@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 04-ago-2016 14:00:03 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="es.upv.dsic.quep.model.Practice" table="practice" schema="public" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="principle" class="es.upv.dsic.quep.model.Principle" fetch="select">
+            <column name="id_principle" not-null="true" />
+        </many-to-one>
+        <property name="abbreviation" type="string">
+            <column name="abbreviation" />
+        </property>
+        <property name="name" type="string">
+            <column name="name" not-null="true" />
+        </property>
+        <property name="creationUser" type="string">
+            <column name="creation_user" not-null="true" />
+        </property>
+        <property name="creationDate" type="date">
+            <column name="creation_date" length="13" not-null="true" />
+        </property>
+        <property name="modificationUser" type="string">
+            <column name="modification_user" />
+        </property>
+        <property name="modificationDate" type="date">
+            <column name="modification_date" length="13" />
+        </property>
+        <property name="active" type="int">
+            <column name="active" not-null="true" />
+        </property>
+        <property name="idTechnique" type="java.lang.Integer">
+            <column name="id_technique" />
+        </property>
+        <property name="umbral" type="java.lang.Integer">
+            <column name="umbral" precision="5" scale="0" />
+        </property>
+        <property name="weight" type="java.lang.Integer">
+            <column name="weight" precision="5" scale="0" />
+        </property>
+        <property name="audit" type="string">
+            <column name="audit" not-null="true" />
+        </property>
+        <set name="techniques" table="technique" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_practice" not-null="true" />
+            </key>
+            <one-to-many class="es.upv.dsic.quep.model.Technique" />
+        </set>
+        <set name="questionnaires" table="questionnaire" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_practice" not-null="true" />
+            </key>
+            <one-to-many class="es.upv.dsic.quep.model.Questionnaire" />
+        </set>
+        <set name="maturityLevelPractices" table="maturity_level_practice" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_practice" not-null="true" />
+            </key>
+            <one-to-many class="es.upv.dsic.quep.model.MaturityLevelPractice" />
+        </set>
+        <set name="rolePractices" table="role_practice" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_practice" not-null="true" />
+            </key>
+            <one-to-many class="es.upv.dsic.quep.model.RolePractice" />
+        </set>
+        <set name="quepQuestions" table="quep_question" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_practice" not-null="true" />
+            </key>
+            <one-to-many class="es.upv.dsic.quep.model.QuepQuestion" />
+        </set>
+    </class>
+</hibernate-mapping>

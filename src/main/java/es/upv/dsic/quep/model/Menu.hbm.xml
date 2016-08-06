@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 04-ago-2016 14:00:03 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="es.upv.dsic.quep.model.Menu" table="menu" schema="public" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="menu" class="es.upv.dsic.quep.model.Menu" fetch="select">
+            <column name="id_submenu" />
+        </many-to-one>
+        <many-to-one name="role" class="es.upv.dsic.quep.model.Role" fetch="select">
+            <column name="id_role" not-null="true" />
+        </many-to-one>
+        <property name="name" type="string">
+            <column name="name" not-null="true" />
+        </property>
+        <property name="type" type="java.lang.Character">
+            <column name="type" length="1">
+                <comment>Submenu or item</comment>
+            </column>
+        </property>
+        <property name="creationUser" type="string">
+            <column name="creation_user" not-null="true" />
+        </property>
+        <property name="creationDate" type="date">
+            <column name="creation_date" length="13" not-null="true" />
+        </property>
+        <property name="modificationUser" type="string">
+            <column name="modification_user" />
+        </property>
+        <property name="moficationDate" type="date">
+            <column name="mofication_date" length="13" />
+        </property>
+        <property name="audit" type="string">
+            <column name="audit" not-null="true" />
+        </property>
+        <property name="active" type="int">
+            <column name="active" not-null="true" />
+        </property>
+        <property name="url" type="string">
+            <column name="url" />
+        </property>
+        <set name="menus" table="menu" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_submenu" />
+            </key>
+            <one-to-many class="es.upv.dsic.quep.model.Menu" />
+        </set>
+    </class>
+</hibernate-mapping>

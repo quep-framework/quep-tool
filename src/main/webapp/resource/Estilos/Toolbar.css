@@ -1,0 +1,897 @@
+.btnAgregar, .btnEditar, .btnEliminar, .btnVer, .btnActivar, .btnRfrescar, .btnRegresarToolbar, .btnPlanesCarrera, .btnPostgrado, .btnMalla, .btnImprimir, .btnWord, .btnExcel, .btnPdf, .btnAuditoria, .btnAsignatura, .btnEditarFechas, .btnHorario, .btnDuplicar, .btnMatriculas, .btnConfigurar, .btnConfigurar1, .btnCambiaMalla, .btnGratuidad, .btnCambiaCarrera, .btnCambiaGrupo, .btnAgregarAsignatura,.btnTBCerrar,.btnTBCerrar,.btnQuitar,.btnTBRegresar,.btnRefrescar,.btnImportar,.btnEliminarImportacion,.btnResultados,.btnValidar,.btnAyuda,.btnCerrarCuestionario,.btnCerrarProceso
+{
+   background-color:Transparent;
+   background-repeat: no-repeat;
+   background-position: 0px 0px;
+   width:24px;
+   height:24px;
+   margin: 0 auto;
+   border:none;
+   display:inline;
+}
+
+.btnAgregar:hover, .btnEditar:hover, .btnEliminar:hover, .btnVer:hover, .btnActivar:hover, .btnRefrescar:hover, .btnPlanesCarrera:hover, .btnPostgrado:hover, .btnMalla:hover, .btnImprimir:hover, .btnWord:hover, .btnExcel:hover, .btnPdf:hover, .btnAuditoria:hover, .btnAsignatura:hover, .btnEditarFechas:hover, .btnHorario:hover, .btnDuplicar:hover, .btnMatriculas:hover, .btnConfigurar:hover, .btnConfigurar1:hover, .btnCambiaMalla:hover, .btnGratuidad:hover, .btnCambiaCarrera:hover, .btnCambiaGrupo:hover, .btnAgregarAsignatura:hover,.btnTBCerrar:hover,.btnTBCerrar:hover,.btnQuitar:hover,.btnTBRegresar:hover,.btnImportar:hover,.btnEliminarImportacion:hover,.btnResultados:hover,.btnValidar:hover,.btnAgregar:hover, .btnEditar:hover, .btnEliminar:hover, .btnVer:hover, .btnActivar:hover, .btnRefrescar:hover, .btnPlanesCarrera:hover, .btnPostgrado:hover, .btnMalla:hover, .btnImprimir:hover, .btnWord:hover, .btnExcel:hover, .btnPdf:hover, .btnAuditoria:hover, .btnAsignatura:hover, .btnEditarFechas:hover, .btnHorario:hover, .btnDuplicar:hover, .btnMatriculas:hover, .btnConfigurar:hover, .btnConfigurar1:hover, .btnCambiaMalla:hover, .btnGratuidad:hover, .btnCambiaCarrera:hover, .btnCambiaGrupo:hover, .btnAgregarAsignatura:hover,.btnTBCerrar:hover,.btnTBCerrar:hover,.btnQuitar:hover,.btnTBRegresar:hover,.btnImportar:hover,.btnEliminarImportacion:hover,.btnResultados:hover,.btnValidar:hover,.btnAyuda:hover,.btnCerrarCuestionario:hover,.btnCerrarProceso:hover
+{
+ background-position: 0px -24px;
+}
+
+.btnCerrarPeq{
+    background-image: url(../Imagenes/btnCerrarPeq.gif);
+}
+
+.btnCerrarPeq
+{
+   background-repeat: no-repeat;
+   background-position: 0px 0px;
+   width:71px;
+   height:20px;
+   display:block;
+   float:left;
+   margin-right:10px;
+   margin-top:10px;
+   border:none;
+}
+
+.btnCerrarPeq:hover
+{
+   background-repeat: no-repeat;
+   background-position: 0px -16px;
+}
+.btnImportar{
+    background-image: url(../Imagenes/btnImportar.gif);
+}
+.btnEliminarImportacion{
+    background-image: url(../Imagenes/btnEliminarImportacion.gif);
+}
+.btnResultados{
+    background-image: url(../Imagenes/btnResultados.gif);
+}
+.btnValidar{
+    background-image: url(../Imagenes/btnValidar.gif);
+}
+.btnQuitar{
+    background-image: url(../Imagenes/btnQuitar.GIF);
+}
+.btnTBRegresar{
+    background-image: url(../Imagenes/btnTBRegresar.gif);
+}
+.btnTBCerrar{
+    background-image: url(../Imagenes/btnTBCerrar.gif);
+}
+.btnAgregar
+{
+	 background-image: url(../Imagenes/btnNuevo.gif);
+}
+.btnEditar
+{
+	 background-image: url(../Imagenes/btnEditar.gif);
+}
+.btnEliminar
+{
+	 background-image: url(../Imagenes/btnEliminar.gif);
+}
+
+.btnVer
+{
+	 background-image: url(../Imagenes/btnVer.gif);
+}
+.btnActivar
+{
+	 background-image: url(../Imagenes/btnActivar.gif);
+}
+
+.btnRefrescar
+{
+	 background-image: url(../Imagenes/btnRefrescar.gif);
+}
+.btnPlanesCarrera
+{
+	 background-image: url(../Imagenes/btnPlan.gif);
+}
+
+.btnPostgrado
+{
+	 background-image: url(../Imagenes/btnDocumento.gif);
+}
+
+.btnMalla
+{
+	 background-image: url(../Imagenes/btnMalla.gif);
+}
+
+.btnImprimir
+{
+	 background-image: url(../Imagenes/btnImprimir1.gif);
+}
+
+.btnWord
+{
+	 background-image: url(../Imagenes/btnWord.gif);
+}
+
+.btnExcel
+{
+	 background-image: url(../Imagenes/btnExcel.gif);
+}
+
+.btnPdf
+{
+	 background-image: url(../Imagenes/btnPdf.gif);
+}
+
+.btnAuditoria
+{
+	 background-image: url(../Imagenes/btnAuditoria.gif);
+}
+
+.btnAsignatura
+{
+	 background-image: url(../Imagenes/btnAsignatura.gif);
+}
+.btnEditarFechas
+{
+    background-image: url(../Imagenes/btnEditar.gif);
+}
+
+.btnHorario
+{
+    background-image: url(../Imagenes/btnHorario.gif);
+}
+
+.btnDuplicar
+{
+    background-image: url(../Imagenes/btnDuplicar.gif);
+}
+
+.btnMatriculas
+{
+    background-image: url(../Imagenes/btnMatriculas.gif);
+}
+
+.btnConfigurar
+{
+    background-image: url(../Imagenes/btnConfigurar.gif);
+}
+
+.btnConfigurar1
+{
+    background-image: url(../Imagenes/btnConfigurar1.gif);
+}
+
+.btnCambiaMalla
+{
+    background-image: url(../Imagenes/btnCambioMalla.gif);
+}
+
+.btnGratuidad
+{
+    background-image: url(../Imagenes/btnGratuidad.gif);
+}
+
+.btnCambiaCarrera
+{
+    background-image: url(../Imagenes/btnCambioCarrera.gif);
+}
+
+.btnCambiaGrupo
+{
+    background-image: url(../Imagenes/btnCambiarGrupo.gif);
+}
+
+.btnAgregarAsignatura
+{
+    background-image: url(../Imagenes/btnAgregarAsignatura.gif);
+}
+.btnAyuda
+{
+    background-image: url(../Imagenes/btnAyudaToolbar.gif);
+}
+.btnCerrarCuestionario
+{
+    background-image: url(../Imagenes/btnCierreCuestionario.gif);
+}
+.btnCerrarProceso
+{
+    background-image: url(../Imagenes/btnCierreTodosCuestionarios.gif);
+}
+.tituloToolbar
+{
+  font-family:Arial;
+	font-weight: 500;
+	font-size: 16px;
+	color:#92B003;
+	padding: 10px 0px 10px 5px;
+	text-transform:uppercase;
+	display:block;
+}
+
+.lblAccion
+{
+	font-family:Arial;
+	font-size:10px;
+	color:#92B003;
+}
+
+.lblPathToolbar
+{
+	font-family:Arial;
+	font-size:10px;
+	color:#B2B2B2;
+}
+
+.divToolbar
+{
+	background-image:url(../Imagenes/imgBackToolbar.gif);
+	background-repeat: repeat-x;
+	background-color:#EFEFEF;
+    border-bottom:solid 1px #cccccc;
+	padding-left:5px;
+	padding-right:5px;
+
+}
+
+#ulRuta {
+	list-style-image:none;
+	margin:0px 0px 0px 10px;
+	padding:5px 0px 0px 0px;
+	display:inline;
+}
+
+#ulRuta li {
+	list-style-image:none;
+	margin:5px 5px 2px 5px;
+	padding:0 0 0 5px;
+	float:left;
+}
+
+
+.btnBuscar
+{
+   background-color:Transparent;
+   background-image: url(../Imagenes/btnBuscar.png);
+   background-repeat: no-repeat;
+   background-position: 0px 0px;
+   width:16px;
+   height:16px;
+   margin: 0 auto;
+   border:none;
+   display:inline;
+}
+
+.btnBuscar:hover
+{
+ background-position: 0px -16px;
+}
+
+.separadorToolbar
+{
+	background-image: url(../Imagenes/imgSeparador.gif);
+  background-repeat: no-repeat;
+  background-position: 0px 0px;
+ width:3px;
+ height:22px;
+ margin: 0 auto;
+ border:none;
+}
+
+/*ESTILOS PARA LA GRILLA DEL LISTADO DE LOS MANTENIMIENTOS*/
+.GrillaCabecera
+{
+	background-color:#9ACC12;
+	font-family:Arial;
+	vertical-align:middle;
+	font-family:Arial;
+	font-size:12px;
+	text-transform:uppercase;
+	color:white;
+	font-weight:bold;
+    border-right:solid 1px white;
+	/*text-align:center;
+	border-right:solid 1px white;
+	border-top:none;
+	border-bottom:none;*/
+}
+
+.GrillaCabecera a
+{
+	font-family:Arial;
+	font-size:12px;
+	text-transform:uppercase;
+	color:white;
+	vertical-align:middle;
+	text-decoration:none;
+	font-weight:bold;
+}
+
+.GrillaCabecera a:hover
+{
+	background-color:#9ACC12;
+	text-decoration:underline;
+}
+.GrillaCabecera a:visited
+{
+	font-family:Arial;
+	font-size:12px;
+	text-transform:uppercase;
+	color:#747474;
+	vertical-align:middle;
+	text-decoration:none;
+	font-weight:bold;
+}
+
+.GrillaFila
+{
+	background-color:white;
+	font-family:Arial;
+	font-size:11px;
+	color:#808080;
+	text-transform:uppercase;
+	border-right:solid 1px #c5c5c5;
+	border-left:solid 1px #c5c5c5;
+	border-top:none;
+	padding-left:5px;
+}
+
+.GrillaFilaAlternativa
+{
+	background-color:#F7F7F7;
+	font-family:Arial;
+	font-size:11px;
+	color:#808080;
+	text-transform:uppercase;
+	border-right:solid 1px #c5c5c5;
+	border-left:solid 1px #c5c5c5;
+	border-top:none;
+	padding-left:5px;
+}
+
+.GrillaFilaSeleccionada
+{
+	background-color:#DEDCDE;
+	font-family:Arial;
+	font-size:11px;
+	color:black;
+	text-transform:uppercase;
+}
+
+.GrillaPaginacion
+{
+	font-size:11px;
+	text-align:center;
+
+	font-family:Arial;
+	color:Black;
+}
+
+.GrillaPaginacion a
+{
+	font-family:Arial;
+	font-size:11px;
+	text-transform:uppercase;
+	color:#B2B2B2;
+	vertical-align:middle;
+	text-decoration:none;
+	font-weight:bold;
+}
+
+.GrillaPaginacion a:hover
+{
+	background-color:white;
+	text-decoration:underline;
+}
+
+a.GrillaPaginacion a:visited
+{
+	font-family:Arial;
+	font-size:11px;
+	color:black;
+	font-weight:bold;
+}
+
+/*ESTILOS PARA EL INGRESO DE LA INFORMACION DE LOS MANTENIMIENTOS */
+
+.lblNombreCampo
+{
+	font-family:Arial;
+	font-size:10px;
+	color:#B2B2B2;
+	padding-right:10px;
+	padding-left:5px;
+	font-weight:bold;
+}
+
+.lblCampoBlack
+{
+	font-family:Arial;
+	font-size:11px;
+	color:black;
+    font-weight:bold;
+}
+
+.pnlCuadro
+{	
+	border: solid 1px #0404B4;
+}
+
+.txtCampo
+{
+	text-transform:uppercase;
+	font-family:Arial;
+	font-size:10px;
+	color:black;
+	border: solid 1px #C5C5C5;
+}
+
+.txtCampoRequerido
+{
+	text-transform:uppercase;
+	background-color:#FFFFD7;
+	font-family:Arial;
+	font-size:10px;
+	color:black;
+	z-index:-500;
+	border: solid 1px #C5C5C5;
+}
+
+.txtCampoDescripciones
+{
+	text-transform:uppercase;
+	background-color:#FFFFD7;
+	font-family:Arial;
+	font-size:10px;
+	color:black;
+	z-index:-500;
+	border: solid 1px #C5C5C5;
+    width:250px;
+    height:20px;
+    white-space: pre;
+}
+
+.cmbCombos{
+    background-color:#FFFFD7;
+	font-family:Arial;
+	font-size:10px;
+	color:black;
+	z-index:-500;
+    width: 200px;
+    white-space:pre-wrap;
+    border: solid 1px #C5C5C5;
+
+    /*background-attachment: fixed;*/
+}
+.cmbCombosOpcional{
+    background-color:white;
+	font-family:Arial;
+	font-size:10px;
+	color:black;
+	z-index:-500;
+    width: 200px;
+    white-space:pre-wrap;
+    border: solid 1px #C5C5C5;
+}
+
+
+.cmbCombosReporte{
+    background-color:white;
+	font-family:Arial;
+	font-size:10px;
+	color:black;
+	z-index:-500;
+    width: 300px;
+    white-space:pre-wrap;
+    border: solid 1px #C5C5C5;
+}
+
+.cmbCombosRequeridoReporte{
+    background-color:#FFFFD7;
+	font-family:Arial;
+	font-size:10px;
+	color:black;
+	z-index:-500;
+    width: 300px;
+    white-space:pre-wrap;
+    border: solid 1px #C5C5C5;
+
+    /*background-attachment: fixed;*/
+}
+
+.lblCampo
+{
+	text-transform:uppercase;
+	font-family:Arial;
+	font-size:15px;
+	color:black;
+	/*border: solid 1px #C5C5C5;*/
+    width:50px;
+}
+
+.divMensajeRequeridos
+{
+	background-color:#FFFFD7;
+	width:200px;
+	border:solid 1px #F2F2A8;
+	padding:2px 0px 2px 0px;
+	margin:10px 0px 10px 0px;
+	vertical-align:top;
+	text-align:center;
+	color:Red;
+	font-size:10px;
+}
+
+.txtInformacion
+{
+	font-family:Arial;
+	font-size:12px;
+	color:#b2b2b2;
+}
+
+.tituloComponente
+{
+    font-family:Arial;
+	font-size: 14px;
+	color:#517DBF;
+	padding: 10px 0px 5px 0px;
+	text-transform:uppercase;
+	display:block;
+	width:90%;
+	border-bottom:solid 1px #f7f7f7
+}
+
+.tituloCarrera
+{
+  font-family:Arial;
+	font-size: 14px;
+	color:#517DBF;
+	padding: 10px 0px 5px 0px;
+	text-transform:uppercase;
+}
+
+a.acerrar:link
+{
+	font-family:Arial;
+	font-size: 12px;
+	font-weight:bold;
+	padding-bottom:20px;
+	text-decoration:none;
+	color:#808080;
+}
+.btnRegresarToolbar
+{
+   background-repeat: no-repeat;
+   background-position: 0px 0px;
+   width:91px;
+   height:26px;
+   display:block;
+   float:right;
+   margin-right:0px;
+   margin-top:10px;
+}
+
+.btnRegresarToolbar
+{
+	 background-image: url(../Imagenes/imgHome.gif);
+}
+
+.prueba{
+    background-color:#bdcfe1;
+	font-family:Arial;
+	vertical-align:middle;
+	font-family:Arial;
+	font-size:12px;
+	text-transform:uppercase;
+	color:White;
+	font-weight:bold;
+	text-align:center;
+
+	border-top:none;
+	border-bottom:none;
+  display:block;
+
+}
+
+.SistemaActual
+{
+	font-family:Arial;
+	font-size:15px;
+	color:#648DC1;
+}
+
+
+
+.iceCmdSrtHdr
+{
+    background-color:#9ACC12;
+	font-family:Arial;
+	vertical-align:middle;
+	font-family:Arial;
+	font-size:12px;
+	text-transform:uppercase;
+	color:white;
+	font-weight:bold;
+	text-align:center;
+    text-indent:10px;
+    position:static;
+    border-top:none;
+	border-bottom:none;
+}
+
+.iceCmdSrtHdr-dis
+{
+    background-color:#9ACC12;
+	font-family:Arial;
+	vertical-align:middle;
+	font-family:Arial;
+	font-size:12px;
+	text-transform:uppercase;
+	color:white;
+	font-weight:bold;
+	text-align:center;
+    text-indent:10px;
+    position:static;
+    border-top:none;
+	border-bottom:none;
+}
+
+
+.iceCmdSrtHdrAsc, .iceCmdSrtHdrDesc{
+    background-color:#9ACC12;
+	font-family:Arial;
+	vertical-align:middle;
+
+	font-size:12px;
+	text-transform:uppercase;
+	color:white;
+	font-weight:bold;
+	text-align:center;
+    text-indent:10px;
+    position:static;
+    border-top:none;
+	border-bottom:none;
+}
+
+.iceCmdSrtHdr td {
+    background-color:#9ACC12;
+	font-family:Arial;
+	vertical-align:middle;
+	font-size:12px;
+	text-transform:uppercase;
+	color:white;
+	font-weight:bold;
+	text-align:center;
+    text-indent:10px;
+	border-top:none;
+	border-bottom:none;
+    width:100%;
+}
+
+.iceCmdSrtHdr table {
+    width:100%;
+}
+/*Estilos Areas Evaluacion */
+
+.GrillaFilaWrapped
+{
+	background-color:White;
+	font-family:Arial;
+	font-size:11px;
+	color:#808080;
+	text-transform:uppercase;
+	border-right:solid 1px #c5c5c5;
+	border-left:solid 1px #c5c5c5;
+	border-top:none;
+	padding-left:5px;
+}
+
+.GrillaFilaAlternativaWrapped
+{
+	background-color:#f8f8f8;
+	font-family:Arial;
+	font-size:11px;
+	color:#808080;
+	text-transform:uppercase;
+	border-right:solid 1px #c5c5c5;
+	border-left:solid 1px #c5c5c5;
+	border-top:none;
+	padding-left:5px;
+    white-space: pre;
+}
+.GrillaFilaSeleccionadaWrapped
+{
+	background-color:#a5bdd6;
+	font-family:Arial;
+	font-size:11px;
+	color:black;
+	text-transform:uppercase;
+    white-space: pre;
+}
+.iceOutConStatInactv {
+    position: absolute;
+    background-image: url(../Imagenes/connect_idle.gif );
+    background-position: top;
+    background-repeat: no-repeat;
+    width: 25px;
+    height: 25px;
+}
+
+.iceOutConStatActv {
+    position: absolute;
+    background-image: url(../Imagenes/connect_active.gif );
+    background-position: top;
+    background-repeat: no-repeat;
+    width: 25px;
+    height: 25px;
+}
+
+.iceOutConStatCaution {
+    position: absolute;
+    background-image: url(../Imagenes/connect_caution.gif );
+    background-position: top;
+    background-repeat: no-repeat;
+    width: 25px;
+    height: 25px;
+}
+
+.iceOutConStatDisconnect {
+    position: absolute;
+    background-image: url(../Imagenes/connect_disconnected.gif );
+    background-position: top;
+    background-repeat: no-repeat;
+    width: 25px;
+    height: 25px;
+}
+
+
+.estiloColumna
+{
+    border-right:Solid 1px #F1F3F3;
+}
+
+
+.btnCancelar, .btnAceptar
+{
+
+   background-repeat: no-repeat;
+   background-position: 0px 0px;
+   width:91px;
+   height:26px;
+   margin: 0 auto;
+   border:none;
+   display:block;
+   margin-left:17px;
+   margin-right:25px;
+   margin-top:10px;
+   float:left;
+
+}
+
+.btnAceptar
+{
+	 background-image: url(../Imagenes/btnAceptar.gif);
+}
+
+.btnCancelar
+{
+	 background-image: url(../Imagenes/btnCancelar.gif);
+}
+
+.mensajePop
+{
+
+	font-size:12px;
+	color:red;
+    float:left;
+    margin-top: 30px;
+    width: 100%;
+    text-align: center;
+    font-family:Arial;
+    margin-bottom: 15px;
+
+}
+
+
+.cerrarPop
+{
+	font-family: Arial;
+	font-size:13px;
+	color:black;
+    font-weight:bold;
+    float: left;
+}
+
+
+.estiloPop
+{
+    z-index: 1001;
+    width: 300px;
+    height: 150px;
+    top: 60%;
+    left: 40%;
+    position:absolute;
+    padding: 0px;
+    z-index: 1000;
+    background: #F5F5F5;
+    border: 5px solid #d9d9d9;
+    color: #666666;
+}
+
+
+.imagenCerrarPop
+{
+        float: right;
+        margin-top: 2px;
+        margin-right: 2px;
+}
+
+
+.tituloAuditoria
+{
+    font-family:Arial;
+	font-size: 14px;
+    font-weight: bold;
+	color:#517DBF;
+	padding: 10px 0px 5px 0px;
+	text-transform:uppercase;
+	display:block;
+	width:90%;
+}
+
+.tituloFiltros
+{
+    font-family:Arial;
+	font-size: 11px;
+    font-weight: bold;
+	color:black;
+	text-transform:uppercase;
+    
+}
+
+
+.estiloListas
+{
+    height: 120px;
+    width: 270px;
+    font-family:Arial;
+	font-size:10px;
+    
+}
+
+.exampleBox {
+    margin: 5px 5px 0 0;
+    padding: 0px;
+    width: 585px;
+    background: #FFF;
+    border: 1px solid #d9d9d9;
+    display: block;
+    float:left;
+}
+
+.backBeanChangeTitle{
+    margin: 0px 0px 12px 0px;
+    height: 20px;
+    width: 585px;
+    padding: 2px 0px 0 0px;
+    background: #FFF url(../Imagenes/PnlHdr_bgslice.gif) ;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+.tituloBusquedaReporte{
+   
+    font-family:Arial;
+    color:#517DBF;
+    font-size:11px;
+    font-weight:bold;
+     
+}
+
+.tituloBusquedaReporte{
+   
+    font-family:Arial;
+    color:#517DBF;
+    font-size:11px;
+    font-weight:bold;
+    margin-left: 5px;
+}
+
+ ul{
+	list-style-type: square;
+    }

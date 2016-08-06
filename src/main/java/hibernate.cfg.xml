@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+    <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+    <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/quepDB</property>
+    <property name="hibernate.connection.username">postgres</property>
+    <property name="hibernate.connection.password">quep</property>
+    <property name="hibernate.show_sql">true</property>
+    <property name="hibernate.current_session_context_class">thread</property>
+    <mapping resource="es/upv/dsic/quep/model/Questionnaire.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/ResilienceCharacteristic.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/MaturityLevelPractice.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/QuestionType.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/Response.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/QuestionnaireQuepQuestion.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/QuepQuestionResponseOption.hbm.xml"/>
+    <mapping resource="../model/Menu.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/RoleStakeholder.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/ResponseOption.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/Technique.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/RolePractice.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/QuepQuestion.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/Stakeholder.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/QuepQuestionTechnique.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/QuepQuestionResilience.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/Role.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/Practice.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/Principle.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/Organization.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/QuestionnaireResponse.hbm.xml"/>
+    <mapping resource="es/upv/dsic/quep/model/MaturityLevel.hbm.xml"/>
+  </session-factory>
+</hibernate-configuration>

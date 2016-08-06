@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 04-ago-2016 14:00:03 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="es.upv.dsic.quep.model.QuestionnaireQuepQuestion" table="questionnaire_quep_question" schema="public" optimistic-lock="version">
+        <composite-id name="id" class="es.upv.dsic.quep.model.QuestionnaireQuepQuestionId">
+            <key-property name="idQuepQuestion" type="int">
+                <column name="id_quep_question" />
+            </key-property>
+            <key-property name="idQuestionnaire" type="int">
+                <column name="id_questionnaire" />
+            </key-property>
+            <key-property name="idPractice" type="int">
+                <column name="id_practice" />
+            </key-property>
+            <key-property name="idRole" type="int">
+                <column name="id_role" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="quepQuestion" class="es.upv.dsic.quep.model.QuepQuestion" update="false" insert="false" fetch="select">
+            <column name="id_quep_question" not-null="true" />
+        </many-to-one>
+        <many-to-one name="questionnaire" class="es.upv.dsic.quep.model.Questionnaire" update="false" insert="false" fetch="select">
+            <column name="id_questionnaire" not-null="true" />
+            <column name="id_practice" not-null="true" />
+            <column name="id_role" not-null="true" />
+        </many-to-one>
+        <property name="creationUser" type="string">
+            <column name="creation_user" not-null="true" />
+        </property>
+        <property name="creationDate" type="date">
+            <column name="creation_date" length="13" not-null="true" />
+        </property>
+        <property name="modificationUser" type="string">
+            <column name="modification_user" />
+        </property>
+        <property name="modificationDate" type="date">
+            <column name="modification_date" length="13" />
+        </property>
+        <property name="active" type="int">
+            <column name="active" not-null="true" />
+        </property>
+        <property name="audit" type="string">
+            <column name="audit" not-null="true" />
+        </property>
+        <property name="idPrinciple" type="int">
+            <column name="id_principle" not-null="true" />
+        </property>
+        <set name="responses" table="response" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_quep_question" not-null="true" />
+                <column name="id_questionnaire" not-null="true" />
+                <column name="id_practice" not-null="true" />
+                <column name="id_role" not-null="true" />
+            </key>
+            <one-to-many class="es.upv.dsic.quep.model.Response" />
+        </set>
+    </class>
+</hibernate-mapping>

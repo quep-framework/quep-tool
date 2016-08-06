@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 04-ago-2016 14:00:03 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="es.upv.dsic.quep.model.Organization" table="organization" schema="public" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <property name="name" type="string">
+            <column name="name" not-null="true" />
+        </property>
+        <property name="locate" type="string">
+            <column name="locate" />
+        </property>
+        <property name="adress" type="string">
+            <column name="adress" not-null="true" />
+        </property>
+        <property name="creationUser" type="string">
+            <column name="creation_user" not-null="true" />
+        </property>
+        <property name="creationDate" type="date">
+            <column name="creation_date" length="13" not-null="true" />
+        </property>
+        <property name="modificationUser" type="string">
+            <column name="modification_user" />
+        </property>
+        <property name="modificationDate" type="date">
+            <column name="modification_date" length="13" />
+        </property>
+        <property name="active" type="int">
+            <column name="active" not-null="true" />
+        </property>
+        <property name="audit" type="string">
+            <column name="audit" not-null="true" />
+        </property>
+        <set name="questionnaireResponses" table="questionnaire_response" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_organization" not-null="true" />
+            </key>
+            <one-to-many class="es.upv.dsic.quep.model.QuestionnaireResponse" />
+        </set>
+        <set name="roleStakeholders" table="role_stakeholder" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_organization" not-null="true" />
+            </key>
+            <one-to-many class="es.upv.dsic.quep.model.RoleStakeholder" />
+        </set>
+        <set name="stakeholders" table="stakeholder" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_organization" />
+            </key>
+            <one-to-many class="es.upv.dsic.quep.model.Stakeholder" />
+        </set>
+    </class>
+</hibernate-mapping>

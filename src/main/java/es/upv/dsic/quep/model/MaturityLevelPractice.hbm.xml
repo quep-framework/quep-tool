@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 04-ago-2016 14:00:03 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="es.upv.dsic.quep.model.MaturityLevelPractice" table="maturity_level_practice" schema="public" optimistic-lock="version">
+        <composite-id name="id" class="es.upv.dsic.quep.model.MaturityLevelPracticeId">
+            <key-property name="idPractice" type="int">
+                <column name="id_practice" />
+            </key-property>
+            <key-property name="idMaturityLevel" type="int">
+                <column name="id_maturity_level" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="maturityLevel" class="es.upv.dsic.quep.model.MaturityLevel" update="false" insert="false" fetch="select">
+            <column name="id_maturity_level" not-null="true" />
+        </many-to-one>
+        <many-to-one name="practice" class="es.upv.dsic.quep.model.Practice" update="false" insert="false" fetch="select">
+            <column name="id_practice" not-null="true" />
+        </many-to-one>
+        <property name="creationUser" type="string">
+            <column name="creation_user" not-null="true" />
+        </property>
+        <property name="creationDate" type="date">
+            <column name="creation_date" length="13" not-null="true" />
+        </property>
+        <property name="modificationUser" type="string">
+            <column name="modification_user" />
+        </property>
+        <property name="modificationDate" type="date">
+            <column name="modification_date" length="13" />
+        </property>
+        <property name="active" type="int">
+            <column name="active" not-null="true" />
+        </property>
+        <property name="audit" type="string">
+            <column name="audit" not-null="true" />
+        </property>
+        <property name="idPrinciple" type="int">
+            <column name="id_principle" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

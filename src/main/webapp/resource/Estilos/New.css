@@ -1,0 +1,562 @@
+﻿body 
+{
+	font-family:Verdana;
+}
+/*titulo*/
+h1
+{
+	/*background-color:#1e3c7b;
+	width:100%;
+	color:#ebf0f9;
+	font:normal 19px Verdana;
+	padding-left:5px;
+	padding-top:5px;
+	height:30px;
+	border-bottom: 5px solid #517dbf;
+	margin-bottom:0;*/
+}
+	h2
+	{
+		width:636px;
+		color:#517dbf;
+		font:bold 11px Verdana;
+		border:0;
+		text-decoration:none;
+		text-transform:capitalize;
+		height:20px;
+		text-align:left;
+		border-bottom:1px solid black;
+		margin-top:5px;
+		clear:both; 
+	}
+/*filtro*/
+.filtro
+{
+	width:100%;
+	height:40px;
+	background-color:#ebf0f9;
+	padding-left:5px;
+	padding-top:5px;
+	margin-top:0;
+}
+	.textbox
+	{
+		width:250px;
+		border:1px solid #cccccc;
+		background-color:White;
+		color:Black;
+		text-transform:uppercase;
+	}
+	.botonFecha
+	{
+		width:20px;
+		height:20px;
+		border:1px solid #cccccc;
+		background-color:White;
+	}
+	/*CLASE PARA LOS TEXTBOX DE INGRESO DE INFORMACION (FORMS VIEW)*/
+	.tbDatos
+	{
+		color:Black;
+		text-transform:uppercase;
+	}
+	
+	.tbDatosCortos
+	{
+		color:Black;
+		text-transform:uppercase;
+	}
+	
+	.label
+	{	
+		font-size:10px;
+		display:block;
+	}
+	.button
+{
+    border: 1px solid #CCCCCC;
+    color: Black;
+    background-color: #f5f5dc;
+    font: bold 9px Verdana;
+    text-transform: uppercase;
+    height: 20px;
+    letter-spacing: 0.8px;
+}
+/*opciones*/
+.opcion
+{
+	color:#517dbf;
+	font-size:12px;
+	font-family:Verdana; 
+	letter-spacing:0.6px;
+	text-decoration:underline;
+	margin-right:80px;
+	margin-left:5px;
+	clear:both;
+}
+/*grilla*/
+.gridview
+{
+	width:636px;
+	border:0;
+	margin-top:30px;
+}
+	.gridview th
+	{
+		width:150px;
+		color:Black;
+		font:bold 10px Verdana;
+		border:0;
+		text-decoration:none;
+		text-transform:capitalize;
+		height:30px;
+		text-align:left;
+	}
+	.gridview td
+	{
+		width:150px;
+		color:Black;
+		font-size:10px;
+		height:25px;
+		border:0;
+		border-bottom:1px solid #CCCCCC; 
+	}
+	.sinborde td
+	{
+		border-bottom:0;
+	}
+	#aBack
+	{
+		margin-left:3px;
+		margin-top:20px;
+		position:absolute;
+	}
+/*FORMULARIO*/
+.form
+{
+	width:230px;
+	border:0;
+	margin-top:10px;
+	margin-left:-10px;
+	margin-bottom:10px;	
+	display:inline; 
+	height:100px
+}
+	.form li
+	{
+		list-style:none;
+		margin:0;
+		padding:0;
+		width:230px;
+		color:Black;
+		font-size:10px;
+		height:20px;
+	}
+	.form li.title
+	{
+		color:black;
+		font: normal 11px Verdana;
+		text-decoration : underline;
+	}
+	.title
+	{
+		color:black;
+		font:bold 11px Verdana;
+	}
+	
+	.left
+	{
+		float:left;
+	}
+	.right
+	{
+	    width:350px;
+		float:right;
+	}
+	.right li
+	{
+		width:350px;
+	}
+	.shorttextbox
+	{
+		width:200px;
+		border:1px solid #cccccc;
+		background-color:White;
+		color:Black;
+		font:normal 11px Verdana;
+		text-transform:uppercase;
+	}
+	.listbox
+	{
+	    Font-Size:smaller;
+	    width:200px;
+	    background-color:White;
+	    color:Black;
+	}
+	
+	.veryshorttextbox
+	{
+		width:80px;
+		border:1px solid #cccccc;
+		background-color:White;
+		color:Black;
+	}
+	.longtextbox
+	{
+		width:200px;
+		height:130px;
+		border:1px solid #cccccc;
+		font:normal 11px Verdana;
+		background-color:White;
+		color:Black;
+		text-transform:uppercase;
+        font-size:10px;
+        font-family:Arial;
+	}
+
+
+    .estiloTextarea
+	{
+        width:200px;
+		height:130px;
+		text-transform:uppercase;
+        background-color:#FFFFD7;
+        font-family:Arial;
+        font-size:10px;
+        color:black;
+        z-index:-500;
+        border: solid 1px #C5C5C5;
+	}
+
+
+
+
+.dropdownlist
+{
+	width:200px;
+	border:1px solid #cccccc;
+	background-color:White;
+	color:Black;
+}
+	
+.mensajeError
+{
+	font-size:10px;
+	color:Red;
+}
+
+.mensajeRequeridos
+{
+	font-size:10px;
+	color:Red;
+	padding: 10px 0px 10px 0px;
+}
+
+.label
+{
+	font-weight: bold;
+	font-size:  x-small;
+	text-align: left;
+	padding:5px 10px 5px 0px;
+	/*margin:5px 10px 5px 0px;*/
+}
+
+
+.btnComprobantes
+{
+   background-repeat: no-repeat;
+   background-position: 0px 0px;	
+   width:121px;
+   height:26px;
+   display:block;
+   margin-right:10px;
+   margin-top:10px;
+   float:left;
+}
+
+.btnComprobantes:hover
+{
+   background-repeat: no-repeat;
+   background-position: 0px -26px;	
+}
+
+.btnComprobantes
+{
+	 background-image: url(../Imagenes/btnComprobantes.gif);
+}
+
+
+.btnGrabar, .btnContinuar, .btnCancelar, .btnActualizar , .btnAceptar, .btnArriba, .btnRegresar, .btnRegresarToolbar, .btnMatriculas1, .btnFinalizar
+{
+   
+   background-repeat: no-repeat;
+   background-position: 0px 0px;	
+   width:91px;
+   height:26px;
+   margin: 0 auto;
+   border:none;
+   display:block;
+   margin-right:10px;
+   margin-top:10px;
+   float:left;
+
+}
+
+.btnCargar
+{
+   width:91px;
+   height:24px;
+   border:none;
+}
+
+
+.btnGrabar:hover, .btnContinuar:hover, .btnCancelar:hover, .btnActualizar:hover, .btnAceptar:hover, .btnRegresarToolbar:hover, .btnArriba:hover, .btnRegresar:hover, .btnMatriculas1:hover, .btnFinalizar:hove
+{
+   background-repeat: no-repeat;
+   background-position: 0px -26px;	
+}
+
+.btnCargar:hover
+{
+   background-repeat: no-repeat;
+}
+
+.btnCargar{
+    background-image: url(../Imagenes/btnCargar.gif);
+}
+.btnGrabar
+{
+	 background-image: url(../Imagenes/btnGrabar.gif);
+}
+
+.btnActualizar
+{
+	 background-image: url(../Imagenes/btnActualizar.gif);
+}
+
+.btnContinuar
+{
+	 background-image: url(../Imagenes/btnContinuar.gif);
+}
+
+.btnAceptar
+{
+	 background-image: url(../Imagenes/btnAceptar.gif);
+}
+
+.btnCancelar
+{
+	 background-image: url(../Imagenes/btnCancelar.gif);
+}
+
+.btnArriba
+{
+	 background-image: url(../Imagenes/btnArriba.gif);
+}
+
+.btnRegresar
+{
+	 background-image: url(../Imagenes/btnRegresar.gif);
+}
+
+.btnMatriculas1
+{
+	 background-image: url(../Imagenes/btnMatriculas1.gif);
+}
+
+.btnFinalizar
+{
+	 background-image: url(../Imagenes/btnFinalizar.gif);
+}
+
+.btnRegresarToolbar
+{
+   background-repeat: no-repeat;
+   background-position: 0px 0px;	
+   width:91px;
+   height:26px;
+   display:block;
+   float:right;
+   margin-right:0px;
+   margin-top:10px;
+}
+
+.btnRegresarToolbar
+{
+	 background-image: url(../Imagenes/btnRegresarToolbar.gif);
+}
+
+
+.btnNuevoPeq, .btnEditarPeq, .btnEliminarPeq
+{
+   background-repeat: no-repeat;
+   background-position: 0px 0px;	
+   width:61px;
+   height:16px;
+   display:block;
+   float:left;
+   margin-right:10px;
+   margin-top:10px;
+}
+ .btnVerDetalles
+{
+   background-repeat: no-repeat;
+   background-position: 0px 0px;
+   width:61px;
+   height:16px;   
+   float:left;
+   margin-right:10px;
+   margin-top:10px;
+}
+.btnVerAsignaturas
+{
+   background-repeat: no-repeat;
+   background-position: 0px 0px;
+   width:82px;
+   height:16px;
+   
+   float:left;
+   margin-right:10px;
+   margin-top:10px;
+}
+
+.btnNuevoPeq:hover, .btnEditarPeq:hover, .btnEliminarPeq:hover,.btnVerDetalles, .btnVerAsignaturas
+{
+   background-repeat: no-repeat;
+   background-position: 0px -16px;	
+}
+
+.btnNuevoPeq
+{
+	 background-image: url(../Imagenes/btnNuevoPeq.gif);
+}
+
+.btnEditarPeq
+{
+	 background-image: url(../Imagenes/btnEditarPeq.gif);
+}
+
+.btnEliminarPeq
+{
+	 background-image: url(../Imagenes/btnEliminarPeq.gif);
+}
+.btnVerDetalles
+{
+    background-image: url(../Imagenes/btnVerDetalles.gif);
+}
+.btnVerAsignaturas{
+    background-image: url(../Imagenes/btnVerAsignaturas.gif); 
+}
+
+.btnGrabarPeq, .btnCancelarPeq, .btnActualizarPeq
+{
+   background-repeat: no-repeat;
+   background-position: 0px 0px;	
+   width:71px;
+   height:16px;
+   display:block;
+   float:left;
+   margin-right:10px;
+   margin-top:10px;
+}
+
+.btnGrabarPeq:hover, .btnCancelarPeq:hover, .btnActualizarPeq:hover
+{
+   background-repeat: no-repeat;
+   background-position: 0px -16px;	
+}
+
+.btnGrabarPeq
+{
+	 background-image: url(../Imagenes/btnGrabarPeq.gif);
+}
+
+.btnCancelarPeq
+{
+	 background-image: url(../Imagenes/btnCancelarPeq.gif);
+}
+
+.btnActualizarPeq
+{
+	 background-image: url(../Imagenes/btnActualizarPeq.gif);
+}
+
+/*CLASE PARA LOS TITULOS DE SECCIONES DENTRO DE LOS MANTENIMIENTOS*/
+.tituloSeccion
+{
+  font-family:Arial;
+	font-size: 11px;
+	font-weight:bold;
+	color:#517DBF;
+	padding: 1px 0px 10px 5px;
+	text-transform:uppercase;
+	display:block;
+}
+
+a.lnkSeccion
+{
+	font-family:Arial;
+	font-size:11px;
+	background-color:Transparent;
+	text-decoration:none;
+	color:#517DBF;
+	padding:5px 5px 10px 5px;
+}
+
+a.lnkSeccion:hover
+{
+	background-color:Transparent;
+	text-decoration:underline;
+}
+
+table.tablaCostos
+{
+    background-color:#FFFFD6;
+    border:solid 1px #EDEDD2;
+    font-family:arial;
+}
+
+table.tablaCostos tr
+{
+    border-bottom:solid 1px #EDEDD2;
+    color:#5B87B4;
+    font-size:11px;
+}
+
+table.tablaCostos tr.titulos
+{
+    color:#000080;
+    font-size:13px;
+    font-weight:bold;
+}
+
+table.tablaCostos tr.totales
+{
+    color:#000080;
+    font-size:13px;
+    font-weight:bold;
+}
+
+
+upload {
+position: relative;
+width: 80px;
+height: 24px;
+overflow:hidden;
+background: url(../Imagenes/btnCargar.gif) left top no-repeat;
+clip:rect(0px, 80px, 24px, 0px );
+}
+
+upload.input {
+position: absolute;
+left: auto;
+right: 0px;
+top: 0px;
+margin:0;
+padding:0;
+-moz-opacity: 0;
+}
+
+iceInpFileBtn{
+ background-image: url(../Imagenes/btnCargar.gif);
+}

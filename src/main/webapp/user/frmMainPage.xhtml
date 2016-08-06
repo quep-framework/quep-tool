@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:composite="http://java.sun.com/jsf/composite"  
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      >
+    <h:head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <title>Menu</title>
+        <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/themes/aristo/theme.css" />
+        <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/site.css" />
+        <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/jquery-ui.css" />
+        <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/perfect-scrollbar.css" />
+        <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/sh.css" />
+        <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/icons/css/font-awesome.min.css" /> 
+        
+        
+                           
+        <script type="text/javascript" src="/QuEP-Tool/resource/js/jquery.js"></script>
+        <script type="text/javascript" src="/QuEP-Tool/resource/js/jquery-ui.js"></script>
+        <script type="text/javascript" src="/QuEP-Tool/resource/js/perfect-scrollbar.js"></script>
+        <script type="text/javascript" src="/QuEP-Tool/resource/js/site.js"></script>
+        <script type="text/javascript" src="/QuEP-Tool/resource/js/index.js"></script>
+
+        <!-- Dependencies of some widgets -->
+        <script type="text/javascript" src="/QuEP-Tool/resource/js/plugins/plugins-all.js"></script>
+
+        <!-- Mustache for templating support -->
+        <script type="text/javascript" src="/QuEP-Tool/resource/js/plugins/mustache.min.js"></script>
+
+        <!-- X-TAG for PrimeElements -->
+        <script type="text/javascript" src="/QuEP-Tool/resource/js/x-tag-core.min.js"></script>
+
+        <!-- PrimeUI -->
+        <link rel="stylesheet" href="build/primeui.css" />
+        <script type="text/javascript" src="build/primeui.js"></script>
+        <script type="text/javascript" src="build/primeelements.js"></script>                                
+    </h:head>
+    <h:body>
+        <h:form>           
+            <div class="PC">
+                <!--start menu izq-->
+                <div id="MENUSIDE">
+                    <div id="MENUSIDEindent">
+                        <span id="LOGO" class="bordersOfMenuSide" >
+                            <img alt="logo" src="/QuEP-Tool/resource/images/logoT.png" style="width: 120px; margin-left: 40px; margin-bottom: 10px;"/>
+                            <img id="BlueLogo" alt="logo" src="/QuEP-Tool/resource/images/logo.png"   style="width: 120px; margin-left: 40px; margin-bottom: 10px;" class="hiddenLogo"/>                         
+                        </span>                                              
+                        <p:panelMenu model="#{menuBean.model}" />                                                
+                    </div>
+                </div>                
+                <!--end menu izq-->
+
+                <div id="CONTENTSIDE">
+                    <div id="CONTENTSIDEindent">
+
+                        <!-- header bar start-->
+                        <div class="ContentSideSections" id="PFTopLinksCover" style="height:60px;">
+                            <a id="LOGOTEXTSIDE" href="/" >
+                                <table><tr><td>
+                                            <img alt="logo" src="/QuEP-Tool/resource/images/logo.png" style="width:125px;"/>
+                                        </td><td>
+                                            <span class="dispBlock logoDarkText" style="margin-left: 18px; font-size: 20px; width: 500px; ">A Total Quality Framework for the assessment and improvement of Emergency Plans Management</span> 
+                                        </td></tr></table>
+                            </a>
+
+                            <a class="PFTopLinks floatRight boldFont marginRight10 hashed" style="width:99px"  >
+                                <table><tr><td>
+
+                                            <table><tr><td>
+                                                        <span style=" ">#{userBean.nameStakeholder}</span>  
+                                                    </td><td>
+                                                        <img  src="/QuEP-Tool/resource/images/user.png" style=" height: 20px; width: 20px;"  />
+                                                    </td></tr>
+                                                <tr><td>
+                                                        <span class="PFDarkText">Role: </span>  
+                                                    </td><td>
+                                                        <span class="PFDarkText">Organization</span>                                              
+                                                    </td></tr>
+                                                <!--tr><td colspan="2">                                            
+                                                      
+                                                        
+                                                    </td></tr-->
+                                            </table>                                
+
+                                        </td></tr>
+                                    <tr><td> <!--oncomplete="logout(xhr, status, args)"-->
+                                            
+                                            <p:commandLink id="close"
+                                                           action="#{loginBean.logout}"
+                                                           value="Logout"
+                                                           style="margin-right:20px;" 
+                                                           />
+                                        </td></tr>
+                                </table>
+                            </a>                                                                                        
+                        </div>
+                        <!-- header bar end-->
+
+                        <!-- content body start-->
+                        
+                        <div id="widgetdemo">                           
+
+                            <div class="ContentSideSections overHidden PFLayouts">
+                                <span class="dispBlock logoBlueText fontSize30 mediumFont">A Support Tool for QuEP </span>
+                                <span class="defaultText">QuEP is a framework for the assessment and improvement of the management of emergency plans within organizations. 
+                                    It is inspired by the Total Quality Management strategy, and provides a hierarchy of emergency plan management maturity levels. 
+                                    The aim of QuEP is to guide organizations to assess and improve their emergency 
+                                    preparedness by following a set of principles, practices and techniques at the technical, human and strategic levels.</span>                               
+                            </div>
+
+                            <div class="ContentSideSections overHidden">                               
+                                <div class="Content33 floatLeft overHidden" style="min-height:200px">
+                                    <div class="BoxesIndent">                                      
+                                        <a href="http://quep.webs.upv.es/">
+                                            <img src="/QuEP-Tool/resource/images/logo_levels.png" alt="portal" class="floatLeft overHidden" style="height:30px; margin-right:20px;"/>                                    
+                                        </a>                                                                        
+                                        <span class="floatLeft PFGrayText fontSize18 mediumFont overHidden">More Information<br /><span class="green fontSize24">QuEP Portal</span></span>
+                                        <h:panelGrid columns="1" cellpadding="5">
+                                            <!--p:graphicImage name="/QuEP-Tool/resource/images/login.png" /-->
+                                            <a href="http://quep.webs.upv.es/">
+                                                <img src="/QuEP-Tool/resource/images/home/ws-construction-en.png" alt="portal" />                                    
+                                            </a>                                
+                                            <h:outputText id="lblPortalWeb" value="Access to QuEP Framework Portal Web" />
+                                        </h:panelGrid>
+                                        <div class="dispTable overHidden Content100 gray fontSize14" style=" padding-top:20px;">                                                                
+                                            Contact us: quep2016@gmail.com, for more information.
+                                        </div>
+                                    </div>
+                                </div>                                                                 
+                            </div>
+                        </div>                                         
+                        <!-- content body end-->
+
+
+                        <!-- footer start-->
+                        <div class="ContentSideSections">
+                            <span class="floatLeft fontSize14 gray"><a href="http://www.quep.dsic.upv.es">QuEP-T</a>, Copyright 2016</span>
+                            <span class="floatRight fontSize14 gray">All rights reserved</span>
+                            <div style="clear:both"></div>
+                        </div>
+                        <!-- footer end-->
+
+                    </div>
+                </div>
+            </div>
+
+            <script type="text/javascript" src="/QuEP-Tool/resource/js/sh.js"></script>
+
+
+        </h:form>                   
+    </h:body>
+        
+</html>
+
