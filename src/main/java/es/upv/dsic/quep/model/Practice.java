@@ -1,5 +1,5 @@
 package es.upv.dsic.quep.model;
-// Generated 04-ago-2016 14:00:00 by Hibernate Tools 4.3.1
+// Generated 06-ago-2016 21:21:41 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -39,6 +39,7 @@ public class Practice  implements java.io.Serializable {
      private Integer umbral;
      private Integer weight;
      private String audit;
+     private String description;
      private Set<Technique> techniques = new HashSet<Technique>(0);
      private Set<Questionnaire> questionnaires = new HashSet<Questionnaire>(0);
      private Set<MaturityLevelPractice> maturityLevelPractices = new HashSet<MaturityLevelPractice>(0);
@@ -58,7 +59,7 @@ public class Practice  implements java.io.Serializable {
         this.active = active;
         this.audit = audit;
     }
-    public Practice(int id, Principle principle, String abbreviation, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, Integer idTechnique, Integer umbral, Integer weight, String audit, Set<Technique> techniques, Set<Questionnaire> questionnaires, Set<MaturityLevelPractice> maturityLevelPractices, Set<RolePractice> rolePractices, Set<QuepQuestion> quepQuestions) {
+    public Practice(int id, Principle principle, String abbreviation, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, Integer idTechnique, Integer umbral, Integer weight, String audit, String description, Set<Technique> techniques, Set<Questionnaire> questionnaires, Set<MaturityLevelPractice> maturityLevelPractices, Set<RolePractice> rolePractices, Set<QuepQuestion> quepQuestions) {
        this.id = id;
        this.principle = principle;
        this.abbreviation = abbreviation;
@@ -72,6 +73,7 @@ public class Practice  implements java.io.Serializable {
        this.umbral = umbral;
        this.weight = weight;
        this.audit = audit;
+       this.description = description;
        this.techniques = techniques;
        this.questionnaires = questionnaires;
        this.maturityLevelPractices = maturityLevelPractices;
@@ -209,6 +211,16 @@ public class Practice  implements java.io.Serializable {
     
     public void setAudit(String audit) {
         this.audit = audit;
+    }
+
+    
+    @Column(name="description")
+    public String getDescription() {
+        return this.description;
+    }
+    
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="practice")

@@ -1,5 +1,5 @@
 package es.upv.dsic.quep.model;
-// Generated 04-ago-2016 14:00:00 by Hibernate Tools 4.3.1
+// Generated 06-ago-2016 21:21:41 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -34,6 +34,7 @@ public class QuestionType  implements java.io.Serializable {
      private int active;
      private String audit;
      private Set<QuepQuestion> quepQuestions = new HashSet<QuepQuestion>(0);
+     private Set<ResponseOption> responseOptions = new HashSet<ResponseOption>(0);
 
     public QuestionType() {
     }
@@ -46,7 +47,7 @@ public class QuestionType  implements java.io.Serializable {
         this.active = active;
         this.audit = audit;
     }
-    public QuestionType(int id, String name, Integer itemNumber, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, Set<QuepQuestion> quepQuestions) {
+    public QuestionType(int id, String name, Integer itemNumber, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, Set<QuepQuestion> quepQuestions, Set<ResponseOption> responseOptions) {
        this.id = id;
        this.name = name;
        this.itemNumber = itemNumber;
@@ -57,6 +58,7 @@ public class QuestionType  implements java.io.Serializable {
        this.active = active;
        this.audit = audit;
        this.quepQuestions = quepQuestions;
+       this.responseOptions = responseOptions;
     }
    
      @Id 
@@ -158,6 +160,15 @@ public class QuestionType  implements java.io.Serializable {
     
     public void setQuepQuestions(Set<QuepQuestion> quepQuestions) {
         this.quepQuestions = quepQuestions;
+    }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="questionType")
+    public Set<ResponseOption> getResponseOptions() {
+        return this.responseOptions;
+    }
+    
+    public void setResponseOptions(Set<ResponseOption> responseOptions) {
+        this.responseOptions = responseOptions;
     }
 
 

@@ -1,5 +1,5 @@
 package es.upv.dsic.quep.model;
-// Generated 04-ago-2016 14:00:00 by Hibernate Tools 4.3.1
+// Generated 06-ago-2016 21:21:41 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -34,6 +34,7 @@ public class Role  implements java.io.Serializable {
      private String audit;
      private Integer umbral;
      private Integer weight;
+     private String abbreviation;
      private Set<RolePractice> rolePractices = new HashSet<RolePractice>(0);
      private Set<Menu> menus = new HashSet<Menu>(0);
      private Set<RoleStakeholder> roleStakeholders = new HashSet<RoleStakeholder>(0);
@@ -50,7 +51,7 @@ public class Role  implements java.io.Serializable {
         this.active = active;
         this.audit = audit;
     }
-    public Role(int id, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, Integer umbral, Integer weight, Set<RolePractice> rolePractices, Set<Menu> menus, Set<RoleStakeholder> roleStakeholders) {
+    public Role(int id, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, Integer umbral, Integer weight, String abbreviation, Set<RolePractice> rolePractices, Set<Menu> menus, Set<RoleStakeholder> roleStakeholders) {
        this.id = id;
        this.name = name;
        this.creationUser = creationUser;
@@ -61,6 +62,7 @@ public class Role  implements java.io.Serializable {
        this.audit = audit;
        this.umbral = umbral;
        this.weight = weight;
+       this.abbreviation = abbreviation;
        this.rolePractices = rolePractices;
        this.menus = menus;
        this.roleStakeholders = roleStakeholders;
@@ -166,6 +168,16 @@ public class Role  implements java.io.Serializable {
     
     public void setWeight(Integer weight) {
         this.weight = weight;
+    }
+
+    
+    @Column(name="abbreviation", length=4)
+    public String getAbbreviation() {
+        return this.abbreviation;
+    }
+    
+    public void setAbbreviation(String abbreviation) {
+        this.abbreviation = abbreviation;
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="role")

@@ -6,7 +6,7 @@
 package es.upv.dsic.quep.dao;
 
 import es.upv.dsic.quep.model.Menu;
-import es.upv.dsic.quep.persistence.HibernateUtil;
+import es.upv.dsic.quep.hibernate.HibernateUtil;
 import java.util.List;
 import javax.inject.Inject;
 import org.hibernate.HibernateException;

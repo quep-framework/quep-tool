@@ -1,5 +1,5 @@
 package es.upv.dsic.quep.model;
-// Generated 04-ago-2016 14:00:00 by Hibernate Tools 4.3.1
+// Generated 06-ago-2016 21:21:41 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -43,12 +43,10 @@ public class MaturityLevel  implements java.io.Serializable {
     }
 
 	
-    public MaturityLevel(int id, String levelAbbreviation, String name, String description, String type, String creationUser, Date fechaCreado, int active, String audit) {
+    public MaturityLevel(int id, String levelAbbreviation, String name, String creationUser, Date fechaCreado, int active, String audit) {
         this.id = id;
         this.levelAbbreviation = levelAbbreviation;
         this.name = name;
-        this.description = description;
-        this.type = type;
         this.creationUser = creationUser;
         this.fechaCreado = fechaCreado;
         this.active = active;
@@ -104,7 +102,7 @@ public class MaturityLevel  implements java.io.Serializable {
     }
 
     
-    @Column(name="description", nullable=false)
+    @Column(name="description")
     public String getDescription() {
         return this.description;
     }
@@ -114,7 +112,7 @@ public class MaturityLevel  implements java.io.Serializable {
     }
 
     
-    @Column(name="type", nullable=false)
+    @Column(name="type")
     public String getType() {
         return this.type;
     }

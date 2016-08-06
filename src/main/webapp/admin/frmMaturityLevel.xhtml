@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Maturity Level </title>
+    </h:head>
+    <h:body>
+        <h:form id="formInsert">
+            <p:panelGrid columns="2">
+                <p:outputLabel value="ID"/>
+                <p:inputText value="#{maturityLevelBean.maturityLevel.id}"/>
+
+                <p:outputLabel value="Name"/>
+                <p:inputText value="#{maturityLevelBean.maturityLevel.name}"/>
+            </p:panelGrid>
+            <p:commandButton actionListener="#{maturityLevelBean.insert()}" value="Add "/>
+        </h:form>
+        <h:form id="formShowMaturityLevels">
+            <p:dataTable var="ml" value="#{maturityLevelBean.maturityLevels}"
+                         emptyMessage="There are not data"
+                         paginator="true" rows="5" paginatorPosition="top"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
+                         {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5 10">
+                <p:column headerText="Id" sortBy="#{ml.id}" filterBy="#{ml.id}" filterMatchMode="contains">
+                    <h:outputText value="#{ml.id}"/>
+                </p:column>
+                <p:column headerText="Name" sortBy="#{ml.name}" filterBy="#{ml.name}" filterMatchMode="contains">
+                    <h:outputText value="#{ml.name}"/>
+                </p:column>
+                <p:column headerText="Update">
+                    <p:commandButton value="Update" oncomplete="PF('dlgupml').show();" update=":formUpdate">
+                        <f:setPropertyActionListener target="#{maturityLevelBean.maturityLevel}" value="#{ml}"/>                    
+                    </p:commandButton>            
+                </p:column>
+                <p:column headerText="Delete">
+                    <p:commandButton value="Delete" oncomplete="PF('dlgdelml').show();">
+                        <f:setPropertyActionListener target="#{maturityLevelBean.maturityLevel}" value="#{ml}"/>                    
+                    </p:commandButton>            
+                </p:column>
+                
+            </p:dataTable>
+
+
+        </h:form>
+
+        <p:dialog id="dlg1" header="Update" showEffect="explode" hideEffect="explode"
+                  widgetVar="dlgupml" modal="true" resizable="false" minWidth="200">
+            <h:form id="formUpdate">
+                <p:panelGrid columns="2">
+                    <p:outputLabel value="ID"/>
+                    <p:inputText value="#{maturityLevelBean.maturityLevel.id}"/>
+
+                    <p:outputLabel value="Name"/>
+                    <p:inputText value="#{maturityLevelBean.maturityLevel.name}"/>
+                </p:panelGrid>                
+                <p:commandButton value="Update" update=":formShowMaturityLevels" 
+                                 actionListener="#{maturityLevelBean.update()}" 
+                                 oncomplete="PF('dlgupml').hide();"/>
+            </h:form>
+        </p:dialog>
+        <p:dialog id="dlg2" header="Delete" showEffect="explode" hideEffect="explode"
+                  widgetVar="dlgdelml" modal="true" resizable="false" minWidth="200">
+            <h:form id="formDelete">
+                <h:outputText value="Are you sure?"/>
+                <p:commandButton value="Yes" update=":formShowMaturityLevels" 
+                                 actionListener="#{maturityLevelBean.delete()}" 
+                                 oncomplete="PF('dlgdelml').hide();"/>
+                <p:commandButton value="No" onclick="dlg2.hide();"/>
+            </h:form>
+        </p:dialog>
+    </h:body>
+</html>
+

@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 06-ago-2016 21:21:42 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="es.upv.dsic.quep.model.Technique" table="technique" schema="public" optimistic-lock="version">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="practice" class="es.upv.dsic.quep.model.Practice" fetch="select">
+            <column name="id_practice" not-null="true" />
+        </many-to-one>
+        <many-to-one name="resilienceCharacteristic" class="es.upv.dsic.quep.model.ResilienceCharacteristic" fetch="select">
+            <column name="id_resilience" />
+        </many-to-one>
+        <property name="abbreviation" type="string">
+            <column name="abbreviation" />
+        </property>
+        <property name="name" type="string">
+            <column name="name" not-null="true" />
+        </property>
+        <property name="creationUser" type="string">
+            <column name="creation_user" not-null="true" />
+        </property>
+        <property name="creationDate" type="date">
+            <column name="creation_date" length="13" />
+        </property>
+        <property name="modificationUser" type="string">
+            <column name="modification_user" not-null="true" />
+        </property>
+        <property name="modificationDate" type="date">
+            <column name="modification_date" length="13" />
+        </property>
+        <property name="active" type="int">
+            <column name="active" not-null="true" />
+        </property>
+        <property name="audit" type="string">
+            <column name="audit" not-null="true" />
+        </property>
+        <property name="description" type="string">
+            <column name="description" />
+        </property>
+        <set name="quepQuestionTechniques" table="quep_question_technique" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_technique" not-null="true" />
+            </key>
+            <one-to-many class="es.upv.dsic.quep.model.QuepQuestionTechnique" />
+        </set>
+    </class>
+</hibernate-mapping>

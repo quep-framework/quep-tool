@@ -6,7 +6,7 @@
 package es.upv.dsic.quep.dao;
 
 import es.upv.dsic.quep.model.Stakeholder;
-import es.upv.dsic.quep.persistence.HibernateUtil;
+import es.upv.dsic.quep.hibernate.HibernateUtil;
 import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;

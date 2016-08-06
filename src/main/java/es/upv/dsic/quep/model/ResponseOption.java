@@ -1,5 +1,5 @@
 package es.upv.dsic.quep.model;
-// Generated 04-ago-2016 14:00:00 by Hibernate Tools 4.3.1
+// Generated 06-ago-2016 21:21:41 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -9,6 +9,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -25,6 +27,7 @@ public class ResponseOption  implements java.io.Serializable {
 
 
      private int id;
+     private QuestionType questionType;
      private String name;
      private String creationUser;
      private Date creationDate;
@@ -40,16 +43,18 @@ public class ResponseOption  implements java.io.Serializable {
     }
 
 	
-    public ResponseOption(int id, String name, String creationUser, Date creationDate, int active, String audit) {
+    public ResponseOption(int id, QuestionType questionType, String name, String creationUser, Date creationDate, int active, String audit) {
         this.id = id;
+        this.questionType = questionType;
         this.name = name;
         this.creationUser = creationUser;
         this.creationDate = creationDate;
         this.active = active;
         this.audit = audit;
     }
-    public ResponseOption(int id, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, Integer weight, Integer isRequiered, Set<QuepQuestionResponseOption> quepQuestionResponseOptions) {
+    public ResponseOption(int id, QuestionType questionType, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, Integer weight, Integer isRequiered, Set<QuepQuestionResponseOption> quepQuestionResponseOptions) {
        this.id = id;
+       this.questionType = questionType;
        this.name = name;
        this.creationUser = creationUser;
        this.creationDate = creationDate;
@@ -72,6 +77,16 @@ public class ResponseOption  implements java.io.Serializable {
     
     public void setId(int id) {
         this.id = id;
+    }
+
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="id_question_type", nullable=false)
+    public QuestionType getQuestionType() {
+        return this.questionType;
+    }
+    
+    public void setQuestionType(QuestionType questionType) {
+        this.questionType = questionType;
     }
 
     

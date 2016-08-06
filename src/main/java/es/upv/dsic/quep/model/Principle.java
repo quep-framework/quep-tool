@@ -1,5 +1,5 @@
 package es.upv.dsic.quep.model;
-// Generated 04-ago-2016 14:00:00 by Hibernate Tools 4.3.1
+// Generated 06-ago-2016 21:21:41 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -35,6 +35,7 @@ public class Principle  implements java.io.Serializable {
      private Integer umbral;
      private String audit;
      private Integer weight;
+     private String description;
      private Set<Practice> practices = new HashSet<Practice>(0);
 
     public Principle() {
@@ -50,7 +51,7 @@ public class Principle  implements java.io.Serializable {
         this.active = active;
         this.audit = audit;
     }
-    public Principle(int id, String abbreviation, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, Integer umbral, String audit, Integer weight, Set<Practice> practices) {
+    public Principle(int id, String abbreviation, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, Integer umbral, String audit, Integer weight, String description, Set<Practice> practices) {
        this.id = id;
        this.abbreviation = abbreviation;
        this.name = name;
@@ -62,6 +63,7 @@ public class Principle  implements java.io.Serializable {
        this.umbral = umbral;
        this.audit = audit;
        this.weight = weight;
+       this.description = description;
        this.practices = practices;
     }
    
@@ -175,6 +177,16 @@ public class Principle  implements java.io.Serializable {
     
     public void setWeight(Integer weight) {
         this.weight = weight;
+    }
+
+    
+    @Column(name="description")
+    public String getDescription() {
+        return this.description;
+    }
+    
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="principle")
