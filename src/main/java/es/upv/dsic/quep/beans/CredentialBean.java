@@ -15,14 +15,7 @@ import javax.inject.Named;
  * @author agna8685
  */
 @Named
-//(value = "userBean")
-//@ManagedBean
 @RequestScoped
-//@ViewScoped
-//@ManagedBean
-//@SessionScoped
-//@Session
-//@Named("userBean")
 
 public class CredentialBean implements Serializable {
 
@@ -34,23 +27,11 @@ public class CredentialBean implements Serializable {
     public CredentialBean() {
     }
 
-    /* @PostConstruct
-    public void init() {
-        stakeholder = new Stakeholder();
-    }*/
     public void closeSession() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
     }
 
 
-    /* public String redireccionarLogin(Boolean band){
-        if (band)
-        return "frmMainPage";
-        else return "frmInitPage";
-    }*/
-    /**
-     * @return the username
-     */
     public String getUsername() {
         return username;
     }

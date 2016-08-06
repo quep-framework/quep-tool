@@ -27,9 +27,7 @@ import org.primefaces.model.menu.MenuModel;
  * @author agna8685
  */
 @Named
-//(value = "menuBean")
 @SessionScoped
-//@ViewScoped
 
 public class MenuBean implements Serializable {
 

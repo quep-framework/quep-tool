@@ -27,11 +27,11 @@ public class NavigationBean implements Serializable {
     }
 
     public static String toUser() {
-        return "/user/frmMainPage.xhtml";
+        return "/all/frmMainPage.xhtml";
     }
 
     public static String redirectToUser() {
-        return "/user/frmMainPage.xhtml?faces-redirect=true";
+        return "/all/frmMainPage.xhtml?faces-redirect=true";
     }
 
 }
