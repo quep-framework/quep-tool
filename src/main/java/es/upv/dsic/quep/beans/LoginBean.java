@@ -6,9 +6,9 @@
 package es.upv.dsic.quep.beans;
 
 import es.upv.dsic.quep.dao.OrganizationDaoImplement;
-import es.upv.dsic.quep.dao.StakeholderDao;
 import es.upv.dsic.quep.dao.StakeholderDaoImplement;
 import es.upv.dsic.quep.model.Organization;
+import es.upv.dsic.quep.model.Role;
 import es.upv.dsic.quep.model.Stakeholder;
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
@@ -17,6 +17,9 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
+import es.upv.dsic.quep.dao.RoleStakeholderDao;
+import es.upv.dsic.quep.dao.RoleStakeholderDaoImplement;
+import es.upv.dsic.quep.model.RoleStakeholder;
 
 /**
  *
@@ -38,7 +41,7 @@ public class LoginBean implements Serializable {
 
     private String nameStakeholder = "";
     private Stakeholder stakeholder = new Stakeholder();
-    
+    private String role = "";
     private String organization = "";
 
     public String login() {
@@ -67,13 +70,20 @@ public class LoginBean implements Serializable {
 
     private boolean checkUser(String pUsername, String pPassword) {
         stakeholder = new Stakeholder();
-        StakeholderDao linkDao = new StakeholderDaoImplement();
+        StakeholderDaoImplement linkDao = new StakeholderDaoImplement();
         stakeholder = linkDao.login(pUsername, pPassword);
         if (stakeholder != null) {//pUsername.equals(this.stakeholder.get) && pPassword.equals("oscar")) {
             setNameStakeholder(this.stakeholder.getName() + " " + this.stakeholder.getLastName());
-            OrganizationDaoImplement orgDao = new OrganizationDaoImplement();
-            setOrganization(orgDao.getOrganization(stakeholder).getName());
-            return true;
+            /*OrganizationDaoImplement orgDao = new OrganizationDaoImplement();
+            setOrganization(orgDao.getOrganization(stakeholder).getName());*/
+          /*  RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
+            RoleStakeholder roleStk= new RoleStakeholder();
+            roleStk=roleStkImpl.getRoleStakeholder(stakeholder);
+            setOrganization(roleStk.getOrganization().getName());
+            setRole(roleStk.getRole().getName());*/
+           setOrganization("UPV");
+            setRole("Administrator");
+            return true;            
         } else {
             return false;
         }
@@ -145,6 +155,14 @@ public class LoginBean implements Serializable {
 
     public void setOrganization(String organization) {
         this.organization = organization;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
     
     

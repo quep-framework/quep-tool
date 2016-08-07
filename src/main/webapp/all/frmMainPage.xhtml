@@ -19,9 +19,7 @@
         <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/perfect-scrollbar.css" />
         <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/sh.css" />
         <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/icons/css/font-awesome.min.css" /> 
-        
-        
-                           
+                                           
         <script type="text/javascript" src="/QuEP-Tool/resource/js/jquery.js"></script>
         <script type="text/javascript" src="/QuEP-Tool/resource/js/jquery-ui.js"></script>
         <script type="text/javascript" src="/QuEP-Tool/resource/js/perfect-scrollbar.js"></script>
@@ -66,37 +64,34 @@
                                 <table><tr><td>
                                             <img alt="logo" src="/QuEP-Tool/resource/images/logo.png" style="width:125px;"/>
                                         </td><td>
-                                            <span class="dispBlock logoDarkText" style="margin-left: 18px; font-size: 20px; width: 500px; ">A Total Quality Framework for the assessment and improvement of Emergency Plans Management</span> 
+                                            <span class="dispBlock logoDarkText" style="margin-left: 18px; font-size: 20px; width: 500px; ">A Total Quality Framework 
+                                                for the assessment and improvement of Emergency Plans Management in the organization "#{loginBean.organization}"</span> 
                                         </td></tr></table>
                             </a>
-
-                            <a class="PFTopLinks floatRight boldFont marginRight10 hashed" style="width:99px"  >
+                                                          
+                            <a class="PFTopLinks floatRight boldFont marginRight10 hashed" style="width:auto;"  >
                                 <table><tr><td>
-
                                             <table><tr><td>
-                                                        <span style=" ">#{loginBean.nameStakeholder}</span>  
+                                                        #{loginBean.nameStakeholder}
                                                     </td><td>
                                                         <img  src="/QuEP-Tool/resource/images/user.png" style=" height: 20px; width: 20px;"  />
                                                     </td></tr>
-                                                <tr><td>
+                                                <tr><td colspan="2" align="center">
                                                         <span class="PFDarkText">Role: </span>  
-                                                    </td><td>
-                                                        <span class="PFDarkText">#{loginBean.organization}</span>                                              
+                                                        <span class="PFDarkText">#{loginBean.role}</span>                                              
                                                     </td></tr>
-                                                <!--tr><td colspan="2">                                            
-                                                      
-                                                        
-                                                    </td></tr-->
                                             </table>                                
 
                                         </td></tr>
                                     <tr><td> <!--oncomplete="logout(xhr, status, args)"-->
                                             
-                                            <p:commandLink id="close"
-                                                           action="#{loginBean.logout}"
+                                            <!--p:commandLink id="close"
+                                                           action="{loginBean.logout}"
                                                            value="Logout"
                                                            style="margin-right:20px;" 
-                                                           />
+                                                           /-->
+                                            <!--p:commandButton  action="{loginBean.logout}" id="cmdLogout" alt="Logout"  value="logout" image="logout-img" /-->
+                                            <p:commandButton value="Logout" type="button"  action="#{loginBean.logout}" icon="ui-icon-extlink" />
                                         </td></tr>
                                 </table>
                             </a>                                                                                        

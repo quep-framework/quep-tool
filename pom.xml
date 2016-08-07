@@ -41,6 +41,11 @@
             <artifactId>postgresql</artifactId>
             <version>9.4.1209</version>
         </dependency>
+        <!--dependency>
+            <groupId>org.primefaces.extensions</groupId>
+            <artifactId>all-themes</artifactId>
+            <version>1.0.8</version>
+        </dependency-->
     </dependencies>
 
     <build>

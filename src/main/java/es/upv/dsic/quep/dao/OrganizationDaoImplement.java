@@ -23,26 +23,12 @@ public class OrganizationDaoImplement implements OrganizationDao {
    
     @Override
     public Organization getOrganization(Stakeholder stk) {
-        Session session = null;
-        List<RoleStakeholder> listRS = null;
-        try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            //int idRole = 6;            
-            Query query = session.createQuery("from RoleStakeholder where id.idRole=6'" + "" + "' and id.idStakeholder = '" + stk.getId() + "'");
-            listRS = (List<RoleStakeholder>) query.list();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        if (listRS!=null) {
-            return listRS.get(0).getOrganization();
-        } else {
+       
             return null;
-        }
+        
     }
+    
+    
     
 
 }
