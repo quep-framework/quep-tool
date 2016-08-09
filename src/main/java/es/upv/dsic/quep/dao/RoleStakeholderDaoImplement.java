@@ -32,14 +32,10 @@ public class RoleStakeholderDaoImplement implements RoleStakeholderDao {
     public Role getRole(Stakeholder stk) {
         Session session = null;
         List<Role> listR = null; 
-        List<RoleStakeholderId> listRS = null;
+        //List<RoleStakeholderId> listRS = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
-            Query queryRS = session.createQuery("select rs.id from RoleStakeholder rs where rs.id.idStakeholder='" + stk.getId() + "'");
-            listRS = (List<RoleStakeholderId>) queryRS.list();
-            RoleStakeholderId id = listRS.get(0);
-
-            Query queryR = session.createQuery("from Role where id='" + id.getIdRole() + "'");
+            Query queryR = session.createQuery("select rs.role from RoleStakeholder rs where rs.id.idStakeholder='" + stk.getId() + "'");
             listR = (List<Role>) queryR.list();
 
         } catch (Exception e) {
@@ -50,8 +46,7 @@ public class RoleStakeholderDaoImplement implements RoleStakeholderDao {
             }
         }
         if (listR != null) {
-            Role r = new Role();
-            r = listR.get(0);
+            Role r =  listR.get(0);
             return r;
         } else {
             return null;

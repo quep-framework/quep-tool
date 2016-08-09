@@ -42,13 +42,9 @@ public class LoginBean implements Serializable {
     private boolean loggedIn = false;
     private boolean admin = false;
 
-    //private String nameStakeholder = "";
     private Stakeholder stakeholder = new Stakeholder();
     private Role role = new Role();
     private Organization organization = new Organization();
-    
-   // private String nameRole = "";
-   // private String nameOrganization = "";
 
     public String login() {
         setLoggedIn(checkUser(credentialBean.getUsername(), credentialBean.getPassword()));

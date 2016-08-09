@@ -16,10 +16,8 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
-//import javax.ejb.EJB;
 
 import javax.inject.Named;
-//import javax.faces.view.ViewScoped;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
@@ -45,11 +43,11 @@ public class MenuBean implements Serializable {
         init();
     }
 
-    //@PostConstruct
+    
     public void init() {
         this.getListMenuRol();
         model = new DefaultMenuModel();
-        this.establecerpermisos();
+        doMenu();
     }
 
     /**
@@ -57,13 +55,12 @@ public class MenuBean implements Serializable {
      */
     public void getListMenuRol() {
         MenuDao linkDao = new MenuDaoImplement();        
-        //Role r=(Role) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("role");      
         Role r= (Role) AccessBean.getSessionObj("role");
         int idRol = r.getId();
         this.lstMenu = linkDao.getMenuRol(idRol);
     }
 
-    public void establecerpermisos() {
+    public void doMenu() {
         for (Menu m : lstMenu) {
             if (m.getType().equals('S')) {
                 DefaultSubMenu firstSubmenu = new DefaultSubMenu(m.getName());
