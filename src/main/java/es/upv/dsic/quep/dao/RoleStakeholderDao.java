@@ -5,6 +5,8 @@
  */
 package es.upv.dsic.quep.dao;
 
+import es.upv.dsic.quep.model.Organization;
+import es.upv.dsic.quep.model.Role;
 import es.upv.dsic.quep.model.RoleStakeholder;
 import es.upv.dsic.quep.model.Stakeholder;
 import java.util.List;
@@ -15,5 +17,7 @@ import java.util.List;
  */
 public interface RoleStakeholderDao {
     
-    public RoleStakeholder getRoleStakeholder(Stakeholder stk);
+    public Role getRole(Stakeholder stk);
+    public Organization getOrganization(int idStakeholder, int idRole);
+    
 }

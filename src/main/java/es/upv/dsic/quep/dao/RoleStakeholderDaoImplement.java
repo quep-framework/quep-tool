@@ -7,11 +7,16 @@ package es.upv.dsic.quep.dao;
 
 import es.upv.dsic.quep.model.Stakeholder;
 import es.upv.dsic.quep.hibernate.HibernateUtil;
+import es.upv.dsic.quep.model.Organization;
+import es.upv.dsic.quep.model.Role;
 import es.upv.dsic.quep.model.RoleStakeholder;
+import es.upv.dsic.quep.model.RoleStakeholderId;
 import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import static org.hibernate.criterion.Expression.sql;
 
 /**
  *
@@ -20,16 +25,22 @@ import org.hibernate.Session;
 public class RoleStakeholderDaoImplement implements RoleStakeholderDao {
 
    
+    
+    
+    
     @Override
-    public RoleStakeholder getRoleStakeholder(Stakeholder stk) {
+    public Role getRole(Stakeholder stk) {
         Session session = null;
-        List<RoleStakeholder> listRS = null;      
+        List<Role> listR = null; 
+        List<RoleStakeholderId> listRS = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
-            //int idRole = 6;            
-            //Query query = session.createQuery("from RoleStakeholder where role.id = 6 and stakeholder.id = '" + stk.getId() + "'");
-            Query query = session.createQuery("from RoleStakeholder where role.id = 6 and stakeholder.id = 1");
-            listRS = (List<RoleStakeholder>) query.list();                    
+            Query queryRS = session.createQuery("select rs.id from RoleStakeholder rs where rs.id.idStakeholder='" + stk.getId() + "'");
+            listRS = (List<RoleStakeholderId>) queryRS.list();
+            RoleStakeholderId id = listRS.get(0);
+
+            Query queryR = session.createQuery("from Role where id='" + id.getIdRole() + "'");
+            listR = (List<Role>) queryR.list();
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -38,10 +49,34 @@ public class RoleStakeholderDaoImplement implements RoleStakeholderDao {
                 session.close();
             }
         }
-        if (listRS != null) {
-            RoleStakeholder rs = new RoleStakeholder();
-            rs = listRS.get(0);
-            return rs;
+        if (listR != null) {
+            Role r = new Role();
+            r = listR.get(0);
+            return r;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Organization getOrganization(int idStakeholder, int idRole) {
+        Session session = null;
+        List<Organization> listO = null; 
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            Query queryRS = session.createQuery("select rs.organization from RoleStakeholder rs where rs.id.idStakeholder='" + idStakeholder + "' and rs.id.idRole='"+idRole + "'");
+            listO = (List<Organization>) queryRS.list();            
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        if (listO != null) {            
+            Organization o = listO.get(0);
+            return o;
         } else {
             return null;
         }

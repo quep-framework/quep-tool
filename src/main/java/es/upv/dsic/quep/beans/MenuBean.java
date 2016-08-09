@@ -8,10 +8,13 @@ package es.upv.dsic.quep.beans;
 import es.upv.dsic.quep.dao.MenuDao;
 import es.upv.dsic.quep.dao.MenuDaoImplement;
 import es.upv.dsic.quep.model.Menu;
+import es.upv.dsic.quep.model.Role;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 
 //import javax.ejb.EJB;
 
@@ -34,6 +37,9 @@ public class MenuBean implements Serializable {
     private List<Menu> lstMenu;
     private Menu menu = new Menu();
     private MenuModel model;
+    
+    @Inject 
+    private AccessBean accessBean;
 
     public MenuBean() {
         init();
@@ -51,8 +57,9 @@ public class MenuBean implements Serializable {
      */
     public void getListMenuRol() {
         MenuDao linkDao = new MenuDaoImplement();        
-        //Role r=(Role) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("stakeholder");
-        int idRol = 6;
+        //Role r=(Role) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("role");      
+        Role r= (Role) AccessBean.getSessionObj("role");
+        int idRol = r.getId();
         this.lstMenu = linkDao.getMenuRol(idRol);
     }
 
@@ -104,4 +111,13 @@ public class MenuBean implements Serializable {
         this.model = model;
     }
 
+    public AccessBean getAccessBean() {
+        return accessBean;
+    }
+
+    public void setAccessBean(AccessBean accessBean) {
+        this.accessBean = accessBean;
+    }
+
+    
 }

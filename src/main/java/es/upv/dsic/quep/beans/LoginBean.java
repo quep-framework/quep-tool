@@ -35,14 +35,20 @@ public class LoginBean implements Serializable {
 
     @Inject
     private NavigationBean navigationBean;
+    
+    @Inject 
+    private AccessBean accessBean;
 
     private boolean loggedIn = false;
     private boolean admin = false;
 
-    private String nameStakeholder = "";
+    //private String nameStakeholder = "";
     private Stakeholder stakeholder = new Stakeholder();
-    private String role = "";
-    private String organization = "";
+    private Role role = new Role();
+    private Organization organization = new Organization();
+    
+   // private String nameRole = "";
+   // private String nameOrganization = "";
 
     public String login() {
         setLoggedIn(checkUser(credentialBean.getUsername(), credentialBean.getPassword()));
@@ -72,18 +78,18 @@ public class LoginBean implements Serializable {
         stakeholder = new Stakeholder();
         StakeholderDaoImplement linkDao = new StakeholderDaoImplement();
         stakeholder = linkDao.login(pUsername, pPassword);
-        if (stakeholder != null) {//pUsername.equals(this.stakeholder.get) && pPassword.equals("oscar")) {
-            setNameStakeholder(this.stakeholder.getName() + " " + this.stakeholder.getLastName());
-            /*OrganizationDaoImplement orgDao = new OrganizationDaoImplement();
-            setOrganization(orgDao.getOrganization(stakeholder).getName());*/
-          /*  RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
-            RoleStakeholder roleStk= new RoleStakeholder();
-            roleStk=roleStkImpl.getRoleStakeholder(stakeholder);
-            setOrganization(roleStk.getOrganization().getName());
-            setRole(roleStk.getRole().getName());*/
-           setOrganization("UPV");
-            setRole("Administrator");
-            return true;            
+        if (stakeholder != null) {            
+            RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
+            
+            role = new Role();
+            role =roleStkImpl.getRole(stakeholder);            
+            AccessBean.setSessionObj("role", role);
+            
+            organization = new Organization();
+            organization = roleStkImpl.getOrganization(stakeholder.getId(), role.getId());            
+            AccessBean.setSessionObj("organization", organization);
+            
+            return true;
         } else {
             return false;
         }
@@ -133,13 +139,7 @@ public class LoginBean implements Serializable {
         this.navigationBean = navigationBean;
     }
 
-    public String getNameStakeholder() {
-        return nameStakeholder;
-    }
-
-    public void setNameStakeholder(String nameStakeholder) {
-        this.nameStakeholder = nameStakeholder;
-    }
+   
 
     public Stakeholder getStakeholder() {
         return stakeholder;
@@ -149,22 +149,30 @@ public class LoginBean implements Serializable {
         this.stakeholder = stakeholder;
     }
 
-    public String getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(String organization) {
-        this.organization = organization;
-    }
-
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
-    
-    
+        
+    public AccessBean getAccessBean() {
+        return accessBean;
+    }
+
+    public void setAccessBean(AccessBean accessBean) {
+        this.accessBean = accessBean;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+     
 
 }

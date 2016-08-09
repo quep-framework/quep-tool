@@ -65,33 +65,34 @@
                                             <img alt="logo" src="/QuEP-Tool/resource/images/logo.png" style="width:125px;"/>
                                         </td><td>
                                             <span class="dispBlock logoDarkText" style="margin-left: 18px; font-size: 20px; width: 500px; ">A Total Quality Framework 
-                                                for the assessment and improvement of Emergency Plans Management in the organization "#{loginBean.organization}"</span> 
+                                                for the assessment and improvement of Emergency Plans Management in the organization "#{loginBean.organization.name} "</span> 
                                         </td></tr></table>
                             </a>
                                                           
                             <a class="PFTopLinks floatRight boldFont marginRight10 hashed" style="width:auto;"  >
                                 <table><tr><td>
                                             <table><tr><td>
-                                                        #{loginBean.nameStakeholder}
+                                                        #{loginBean.stakeholder.name} #{loginBean.stakeholder.lastName} 
                                                     </td><td>
                                                         <img  src="/QuEP-Tool/resource/images/user.png" style=" height: 20px; width: 20px;"  />
                                                     </td></tr>
                                                 <tr><td colspan="2" align="center">
                                                         <span class="PFDarkText">Role: </span>  
-                                                        <span class="PFDarkText">#{loginBean.role}</span>                                              
+                                                        <span class="PFDarkText">#{loginBean.role.name}</span>                                              
                                                     </td></tr>
                                             </table>                                
 
                                         </td></tr>
                                     <tr><td> <!--oncomplete="logout(xhr, status, args)"-->
                                             
-                                            <!--p:commandLink id="close"
-                                                           action="{loginBean.logout}"
+                                            <p:commandLink id="close"
+                                                           action="#{loginBean.logout}"
                                                            value="Logout"
                                                            style="margin-right:20px;" 
-                                                           /-->
+                                                           styleClass="ui-icon-extlink"                                                          
+                                                           />
                                             <!--p:commandButton  action="{loginBean.logout}" id="cmdLogout" alt="Logout"  value="logout" image="logout-img" /-->
-                                            <p:commandButton value="Logout" type="button"  action="#{loginBean.logout}" icon="ui-icon-extlink" />
+                                            <!--p:commandButton value="Logout" type="button"  action="{loginBean.logout}" icon="ui-icon-extlink" /-->
                                         </td></tr>
                                 </table>
                             </a>                                                                                        

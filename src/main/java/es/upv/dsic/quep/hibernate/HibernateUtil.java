@@ -42,4 +42,6 @@ public class HibernateUtil implements Serializable {
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
+    
+    
 }
