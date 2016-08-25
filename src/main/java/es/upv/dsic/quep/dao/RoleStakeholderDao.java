@@ -19,5 +19,6 @@ public interface RoleStakeholderDao {
     
     public Role getRole(Stakeholder stk);
     public Organization getOrganization(int idStakeholder, int idRole);
+    public List<Organization> getListOrganization(int idStakeholder, int idRole);
     
 }

@@ -6,7 +6,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:composite="http://java.sun.com/jsf/composite"  
       xmlns:ui="http://java.sun.com/jsf/facelets" 
-      >
+          
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -33,11 +34,29 @@
                     <p:password id="password" value="#{credentialBean.password}" required="true" label="password" />
 
                     <f:facet name="footer">
-                        <p:commandButton value="Login" update="growl"  action ="#{loginBean.login}"
-                                         oncomplete="handleLoginRequest(xhr, status, args)" />
+                        <p:commandButton value="Login" update="growl"  action ="#{loginBean.login}" 
+                                         oncomplete ="handleLoginRequest(xhr, status, args)" />
+                        
+                        <!--p:commandButton value="Login" 
+                                            action ="{loginBean.login()}"
+                                         onclick="PF('dlg1').show();" title="login"                        
+                                         oncomplete="handleLoginRequest(xhr, status, args)" >
+                            <c:if test="{loginBean.bandOrganization}" var="dlg1"/>                                                            
+                        </p:commandButton-->
                     </f:facet>  
                 </h:panelGrid>
             </p:dialog>
+            <!-- end dialog -->
+            
+             <!-- start dialog-->       
+             <!--p:growl id="growl1" sticky="true" showDetail="true" life="3000" />
+             <p:dialog header="Organization" widgetVar="dlg1" resizable="false">
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputLabel for="org" value="Organization:" />
+                    <p:inputText id="org" value="hola mudo" required="true" label="organization111" />                    
+                   
+                </h:panelGrid>
+            </p:dialog-->
             <!-- end dialog -->
 
             <!--       <ui:fragment rendered="#not empty userBean.stakeholder}">
@@ -140,14 +159,38 @@
         </h:form>
 
         <script type="text/javascript">
-                                    function handleLoginRequest(xhr, status, args) {
-                                        if (args.validationFailed || !args.loggedIn) {
-                                            PF('dlg').jq.effect("shake", {times: 5}, 100);
-                                        } else {
-                                            PF('dlg').hide();
-                                            $('#loginLink').fadeOut();
-                                        }
-                                    }
+               /* function handleLoginRequest(xhr, status, args) {                
+                    if (args.bandOrganization){                                    
+                             PF('dlg1').show();
+                         }
+                         else{
+                     if (args.validationFailed || !args.loggedIn ) {
+                         PF('dlg').jq.effect("shake", {times: 5}, 100);                                                  
+                     } else {
+                             PF('dlg').hide();
+                             $('#loginLink').fadeOut();    
+                 }}
+                 }*/
+                 
+                 
+                function handleLoginRequest(xhr, status, args) {
+                     if (args.validationFailed || !args.loggedIn ) {
+                         PF('dlg').jq.effect("shake", {times: 5}, 100);                                                  
+                     } else {                        
+                             PF('dlg').hide();
+                             $('#loginLink').fadeOut();                                                                                   
+                     }
+                 }
+                 
+                 /*function handleOrganizationRequest(xhr, status, args) {
+                     if (args.validationFailed || !args.bandOrganization) {
+                         PF('dlg1').jq.effect("shake", {times: 5}, 100);     
+                     } else {
+                            PF('dlg1').hide();
+                            $('#organizationLink').fadeOut();                                                                                                            
+                     }
+                 }*/
+
         </script>
     </h:body>
 </html>

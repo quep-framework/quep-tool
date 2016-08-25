@@ -1,5 +1,5 @@
 package es.upv.dsic.quep.model;
-// Generated 06-ago-2016 21:21:41 by Hibernate Tools 4.3.1
+// Generated 10-ago-2016 23:05:31 by Hibernate Tools 4.3.1
 
 
 import javax.persistence.Column;
@@ -14,13 +14,15 @@ public class RoleStakeholderId  implements java.io.Serializable {
 
      private int idRole;
      private int idStakeholder;
+     private int idOrganization;
 
     public RoleStakeholderId() {
     }
 
-    public RoleStakeholderId(int idRole, int idStakeholder) {
+    public RoleStakeholderId(int idRole, int idStakeholder, int idOrganization) {
        this.idRole = idRole;
        this.idStakeholder = idStakeholder;
+       this.idOrganization = idOrganization;
     }
    
 
@@ -45,6 +47,16 @@ public class RoleStakeholderId  implements java.io.Serializable {
     }
 
 
+    @Column(name="id_organization", nullable=false)
+    public int getIdOrganization() {
+        return this.idOrganization;
+    }
+    
+    public void setIdOrganization(int idOrganization) {
+        this.idOrganization = idOrganization;
+    }
+
+
    public boolean equals(Object other) {
          if ( (this == other ) ) return true;
 		 if ( (other == null ) ) return false;
@@ -52,7 +64,8 @@ public class RoleStakeholderId  implements java.io.Serializable {
 		 RoleStakeholderId castOther = ( RoleStakeholderId ) other; 
          
 		 return (this.getIdRole()==castOther.getIdRole())
- && (this.getIdStakeholder()==castOther.getIdStakeholder());
+ && (this.getIdStakeholder()==castOther.getIdStakeholder())
+ && (this.getIdOrganization()==castOther.getIdOrganization());
    }
    
    public int hashCode() {
@@ -60,6 +73,7 @@ public class RoleStakeholderId  implements java.io.Serializable {
          
          result = 37 * result + this.getIdRole();
          result = 37 * result + this.getIdStakeholder();
+         result = 37 * result + this.getIdOrganization();
          return result;
    }   
 

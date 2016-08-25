@@ -2,26 +2,26 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
 <hibernate-reverse-engineering>
   <schema-selection match-catalog="quepDB" match-schema="public"/>
-  <table-filter match-name="questionnaire"/>
+  <table-filter match-name="question_type"/>
+  <table-filter match-name="quep_question_technique"/>
+  <table-filter match-name="response_option"/>
+  <table-filter match-name="questionnaire_response"/>
+  <table-filter match-name="role"/>
+  <table-filter match-name="questionnaire_quep_question"/>
+  <table-filter match-name="role_stakeholder"/>
+  <table-filter match-name="technique"/>
+  <table-filter match-name="maturity_level"/>
+  <table-filter match-name="maturity_level_practice"/>
+  <table-filter match-name="response"/>
+  <table-filter match-name="role_practice"/>
+  <table-filter match-name="stakeholder"/>
+  <table-filter match-name="resilience_characteristic"/>
   <table-filter match-name="menu"/>
   <table-filter match-name="quep_question_resilience"/>
-  <table-filter match-name="stakeholder"/>
-  <table-filter match-name="technique"/>
-  <table-filter match-name="practice"/>
-  <table-filter match-name="question_type"/>
-  <table-filter match-name="role_practice"/>
-  <table-filter match-name="questionnaire_response"/>
-  <table-filter match-name="principle"/>
-  <table-filter match-name="role"/>
-  <table-filter match-name="maturity_level"/>
-  <table-filter match-name="quep_question_response_option"/>
-  <table-filter match-name="quep_question_technique"/>
-  <table-filter match-name="response"/>
   <table-filter match-name="organization"/>
-  <table-filter match-name="resilience_characteristic"/>
-  <table-filter match-name="maturity_level_practice"/>
-  <table-filter match-name="role_stakeholder"/>
-  <table-filter match-name="response_option"/>
+  <table-filter match-name="principle"/>
   <table-filter match-name="quep_question"/>
-  <table-filter match-name="questionnaire_quep_question"/>
+  <table-filter match-name="questionnaire"/>
+  <table-filter match-name="practice"/>
+  <table-filter match-name="quep_question_response_option"/>
 </hibernate-reverse-engineering>

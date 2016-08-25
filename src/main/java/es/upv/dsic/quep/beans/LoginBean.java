@@ -5,7 +5,6 @@
  */
 package es.upv.dsic.quep.beans;
 
-import es.upv.dsic.quep.dao.OrganizationDaoImplement;
 import es.upv.dsic.quep.dao.StakeholderDaoImplement;
 import es.upv.dsic.quep.model.Organization;
 import es.upv.dsic.quep.model.Role;
@@ -17,9 +16,9 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
-import es.upv.dsic.quep.dao.RoleStakeholderDao;
 import es.upv.dsic.quep.dao.RoleStakeholderDaoImplement;
-import es.upv.dsic.quep.model.RoleStakeholder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -35,8 +34,8 @@ public class LoginBean implements Serializable {
 
     @Inject
     private NavigationBean navigationBean;
-    
-    @Inject 
+
+    @Inject
     private AccessBean accessBean;
 
     private boolean loggedIn = false;
@@ -44,7 +43,10 @@ public class LoginBean implements Serializable {
 
     private Stakeholder stakeholder = new Stakeholder();
     private Role role = new Role();
-    private Organization organization = new Organization();
+    
+
+  
+    //private boolean bandOrganization = false;
 
     public String login() {
         setLoggedIn(checkUser(credentialBean.getUsername(), credentialBean.getPassword()));
@@ -52,6 +54,7 @@ public class LoginBean implements Serializable {
         msg.setSeverity(FacesMessage.SEVERITY_ERROR);
         FacesContext.getCurrentInstance().addMessage(null, msg);
         RequestContext.getCurrentInstance().addCallbackParam("loggedIn", loggedIn);
+        //RequestContext.getCurrentInstance().addCallbackParam("bandOrganization", bandOrganization);
 
         if (loggedIn) {
             return navigationBean.redirectToUser();
@@ -74,23 +77,20 @@ public class LoginBean implements Serializable {
         stakeholder = new Stakeholder();
         StakeholderDaoImplement linkDao = new StakeholderDaoImplement();
         stakeholder = linkDao.login(pUsername, pPassword);
-        if (stakeholder != null) {            
+        AccessBean.setSessionObj("stakeholder", stakeholder);
+        if (stakeholder != null) {
             RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
-            
             role = new Role();
-            role =roleStkImpl.getRole(stakeholder);            
-            AccessBean.setSessionObj("role", role);
-            
-            organization = new Organization();
-            organization = roleStkImpl.getOrganization(stakeholder.getId(), role.getId());            
-            AccessBean.setSessionObj("organization", organization);
+            role = roleStkImpl.getRole(stakeholder);
+            AccessBean.setSessionObj("role", role);            
             
             return true;
         } else {
             return false;
         }
     }
-
+    
+         
     /**
      * @return the loggedIn
      */
@@ -135,8 +135,6 @@ public class LoginBean implements Serializable {
         this.navigationBean = navigationBean;
     }
 
-   
-
     public Stakeholder getStakeholder() {
         return stakeholder;
     }
@@ -152,7 +150,7 @@ public class LoginBean implements Serializable {
     public void setRole(Role role) {
         this.role = role;
     }
-        
+
     public AccessBean getAccessBean() {
         return accessBean;
     }
@@ -161,14 +159,15 @@ public class LoginBean implements Serializable {
         this.accessBean = accessBean;
     }
 
-    public Organization getOrganization() {
-        return organization;
+
+    /*
+    public boolean isBandOrganization() {
+        return bandOrganization;
     }
 
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
-    }
+    public void setBandOrganization(boolean bandOrganization) {
+        this.bandOrganization = bandOrganization;
+    }*/
 
-     
-
+    
 }
