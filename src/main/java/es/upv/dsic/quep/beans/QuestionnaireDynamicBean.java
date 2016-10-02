@@ -51,6 +51,7 @@ import javax.inject.Named;
 import javax.ws.rs.core.Form;
 import org.primefaces.behavior.ajax.AjaxBehavior;
 import org.primefaces.behavior.ajax.AjaxBehaviorListenerImpl;
+import org.primefaces.component.calendar.Calendar;
 
 
 import org.primefaces.component.inputtextarea.InputTextarea;
@@ -76,12 +77,14 @@ import org.primefaces.model.menu.MenuModel;
 public class QuestionnaireDynamicBean implements Serializable {
 
     private TabView tabview;
+    private Calendar cal;
     private Tab tab;
     private PanelGrid panel;
     //private SelectOneRadio rB;
     private SelectOneRadio rB;
     private OutputLabel lbl;
     private OutputLabel lbl1;
+      private OutputLabel lblRsp;
     // private OutputLabel lblItem;
     private InputTextarea txtA;
     private SelectManyCheckbox selManyChk;
@@ -90,7 +93,7 @@ public class QuestionnaireDynamicBean implements Serializable {
     @PostConstruct
     public void init() {
         panel = new PanelGrid();
-        panel.setId("p1");
+        panel.setId("p1");        
 
         tabview = new TabView();
         tabview.setId("tv1");
@@ -103,10 +106,17 @@ public class QuestionnaireDynamicBean implements Serializable {
         pnl = new PanelGrid();
         pnl.setId("pnl");
         pnl.setColumns(2);
+        
 
         lbl1 = new OutputLabel();
         lbl1.setValue("Q1. Has the organization performed any emergency drill?");
         pnl.getChildren().add(lbl1);
+   
+        /*lblRsp = new OutputLabel();
+        lblRsp.setValue("Response:");
+        pnl.getChildren().add(lblRsp);
+       */
+        
        
         rB = new SelectOneRadio();
         rB.setId("rB");
@@ -292,6 +302,24 @@ public class QuestionnaireDynamicBean implements Serializable {
     public void setPnl(PanelGrid pnl) {
         this.pnl = pnl;
     }
+
+    public OutputLabel getLblRsp() {
+        return lblRsp;
+    }
+
+    public void setLblRsp(OutputLabel lblRsp) {
+        this.lblRsp = lblRsp;
+    }
+
+    public Calendar getCal() {
+        return cal;
+    }
+
+    public void setCal(Calendar cal) {
+        this.cal = cal;
+    }
+    
+    
 
     
 }

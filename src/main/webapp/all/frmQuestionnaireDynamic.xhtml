@@ -2,136 +2,181 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:composite="http://java.sun.com/jsf/composite"  
-      xmlns:ui="http://java.sun.com/jsf/facelets" 
-      >
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:f="http://xmlns.jcp.org/jsf/core"          
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <title>Menu</title>
+        <title>Questionnaire</title>
         <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/themes/aristo/theme.css" />
         <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/site.css" />
-        <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/jquery-ui.css" />
+        <!--link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/jquery-ui.css" />
         <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/perfect-scrollbar.css" />
         <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/sh.css" />
-        <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/icons/css/font-awesome.min.css" /> 
+        <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/icons/css/font-awesome.min.css" /--> 
 
         <!--script type="text/javascript" src="/QuEP-Tool/resource/js/jquery.js"></script-->
-        <script type="text/javascript" src="/QuEP-Tool/resource/js/jquery-ui.js"></script>
-        <script type="text/javascript" src="/QuEP-Tool/resource/js/perfect-scrollbar.js"></script>
+        <!--documentado x bloquear select one menu--> 
+        <!--script type="text/javascript" src="/QuEP-Tool/resource/js/perfect-scrollbar.js"></script>
         <script type="text/javascript" src="/QuEP-Tool/resource/js/site.js"></script>
-        <script type="text/javascript" src="/QuEP-Tool/resource/js/index.js"></script>
+        <script type="text/javascript" src="/QuEP-Tool/resource/js/index.js"></script-->
 
         <!-- Dependencies of some widgets -->
-        <script type="text/javascript" src="/QuEP-Tool/resource/js/plugins/plugins-all.js"></script>
+        <!--script type="text/javascript" src="/QuEP-Tool/resource/js/plugins/plugins-all.js"></script-->
 
         <!-- Mustache for templating support -->
-        <script type="text/javascript" src="/QuEP-Tool/resource/js/plugins/mustache.min.js"></script>
+        <!--script type="text/javascript" src="/QuEP-Tool/resource/js/plugins/mustache.min.js"></script-->
 
         <!-- X-TAG for PrimeElements -->
-        <script type="text/javascript" src="/QuEP-Tool/resource/js/x-tag-core.min.js"></script>
+        <!--script type="text/javascript" src="/QuEP-Tool/resource/js/x-tag-core.min.js"></script-->
 
         <!-- PrimeUI -->
-        <link rel="stylesheet" href="build/primeui.css" />
-        <script type="text/javascript" src="build/primeui.js"></script>
-        <script type="text/javascript" src="build/primeelements.js"></script>                                
+        <!--link rel="stylesheet" href="/QuEP-Tool/build/primeui.css" />
+        <script type="text/javascript" src="/QuEP-Tool/build/primeui.js"></script>
+        <script type="text/javascript" src="/QuEP-Tool/build/primeelements.js"></script-->                                                             
     </h:head>
     <h:body>
-        <h:form>           
-            <div class="PC">
-                <!--start menu izq-->
-                <div id="MENUSIDE">
-                    <div id="MENUSIDEindent">
-                        <span id="LOGO" class="bordersOfMenuSide" >
-                            <img alt="logo" src="/QuEP-Tool/resource/images/logoT.png" style="width: 120px; margin-left: 40px; margin-bottom: 10px;"/>
-                            <img id="BlueLogo" alt="logo" src="/QuEP-Tool/resource/images/logo.png"   style="width: 120px; margin-left: 40px; margin-bottom: 10px;" class="hiddenLogo"/>                         
-                        </span>                                              
+         <!--h:form-->   
+
+
+
+
+
+        <div class="PC">
+            <!--start menu izq-->
+            <div id="MENUSIDE">
+                <div id="MENUSIDEindent">
+                    <span id="LOGO" class="bordersOfMenuSide" >
+                        <img alt="logo" src="/QuEP-Tool/resource/images/logoT.png" style="width: 120px; margin-left: 40px; margin-bottom: 10px;"/>
+                        <img id="BlueLogo" alt="logo" src="/QuEP-Tool/resource/images/logo.png"   style="width: 120px; margin-left: 40px; margin-bottom: 10px;" class="hiddenLogo"/>                         
+                    </span>   
+                    <h:form>
                         <p:panelMenu model="#{menuBean.model}" />                                                
-                    </div>
-                </div>                
-                <!--end menu izq-->
+                    </h:form>
+                </div>
+            </div>                
+            <!--end menu izq-->
 
-                <div id="CONTENTSIDE">
-                    <div id="CONTENTSIDEindent">
+            <div id="CONTENTSIDE">
+                <div id="CONTENTSIDEindent">
 
-                        <!-- header bar start-->
-                        <div class="ContentSideSections" id="PFTopLinksCover" style="height:60px;">
-                            <a id="LOGOTEXTSIDE" href="/" >
-                                <table><tr><td>
-                                            <img alt="logo" src="/QuEP-Tool/resource/images/logo.png" style="width:125px;"/>
-                                        </td><td>
-                                            <span class="dispBlock logoDarkText" style="margin-left: 18px; font-size: 20px; width: 500px; ">A Total Quality Framework 
-                                                for the assessment and improvement of Emergency Plans Management in the organization "#{loginBean.organization.name} "</span> 
-                                        </td></tr></table>
-                            </a>
+                    <!-- header bar start-->
+                    <!--div class="ContentSideSections" id="PFTopLinksCover" style="height:60px;"-->
+                    <div class="ContentSideSections" id="PFTopLinksCover" style="height:60px;">
+                        <a id="LOGOTEXTSIDE" href="/" >
+                            <table><tr><td>
+                                        <img alt="logo" src="/QuEP-Tool/resource/images/logo.png" style="width:125px;"/>
+                                    </td><td>
+                                        <span class="dispBlock logoDarkText" style="margin-left: 18px; font-size: 20px; width: 500px; ">A Total Quality Framework 
+                                            for the assessment and improvement of Emergency Plans Management 
+                                            <h:form>
+                                                <c:choose id="chooseOrg">
+                                                    <c:when test="#{organizationBean.bandOrganization}" id="bOrgTrue">
+                                                        <h:panelGrid columns="2" cellpadding="2" id="pnlOrgBean">                                        
+                                                            <p:outputLabel  value="Organization:"  id="lblOrgTrue"/>
+                                                            <p:selectOneMenu  value="#{organizationBean.organization}" var="o"  effect="fade" 
+                                                                              filter="true" filterMatchMode="contains" >
+                                                                <f:selectItems value="#{organizationBean.lstOrganization}" var="lstO"  itemLabel="#{lstO.name}" itemValue="#{lstO}" />
 
-                            <a class="PFTopLinks floatRight boldFont marginRight10 hashed" style="width:auto;"  >
-                                <table><tr><td>
-                                            <table><tr><td>
-                                                        #{loginBean.stakeholder.name} #{loginBean.stakeholder.lastName} 
-                                                    </td><td>
-                                                        <img  src="/QuEP-Tool/resource/images/user.png" style=" height: 20px; width: 20px;"  />
-                                                    </td></tr>
-                                                <tr><td colspan="2" align="center">
-                                                        <span class="PFDarkText">Role: </span>  
-                                                        <span class="PFDarkText">#{loginBean.role.name}</span>                                              
-                                                    </td></tr>
-                                            </table>                                
+                                                                <p:column>
+                                                                    <h:outputText value="#{o.name}" />
+                                                                </p:column>
+                                                               
+                                                            </p:selectOneMenu>                                                                                                                
+                                                        </h:panelGrid>
+                                                    </c:when>
+                                                    <c:otherwise id="bOrgFalse">
+                                                        Organization: #{organizationBean.nameOrganization}
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </h:form>                                                                                                
 
-                                        </td></tr>
-                                    <tr><td> <!--oncomplete="logout(xhr, status, args)"-->
+                                            <!--p:selectOneMenu id="advanced" value="{selectOneMenuView.theme}" converter="themeConverter" panelStyle="width:180px"
+                                                             effect="fade" var="t" style="width:160px" filter="true" filterMatchMode="startsWith">
+                                                <f:selectItems value="{selectOneMenuView.themes}" var="theme" itemLabel="{theme.displayName}" itemValue="{theme}" />
 
+                                                <p:column style="width:10%">
+                                                    <h:outputText styleClass="ui-theme ui-theme-{t.name}" />
+                                                </p:column>
+
+                                                <p:column>
+                                                    <h:outputText value="{t.displayName}" />
+                                                </p:column>
+                                            </p:selectOneMenu-->
+
+                                        </span> 
+                                    </td>
+                                </tr></table>
+                        </a>
+
+
+
+
+                        <a class="PFTopLinks floatRight boldFont marginRight10 hashed" style="width:auto;"  >
+                            <table><tr><td>
+                                        <table><tr><td>
+                                                    #{loginBean.stakeholder.name} #{loginBean.stakeholder.lastName} 
+                                                </td><td>
+                                                    <img  src="/QuEP-Tool/resource/images/user.png" style=" height: 20px; width: 20px;"  />
+                                                </td></tr>
+                                            <tr><td colspan="2" align="center">
+                                                    <span class="PFDarkText">Role: </span>  
+                                                    <span class="PFDarkText">#{loginBean.role.name}</span>                                              
+                                                </td></tr>
+                                        </table>                                
+
+                                    </td></tr>
+                                <tr><td> <!--oncomplete="logout(xhr, status, args)"-->
+                                        <h:form>
                                             <p:commandLink id="close"
-                                                           action="#{loginBean.logout}"
+                                                           action="#{loginBean.logout()}"
                                                            value="Logout"
                                                            style="margin-right:20px;" 
                                                            styleClass="ui-icon-extlink"                                                          
                                                            />
-                                            <!--p:commandButton  action="{loginBean.logout}" id="cmdLogout" alt="Logout"  value="logout" image="logout-img" /-->
-                                            <!--p:commandButton value="Logout" type="button"  action="{loginBean.logout}" icon="ui-icon-extlink" /-->
-                                        </td></tr>
-                                </table>
-                            </a>                                                                                        
-                        </div>
-                        <!-- header bar end-->
-
-                        <!-- content body start-->
-                         <div>
-                            <h:form>                                 
-                                <div>
-                                    <h:panelGrid binding="#{questionnaireDynamicBean.panel}"/>
-                                    <!--h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
-                                        <p:outputLabel for="item" value="Item:" />
-                                        <p:selectOneRadio  id="item" value="{questionnaireDynamicBean.item}"   layout="grid" columns="3">
-                                            <f:selectItems value="{questionnaireDynamicBean.items}" var="c" itemLabel="{item}" itemValue="{item}"/>
-                                        </p:selectOneRadio>
-                                    </h:panelGrid-->                                                                       
-                                </div>
-                            </h:form>
-                        </div>                                            
-                        <!-- content body end-->
-
-
-                        <!-- footer start-->
-                        <div class="ContentSideSections">
-                            <span class="floatLeft fontSize14 gray"><a href="http://www.quep.dsic.upv.es">QuEP-T</a>, Copyright 2016</span>
-                            <span class="floatRight fontSize14 gray">All rights reserved</span>
-                            <div style="clear:both"></div>
-                        </div>
-                        <!-- footer end-->
-
+                                        </h:form>
+                                        <!--p:commandButton  action="{loginBean.logout}" id="cmdLogout" alt="Logout"  value="logout" image="logout-img" /-->
+                                        <!--p:commandButton value="Logout" type="button"  action="{loginBean.logout}" icon="ui-icon-extlink" /-->
+                                    </td></tr>
+                            </table>
+                        </a>                                                                                        
                     </div>
+                    <!-- header bar end-->
+
+                    <!-- content body start-->         
+                    <div>
+                        <h:panelGrid binding="#{questionnaireDynamicBean.panel}"/>
+                        <!--h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                            <p:outputLabel for="item" value="Item:" />
+                            <p:selectOneRadio  id="item" value="{questionnaireDynamicBean.item}"   layout="grid" columns="3">
+                                <f:selectItems value="{questionnaireDynamicBean.items}" var="c" itemLabel="{item}" itemValue="{item}"/>
+                            </p:selectOneRadio>
+                        </h:panelGrid-->                                                                       
+                    </div>
+                    <!-- content body end-->
+
+
+                    <!-- footer start-->
+                    <div class="ContentSideSections">
+                        <span class="floatLeft fontSize14 gray"><a href="http://www.quep.dsic.upv.es">QuEP-T</a>, Copyright 2016</span>
+                        <span class="floatRight fontSize14 gray">All rights reserved</span>
+                        <div style="clear:both"></div>
+                    </div>
+                    <!-- footer end-->
+
                 </div>
             </div>
+        </div>
 
-            <script type="text/javascript" src="/QuEP-Tool/resource/js/sh.js"></script>
+        <!--script type="text/javascript" src="/QuEP-Tool/resource/js/sh.js"></script-->
 
 
-        </h:form>                   
+        <!--/h:form-->   
+        
+                   
     </h:body>
 
 </html>
