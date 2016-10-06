@@ -17,3 +17,8 @@ and open the template in the editor.
     
 }
 
+.panelNoBorder, .panelNoBorder tr, .panelNoBorder td{
+border: hidden;
+border-color: white;
+}
+

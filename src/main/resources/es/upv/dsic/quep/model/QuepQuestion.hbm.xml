@@ -8,10 +8,12 @@
             <column name="id" />
             <generator class="assigned" />
         </id>
-        <many-to-one name="practice" class="es.upv.dsic.quep.model.Practice" fetch="select">
+        <many-to-one name="practice" class="es.upv.dsic.quep.model.Practice" 
+                     fetch="select" lazy="false">
             <column name="id_practice" not-null="true" />
         </many-to-one>
-        <many-to-one name="questionType" class="es.upv.dsic.quep.model.QuestionType" fetch="select">
+        <many-to-one name="questionType" class="es.upv.dsic.quep.model.QuestionType"
+                     fetch="select" lazy="false">
             <column name="id_question_type" not-null="true" />
         </many-to-one>
         <property name="idPrinciple" type="int">

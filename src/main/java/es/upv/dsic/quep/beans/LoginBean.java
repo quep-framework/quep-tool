@@ -74,6 +74,9 @@ public class LoginBean implements Serializable {
     }
 
     private boolean checkUser(String pUsername, String pPassword) {
+        ///////*******************
+        //REVISAR MAPEO Y CAMBIARLO lazy="false"
+        //////
         stakeholder = new Stakeholder();
         StakeholderDaoImplement linkDao = new StakeholderDaoImplement();
         stakeholder = linkDao.login(pUsername, pPassword);
