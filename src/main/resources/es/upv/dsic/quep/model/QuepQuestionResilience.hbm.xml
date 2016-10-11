@@ -12,10 +12,15 @@
                 <column name="id_quep_question" />
             </key-property>
         </composite-id>
-        <many-to-one name="quepQuestion" class="es.upv.dsic.quep.model.QuepQuestion" update="false" insert="false" fetch="select">
+        <many-to-one name="quepQuestion" class="es.upv.dsic.quep.model.QuepQuestion"
+                     lazy="false"
+                     update="false" insert="false" fetch="select">
             <column name="id_quep_question" not-null="true" />
         </many-to-one>
-        <many-to-one name="resilienceCharacteristic" class="es.upv.dsic.quep.model.ResilienceCharacteristic" update="false" insert="false" fetch="select">
+        <many-to-one name="resilienceCharacteristic" 
+                     class="es.upv.dsic.quep.model.ResilienceCharacteristic" 
+                     lazy="false"
+                     update="false" insert="false" fetch="select">
             <column name="id_resilience" not-null="true" />
         </many-to-one>
         <property name="creationUser" type="string">

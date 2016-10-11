@@ -24,10 +24,14 @@
                 <column name="id_organization" />
             </key-property>
         </composite-id>
-        <many-to-one name="organization" class="es.upv.dsic.quep.model.Organization" update="false" insert="false" fetch="select">
+        <many-to-one name="organization" class="es.upv.dsic.quep.model.Organization" 
+                     lazy="false"
+                     update="false" insert="false" fetch="select">
             <column name="id_organization" not-null="true" />
         </many-to-one>
-        <many-to-one name="questionnaire" class="es.upv.dsic.quep.model.Questionnaire" update="false" insert="false" fetch="select">
+        <many-to-one name="questionnaire" class="es.upv.dsic.quep.model.Questionnaire" 
+                     lazy="false"
+                     update="false" insert="false" fetch="select">
             <column name="id_questionnaire" not-null="true" />
             <column name="id_practice" not-null="true" />
             <column name="id_role" not-null="true" />

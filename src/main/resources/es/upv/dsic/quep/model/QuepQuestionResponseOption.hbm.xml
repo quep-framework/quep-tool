@@ -12,10 +12,14 @@
                 <column name="id_response_option" />
             </key-property>
         </composite-id>
-        <many-to-one name="quepQuestion" class="es.upv.dsic.quep.model.QuepQuestion" update="false" insert="false" fetch="select">
+        <many-to-one name="quepQuestion" class="es.upv.dsic.quep.model.QuepQuestion" 
+                     lazy="false"
+                     update="false" insert="false" fetch="select">
             <column name="id_quep_question" not-null="true" />
         </many-to-one>
-        <many-to-one name="responseOption" class="es.upv.dsic.quep.model.ResponseOption" update="false" insert="false" fetch="select">
+        <many-to-one name="responseOption" class="es.upv.dsic.quep.model.ResponseOption" 
+                     lazy="false"
+                     update="false" insert="false" fetch="select">
             <column name="id_quep_question" not-null="true" />
         </many-to-one>
         <property name="creationUser" type="string">

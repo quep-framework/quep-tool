@@ -12,10 +12,14 @@
                 <column name="id_maturity_level" />
             </key-property>
         </composite-id>
-        <many-to-one name="maturityLevel" class="es.upv.dsic.quep.model.MaturityLevel" update="false" insert="false" fetch="select">
+        <many-to-one name="maturityLevel" class="es.upv.dsic.quep.model.MaturityLevel" 
+                     lazy="false"
+                     update="false" insert="false" fetch="select">
             <column name="id_maturity_level" not-null="true" />
         </many-to-one>
-        <many-to-one name="practice" class="es.upv.dsic.quep.model.Practice" update="false" insert="false" fetch="select">
+        <many-to-one name="practice" class="es.upv.dsic.quep.model.Practice" 
+                     lazy="false"
+                     update="false" insert="false" fetch="select">
             <column name="id_practice" not-null="true" />
         </many-to-one>
         <property name="creationUser" type="string">

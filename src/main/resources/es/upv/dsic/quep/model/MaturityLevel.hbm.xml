@@ -3,7 +3,8 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated 20-sep-2016 10:46:43 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="es.upv.dsic.quep.model.MaturityLevel" table="maturity_level" schema="public" optimistic-lock="version">
+    <class name="es.upv.dsic.quep.model.MaturityLevel" table="maturity_level" 
+           schema="public" optimistic-lock="version">
         <id name="id" type="int">
             <column name="id" />
             <generator class="sequence">
