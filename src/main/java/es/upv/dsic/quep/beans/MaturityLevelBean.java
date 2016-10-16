@@ -8,6 +8,7 @@ package es.upv.dsic.quep.beans;
 import es.upv.dsic.quep.dao.MaturityLevelDao;
 import es.upv.dsic.quep.dao.MaturityLevelDaoImplement;
 import es.upv.dsic.quep.model.MaturityLevel;
+import es.upv.dsic.quep.model.RoleStakeholder;
 import es.upv.dsic.quep.model.Stakeholder;
 import java.io.Serializable;
 import java.util.Date;
@@ -87,8 +88,10 @@ public class MaturityLevelBean implements Serializable {
     }
     
     public void setIMaturityLevel(){
+        RoleStakeholder rs= (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
         Stakeholder stk = new Stakeholder();
-        stk = (Stakeholder) AccessBean.getSessionObj("stakeholder");
+        //stk = (Stakeholder) AccessBean.getSessionObj("stakeholder");
+        stk = rs.getStakeholder();
         maturityLevel.setCreationUser(stk.getEmail());
         maturityLevel.setFechaCreado(new Date());
         maturityLevel.setAudit("I");
@@ -96,8 +99,10 @@ public class MaturityLevelBean implements Serializable {
     }
     
     public void setUMaturityLevel(){
+        RoleStakeholder rs= (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
         Stakeholder stk = new Stakeholder();
-        stk = (Stakeholder) AccessBean.getSessionObj("stakeholder");
+        //stk = (Stakeholder) AccessBean.getSessionObj("stakeholder");
+        stk = rs.getStakeholder();
         maturityLevel.setActualizado(stk.getEmail());
         maturityLevel.setModificationDate(new Date());
         maturityLevel.setAudit("U");

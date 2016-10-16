@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 20-sep-2016 10:46:43 by Hibernate Tools 4.3.1 -->
+<!-- Generated 16-oct-2016 11:03:17 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="es.upv.dsic.quep.model.QuepQuestion" table="quep_question" schema="public" optimistic-lock="version">
         <id name="id" type="int">
@@ -9,11 +9,11 @@
             <generator class="assigned" />
         </id>
         <many-to-one name="practice" class="es.upv.dsic.quep.model.Practice" 
-                     fetch="select" lazy="false">
+                     lazy="false" fetch="select">
             <column name="id_practice" not-null="true" />
         </many-to-one>
-        <many-to-one name="questionType" class="es.upv.dsic.quep.model.QuestionType"
-                     fetch="select" lazy="false">
+        <many-to-one name="questionType" class="es.upv.dsic.quep.model.QuestionType" 
+                     lazy="false" fetch="select">
             <column name="id_question_type" not-null="true" />
         </many-to-one>
         <property name="idPrinciple" type="int">
@@ -70,15 +70,13 @@
             </key>
             <one-to-many class="es.upv.dsic.quep.model.QuepQuestionTechnique" />
         </set>
-        <set name="quepQuestionResponseOptions" table="quep_question_response_option" 
-             inverse="true" lazy="false" fetch="select">
+        <set name="quepQuestionResponseOptions" table="quep_question_response_option" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="id_quep_question" not-null="true" />
             </key>
             <one-to-many class="es.upv.dsic.quep.model.QuepQuestionResponseOption" />
         </set>
-        <set name="questionnaireQuepQuestions" table="questionnaire_quep_question" 
-             inverse="true" lazy="true" fetch="select">
+        <set name="questionnaireQuepQuestions" table="questionnaire_quep_question" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="id_quep_question" not-null="true" />
             </key>

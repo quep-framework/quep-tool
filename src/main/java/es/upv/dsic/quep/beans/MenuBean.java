@@ -9,6 +9,7 @@ import es.upv.dsic.quep.dao.MenuDao;
 import es.upv.dsic.quep.dao.MenuDaoImplement;
 import es.upv.dsic.quep.model.Menu;
 import es.upv.dsic.quep.model.Role;
+import es.upv.dsic.quep.model.RoleStakeholder;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -55,7 +56,8 @@ public class MenuBean implements Serializable {
      */
     public void getListMenuRol() {
         MenuDao linkDao = new MenuDaoImplement();        
-        Role r= (Role) AccessBean.getSessionObj("role");
+        RoleStakeholder rs= (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
+        Role r = rs.getRole();
         int idRol = r.getId();
         this.lstMenu = linkDao.getMenuRol(idRol);
     }

@@ -37,7 +37,7 @@ public class ResponseOption  implements java.io.Serializable {
      private String audit;
      private Integer weight;
      private Integer isRequiered;
-     private Set<QuepQuestionResponseOption> quepQuestionResponseOptions = new HashSet<QuepQuestionResponseOption>(0);
+    private Set<QuepQuestionResponseOption> quepQuestionResponseOptions = new HashSet<QuepQuestionResponseOption>(0);
 
     public ResponseOption() {
     }
@@ -52,7 +52,7 @@ public class ResponseOption  implements java.io.Serializable {
         this.active = active;
         this.audit = audit;
     }
-    public ResponseOption(int id, QuestionType questionType, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, Integer weight, Integer isRequiered, Set<QuepQuestionResponseOption> quepQuestionResponseOptions) {
+   public ResponseOption(int id, QuestionType questionType, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, Integer weight, Integer isRequiered, Set<QuepQuestionResponseOption> quepQuestionResponseOptions) {
        this.id = id;
        this.questionType = questionType;
        this.name = name;

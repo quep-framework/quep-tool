@@ -96,7 +96,7 @@ public class QuepQuestionResponseOption  implements java.io.Serializable {
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="id_quep_question", nullable=false, insertable=false, updatable=false)
+    @JoinColumn(name="id_response_option", nullable=false, insertable=false, updatable=false)
     public ResponseOption getResponseOption() {
         return this.responseOption;
     }
@@ -194,9 +194,5 @@ public class QuepQuestionResponseOption  implements java.io.Serializable {
         this.responses = responses;
     }
 
-
-
-
 }
-
 

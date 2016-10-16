@@ -11,9 +11,12 @@ import es.upv.dsic.quep.dao.MenuDaoImplement;
 import es.upv.dsic.quep.dao.QuestioannaireDaoImplement;
 import es.upv.dsic.quep.model.Menu;
 import es.upv.dsic.quep.model.QuepQuestion;
+import es.upv.dsic.quep.model.QuepQuestionResponseOption;
 import es.upv.dsic.quep.model.QuestionType;
 import es.upv.dsic.quep.model.QuestionnaireQuepQuestion;
+import es.upv.dsic.quep.model.ResponseOption;
 import es.upv.dsic.quep.model.Role;
+import es.upv.dsic.quep.model.RoleStakeholder;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +39,10 @@ import javax.faces.model.SelectItem;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import javax.el.ELContext;
 import javax.el.MethodExpression;
 import javax.el.ValueExpression;
@@ -109,98 +114,117 @@ public class QuestionnaireDynamicBean implements Serializable {
     private AccessBean accessBean;
 
     public QuestionnaireDynamicBean() {
-        //  @PostConstruct
-        //public void init() {
-        //QuestioannaireDaoImplement qDaoImp = new QuestioannaireDaoImplement();
-        Role role = new Role();
 
-        role = (Role) AccessBean.getSessionObj("role");
+        try {
 
-        lstQuestionnaireQQ = new ArrayList<QuestionnaireQuepQuestion>();
-        QuestioannaireDaoImplement qdi = new QuestioannaireDaoImplement();
-        lstQuestionnaireQQ = qdi.getQuestionnairesQQbyRole(role.getId());
-        int size = lstQuestionnaireQQ.size();
-        int i = 0;
+            //  @PostConstruct
+            //public void init() {
+            //QuestioannaireDaoImplement qDaoImp = new QuestioannaireDaoImplement();
+            RoleStakeholder rs = (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
+            Role role = new Role();
+            //role = (Role) AccessBean.getSessionObj("role");
+            role = rs.getRole();
 
-        if (lstQuestionnaireQQ != null) {
+            lstQuestionnaireQQ = new ArrayList<QuestionnaireQuepQuestion>();
+            QuestioannaireDaoImplement qdi = new QuestioannaireDaoImplement();
+            lstQuestionnaireQQ = qdi.getQuestionnairesQQbyRole(role.getId());
 
-            panel = new PanelGrid();
-            panel.setId("p1");
+            int size = lstQuestionnaireQQ.size();
+            int i = 0;
 
-            tabview = new TabView();
-            tabview.setId("tv1");
-            lbl = new OutputLabel();
-            lbl.setValue("Tabview");
-            tab = new Tab();
-            tab.setId("t1");
-            tab.setTitle("Q1-Q5");
+            if (lstQuestionnaireQQ != null) {
 
-            for (Iterator<QuestionnaireQuepQuestion> it = lstQuestionnaireQQ.iterator(); it.hasNext();) {
-                QuestionnaireQuepQuestion next = it.next();
+                panel = new PanelGrid();
+                panel.setId("p1");
 
-                PanelGrid pnl0 = new PanelGrid();
-                pnl0.setId("pnl" + String.valueOf(i));
-                pnl0.setColumns(1);
-                pnl0.setStyleClass("panelNoBorder");
+                tabview = new TabView();
+                tabview.setId("tv1");
+                lbl = new OutputLabel();
+                lbl.setValue("Tabview");
+                tab = new Tab();
+                tab.setId("t1");
+                tab.setTitle("Q1-Q5");
 
-                QuepQuestion qq = new QuepQuestion();
-                qq = next.getQuepQuestion();
+                for (Iterator<QuestionnaireQuepQuestion> it = lstQuestionnaireQQ.iterator(); it.hasNext();) {
+                    QuestionnaireQuepQuestion next = it.next();
 
-                //dinamic component
-                lbl1 = new OutputLabel();
-                lbl1.setId("lbl1"+i);
-                lbl1.setValue(qq.getDescription());
-                pnl0.getChildren().add(lbl1);
-                
-                pnl = new PanelGrid();
-                pnl.setId("pnl"+i);
-                pnl.setColumns(2);
-                pnl.setStyleClass("panelNoBorder");
+                    PanelGrid pnl0 = new PanelGrid();
+                    pnl0.setId("pnl0_" + String.valueOf(i));
+                    pnl0.setColumns(1);
+                    pnl0.setStyleClass("panelNoBorder");
 
-                //static component
-                OutputLabel lbl3 = new OutputLabel();
-                lbl3.setValue("Response:");
-                pnl.getChildren().add(lbl3);
+                    QuepQuestion qq = new QuepQuestion();
+                    qq = next.getQuepQuestion();
 
-                //dinamic component
-                QuestionType qt=new QuestionType();
-                qt=qq.getQuestionType();
-                
-                
-                rB = new SelectOneRadio();
-                rB.setId("rB");
-                List<SelectItem> items = new ArrayList<SelectItem>();
-                items.add(new SelectItem("Yes", "Yes"));
-                items.add(new SelectItem("No", "No"));
-                UISelectItems selectItems = new UISelectItems();
-                selectItems.setValue(items);
-                rB.getChildren().add(selectItems);
-                pnl.getChildren().add(rB);
+                    //dinamic component
+                    lbl1 = new OutputLabel();
+                    lbl1.setId("lbl" + String.valueOf(i));
+                    lbl1.setValue(qq.getDescription());
+                    pnl0.getChildren().add(lbl1);
 
-                lblTxtA = new OutputLabel();
-                lblTxtA.setValue("Comments:");
-                pnl.getChildren().add(lblTxtA);
+                    pnl = new PanelGrid();
+                    pnl.setId("pnl" + String.valueOf(i));
+                    pnl.setColumns(2);
+                    pnl.setStyleClass("panelNoBorder");
 
-                txtA = new InputTextarea();
-                txtA.setTitle("Response:");
-                txtA.setLabel("Response:");
-                txtA.setId("txtA1");
-                pnl.getChildren().add(txtA);
-                
-                tab.getChildren().add(pnl0);
-                tab.getChildren().add(pnl);
-            
-                i++;
+                    //static component
+                    OutputLabel lbl3 = new OutputLabel();
+                    lbl3.setValue("Response:");
+                    pnl.getChildren().add(lbl3);
 
+                    //dinamic component
+                    QuestionType qt = new QuestionType();
+                    qt = qq.getQuestionType();
+
+                    rB = new SelectOneRadio();
+                    rB.setId("rB");
+                    List<SelectItem> items = new ArrayList<SelectItem>();
+                    List<ResponseOption> lstqQRO = new ArrayList<ResponseOption>(0);
+                    lstqQRO=qdi.getResponseOptions(qq.getId());
+
+                    //Set<QuepQuestionResponseOption> setQQRO= new HashSet<QuepQuestionResponseOption>(0);
+                    //setQQRO = qq.getQuepQuestionResponseOptions();
+                    
+                    for (Iterator<ResponseOption> it1 = lstqQRO.iterator(); it1.hasNext();) {
+                        ResponseOption ro = it1.next();
+                        //ResponseOption ro=n1.getResponseOption();
+                        //lstqQRO.add(ro);
+                        items.add(new SelectItem(ro.getName(), ro.getName()));
+                    }
+                   
+
+                    //items.add(new SelectItem("Yes", "Yes"));
+                    //items.add(new SelectItem("No", "No"));
+                    UISelectItems selectItems = new UISelectItems();
+                    selectItems.setValue(items);
+                    rB.getChildren().add(selectItems);
+                    pnl.getChildren().add(rB);
+
+                    lblTxtA = new OutputLabel();
+                    lblTxtA.setValue("Comments:");
+                    pnl.getChildren().add(lblTxtA);
+
+                    txtA = new InputTextarea();
+                    txtA.setTitle("Response:");
+                    txtA.setLabel("Response:");
+                    txtA.setId("txtA1");
+                    pnl.getChildren().add(txtA);
+
+                    tab.getChildren().add(pnl0);
+                    tab.getChildren().add(pnl);
+
+                    i++;
+
+                }
+
+                tabview.getChildren().add(lbl);
+                tabview.getChildren().add(tab);
+
+                panel.getChildren().add(tabview);
             }
-
-            
-
-            tabview.getChildren().add(lbl);
-            tabview.getChildren().add(tab);
-
-            panel.getChildren().add(tabview);
+        } catch (Exception e) {
         }
+
     }
 
     public TabView getTabview() {

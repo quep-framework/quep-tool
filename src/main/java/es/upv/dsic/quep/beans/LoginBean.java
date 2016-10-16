@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import es.upv.dsic.quep.dao.RoleStakeholderDaoImplement;
+import es.upv.dsic.quep.model.RoleStakeholder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,15 +79,21 @@ public class LoginBean implements Serializable {
         //REVISAR MAPEO Y CAMBIARLO lazy="false"
         //////
         stakeholder = new Stakeholder();
-        StakeholderDaoImplement linkDao = new StakeholderDaoImplement();
-        stakeholder = linkDao.login(pUsername, pPassword);
-        AccessBean.setSessionObj("stakeholder", stakeholder);
+        //StakeholderDaoImplement linkDao = new StakeholderDaoImplement();
+        //stakeholder = linkDao.login(pUsername, pPassword);
+        RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
+        RoleStakeholder roleStk= roleStkImpl.getRoleStakeholder(pUsername, pPassword);
+        stakeholder = roleStk.getStakeholder();
+        
+               
+        //AccessBean.setSessionObj("stakeholder", stakeholder);
         if (stakeholder != null) {
-            RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
+            //RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
             role = new Role();
-            role = roleStkImpl.getRole(stakeholder);
-            AccessBean.setSessionObj("role", role);            
-            
+            //role = roleStkImpl.getRole(stakeholder);
+            role = roleStk.getRole();
+            //AccessBean.setSessionObj("role", role);            
+            AccessBean.setSessionObj("roleStakeholder", roleStk); 
             return true;
         } else {
             return false;

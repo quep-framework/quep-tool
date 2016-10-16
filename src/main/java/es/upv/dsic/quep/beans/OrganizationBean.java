@@ -11,6 +11,7 @@ import es.upv.dsic.quep.dao.RoleStakeholderDaoImplement;
 import es.upv.dsic.quep.model.Menu;
 import es.upv.dsic.quep.model.Organization;
 import es.upv.dsic.quep.model.Role;
+import es.upv.dsic.quep.model.RoleStakeholder;
 import es.upv.dsic.quep.model.Stakeholder;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -49,14 +50,17 @@ public class OrganizationBean implements Serializable {
 
     public OrganizationBean() {
         RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
-
+        RoleStakeholder rs= (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
+        
         Role role = new Role();
-        role = (Role) AccessBean.getSessionObj("role");
+        //role = (Role) AccessBean.getSessionObj("role");
+        role =rs.getRole();
 
         Stakeholder stk = new Stakeholder();
-        stk = (Stakeholder) AccessBean.getSessionObj("stakeholder");
+        //stk = (Stakeholder) AccessBean.getSessionObj("stakeholder");
+        stk=rs.getStakeholder();
 
-        lstOrganization = new ArrayList<>();
+        lstOrganization = new ArrayList<>(0);
         lstOrganization = roleStkImpl.getListOrganization(stk.getId(), role.getId());
         
         bandOrganization = lstOrganization.size() > 1;

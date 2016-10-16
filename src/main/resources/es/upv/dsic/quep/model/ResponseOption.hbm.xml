@@ -42,7 +42,8 @@
         <property name="isRequiered" type="java.lang.Integer">
             <column name="is_requiered" />
         </property>
-        <set name="quepQuestionResponseOptions" table="quep_question_response_option" inverse="true" lazy="true" fetch="select">
+        <set name="quepQuestionResponseOptions" table="quep_question_response_option" 
+             inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="id_quep_question" not-null="true" />
             </key>

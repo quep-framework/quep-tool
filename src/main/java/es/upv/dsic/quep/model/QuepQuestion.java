@@ -2,6 +2,7 @@ package es.upv.dsic.quep.model;
 // Generated 20-sep-2016 10:46:39 by Hibernate Tools 4.3.1
 
 
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -302,5 +303,4 @@ public class QuepQuestion  implements java.io.Serializable {
 
 
 }
-
 

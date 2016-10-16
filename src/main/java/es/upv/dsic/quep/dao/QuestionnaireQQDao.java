@@ -5,7 +5,9 @@
  */
 package es.upv.dsic.quep.dao;
 
+import es.upv.dsic.quep.model.QuepQuestion;
 import es.upv.dsic.quep.model.QuestionnaireQuepQuestion;
+import es.upv.dsic.quep.model.ResponseOption;
 import java.util.List;
 
 /**
@@ -15,5 +17,6 @@ import java.util.List;
 public interface QuestionnaireQQDao {
     
     public List<QuestionnaireQuepQuestion> getQuestionnairesQQbyRole(int idRole);
+    public List<ResponseOption> getResponseOptions(int idqq) ;
  
 }

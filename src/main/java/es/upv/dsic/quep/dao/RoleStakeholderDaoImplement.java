@@ -26,7 +26,32 @@ public class RoleStakeholderDaoImplement implements RoleStakeholderDao {
 
    
     
-    
+    @Override
+    public RoleStakeholder getRoleStakeholder(String user, String password) {
+        Session session = null;
+        List<RoleStakeholder> listR = null; 
+        //List<RoleStakeholderId> listRS = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+             Query queryR = session.createQuery("from RoleStakeholder where stakeholder.email='" + user + "' and stakeholder.password = '" + password + "'");
+     
+            listR = (List<RoleStakeholder>) queryR.list();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        if (listR != null) {
+            RoleStakeholder r =  listR.get(0);
+            return r;
+        } else {
+            return null;
+        }
+    }
+
     
     @Override
     public Role getRole(Stakeholder stk) {
