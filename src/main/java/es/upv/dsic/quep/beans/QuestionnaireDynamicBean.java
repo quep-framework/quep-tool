@@ -30,16 +30,22 @@ import java.util.List;
 import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIForm;
 import javax.faces.component.UISelectItems;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ActionListener;
 import javax.inject.Inject;
 
 import javax.inject.Named;
+import static org.primefaces.behavior.ajax.AjaxBehavior.PropertyKeys.listener;
 
 import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.commandbutton.CommandButton;
+import org.primefaces.component.confirmdialog.ConfirmDialog;
+import org.primefaces.component.growl.Growl;
 import org.primefaces.component.inputtext.InputText;
 
 import org.primefaces.component.inputtextarea.InputTextarea;
@@ -65,6 +71,7 @@ public class QuestionnaireDynamicBean implements Serializable {
     private Calendar cal;
     private Tab tab;
     private PanelGrid panel;
+    private PanelGrid panelfrm;
 
     private SelectOneMenu cmb;
     private SelectOneRadio rB;
@@ -76,12 +83,16 @@ public class QuestionnaireDynamicBean implements Serializable {
     private InputTextarea txtComments;
     private PanelGrid pnlResponseOptionC2;
     private List<QuestionnaireQuepQuestion> lstQuestionnaireQQ;
-
-    UISelectItems selectItems;
-
-    QuestioannaireDaoImplement qdi = new QuestioannaireDaoImplement();
-
+    
+    private UIForm form; 
     private CommandButton btnSave;
+    private Growl growl;
+    private ConfirmDialog confirmdialog;
+
+    private UISelectItems selectItems;
+
+    private QuestioannaireDaoImplement qdi = new QuestioannaireDaoImplement();
+
     private Response oResponse;
     private QuestionnaireResponse oQResponse;
 
@@ -90,7 +101,7 @@ public class QuestionnaireDynamicBean implements Serializable {
 
     private RoleStakeholder oRoleStakeholder = null;
 
-    /* public QuestionnaireDynamicBean() {
+    public QuestionnaireDynamicBean() {
         try {
             oRoleStakeholder = (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
             buildQuestionnaire();
@@ -98,37 +109,40 @@ public class QuestionnaireDynamicBean implements Serializable {
             System.out.printf(e.getMessage());
         }
 
-    }*/
-    @PostConstruct
-    public void init() {
-        /**
-         * This map contains all the params you submitted from the html form
-         */
-
-        try {
-            oRoleStakeholder = (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
-            buildQuestionnaire();
-
-        } catch (Exception e) {
-            System.out.printf(e.getMessage());
-        }
     }
+   /* @PostConstruct
+    public void init() {
+  
+
+        try {
+            oRoleStakeholder = (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
+            buildQuestionnaire();
+
+        } catch (Exception e) {
+            System.out.printf(e.getMessage());
+        }
+    }*/
 
     public void buildQuestionnaire() {
         Role role = new Role();
         role = oRoleStakeholder.getRole();
 
         lstQuestionnaireQQ = new ArrayList<QuestionnaireQuepQuestion>();
-
         lstQuestionnaireQQ = qdi.getQuestionnairesQQbyRole(role.getId());
 
         int i = 0;
 
         if (lstQuestionnaireQQ != null) {
-
+            
             panel = new PanelGrid();
             panel.setId("pnlMain");
-
+            
+            form=new UIForm();
+            form.setId("frmQ");
+            
+            panelfrm = new PanelGrid();
+            panelfrm.setId("pnlMain");
+         
             tabview = new TabView();
             tabview.setId("tvQ");
             lblTabview = new OutputLabel();
@@ -276,8 +290,42 @@ public class QuestionnaireDynamicBean implements Serializable {
 
             tabview.getChildren().add(lblTabview);
             tabview.getChildren().add(tab);
-
-            panel.getChildren().add(tabview);
+           
+            
+            btnSave = new CommandButton();
+            growl = new Growl();
+            growl.setId("message");
+            growl.setShowDetail(true);
+            btnSave.setId("cmdSave");
+            btnSave.setValue("Save");
+           
+            btnSave.addActionListener(new ActionListener() {
+                @Override
+                public void processAction(ActionEvent event) throws AbortProcessingException {
+                    save(event);
+                }
+            });
+            btnSave.setUpdate("message,frmQ");
+            btnSave.setConfirmationScript("Are you sure?");
+            
+            
+            panelfrm.getChildren().add(growl);
+            panelfrm.getChildren().add(btnSave);
+            panelfrm.getChildren().add(tabview);
+         /*    <!--p:growl id="message" showDetail="true" />
+                                <p:commandButton id="cmdSave" value="Save"  actionListener="{questionnaireDynamicBean.save}" update="message,frmQ">
+                                    <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton id="cmdSaveYes" value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton id="cmdSaveNo" value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog-->*/
+            
+            
+            
+            form.getChildren().add(panelfrm);
+            panel.getChildren().add(form);
+            
         }
     }
 
@@ -364,14 +412,14 @@ public class QuestionnaireDynamicBean implements Serializable {
         else{
              addMessage("Error", "Please try again later."+ mSave.get(0),0);
         }
-        bandSave=true;
+        //bandSave=true;
     }
     
-    boolean bandSave = false;
+   // boolean bandSave = false;
     
      public void save(ActionEvent ae) {
          try {
-             if (!bandSave)
+             //if (!bandSave)
              saveResponse();
              
          } catch (Exception e) {
@@ -591,4 +639,40 @@ public class QuestionnaireDynamicBean implements Serializable {
         this.selectItems = selectItems;
     }
 
+    public UIForm getForm() {
+        return form;
+    }
+
+    public void setForm(UIForm form) {
+        this.form = form;
+    }
+
+   
+
+    public PanelGrid getPanelfrm() {
+        return panelfrm;
+    }
+
+    public void setPanelfrm(PanelGrid panelfrm) {
+        this.panelfrm = panelfrm;
+    }
+
+    public Growl getGrowl() {
+        return growl;
+    }
+
+    public void setGrowl(Growl growl) {
+        this.growl = growl;
+    }
+
+    public ConfirmDialog getConfirmdialog() {
+        return confirmdialog;
+    }
+
+    public void setConfirmdialog(ConfirmDialog confirmdialog) {
+        this.confirmdialog = confirmdialog;
+    }
+
+    
+    
 }
