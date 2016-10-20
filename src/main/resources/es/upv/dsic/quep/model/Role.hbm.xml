@@ -1,12 +1,14 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 20-sep-2016 10:46:43 by Hibernate Tools 4.3.1 -->
+<!-- Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="es.upv.dsic.quep.model.Role" table="role" schema="public" optimistic-lock="version">
         <id name="id" type="int">
             <column name="id" />
-            <generator class="assigned" />
+             <generator class="sequence">
+                <param name="sequence">role_id_seq</param>
+            </generator>
         </id>
         <property name="name" type="string">
             <column name="name" not-null="true" />

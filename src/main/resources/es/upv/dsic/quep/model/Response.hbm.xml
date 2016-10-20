@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 20-sep-2016 10:46:43 by Hibernate Tools 4.3.1 -->
+<!-- Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="es.upv.dsic.quep.model.Response" table="response" schema="public" optimistic-lock="version">
         <composite-id name="id" class="es.upv.dsic.quep.model.ResponseId">
@@ -23,24 +23,44 @@
             <key-property name="idOrganization" type="int">
                 <column name="id_organization" />
             </key-property>
+            <key-property name="idResponseOption" type="int">
+                <column name="id_response_option" />
+            </key-property>
         </composite-id>
-        <many-to-one name="quepQuestionResponseOption" class="es.upv.dsic.quep.model.QuepQuestionResponseOption" update="false" insert="false" fetch="select">
-            <column name="id_quep_question" not-null="true" />
-            <column name="id_response_option" />
-        </many-to-one>
-        <many-to-one name="questionnaireQuepQuestion" class="es.upv.dsic.quep.model.QuestionnaireQuepQuestion" update="false" insert="false" fetch="select">
+        <many-to-one name="questionnaireQuepQuestion" 
+                     class="es.upv.dsic.quep.model.QuestionnaireQuepQuestion" 
+                     lazy="false"
+                     update="false" insert="false" fetch="select">
             <column name="id_quep_question" not-null="true" />
             <column name="id_questionnaire" not-null="true" />
             <column name="id_practice" not-null="true" />
             <column name="id_role" not-null="true" />
         </many-to-one>
-        <many-to-one name="stakeholder" class="es.upv.dsic.quep.model.Stakeholder" update="false" insert="false" fetch="select">
+        <many-to-one name="questionnaireResponse" 
+                     class="es.upv.dsic.quep.model.QuestionnaireResponse" 
+                     lazy="false"
+                     update="false" insert="false" fetch="select">
+            <column name="id_stakeholder" not-null="true" />
+            <column name="id_quep_question" not-null="true" />
+            <column name="id_practice" not-null="true" />
+            <column name="id_questionnaire" not-null="true" />
+            <column name="id_role" not-null="true" />
+            <column name="id_organization" not-null="true" />
+        </many-to-one>
+        <many-to-one name="responseOption" class="es.upv.dsic.quep.model.ResponseOption" 
+                     lazy="false"
+                     update="false" insert="false" fetch="select">
+            <column name="id_response_option" not-null="true" />
+        </many-to-one>
+        <many-to-one name="stakeholder" class="es.upv.dsic.quep.model.Stakeholder" 
+                     lazy="false"
+                     update="false" insert="false" fetch="select">
             <column name="id_stakeholder" not-null="true" />
         </many-to-one>
         <property name="idPrinciple" type="int">
             <column name="id_principle" not-null="true" />
         </property>
-        <property name="responseOption" type="string">
+        <property name="responseOption_1" type="string">
             <column name="response_option" not-null="true" />
         </property>
         <property name="comment" type="string">
@@ -70,6 +90,5 @@
         <property name="audit" type="string">
             <column name="audit" not-null="true" />
         </property>
-        <one-to-one name="questionnaireResponse" class="es.upv.dsic.quep.model.QuestionnaireResponse"></one-to-one>
     </class>
 </hibernate-mapping>

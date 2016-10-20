@@ -1,18 +1,16 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 20-sep-2016 10:46:43 by Hibernate Tools 4.3.1 -->
+<!-- Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="es.upv.dsic.quep.model.ResponseOption" table="response_option" 
-           schema="public" optimistic-lock="version">
+    <class name="es.upv.dsic.quep.model.ResponseOption" table="response_option" schema="public" optimistic-lock="version">
         <id name="id" type="int">
             <column name="id" />
-            <generator class="sequence">
-                <param name="sequence">response_option_id_seq</param>
-            </generator>
+            <generator class="assigned" />
         </id>
         <many-to-one name="questionType" class="es.upv.dsic.quep.model.QuestionType" 
-                     lazy="false" fetch="select">
+                     lazy="false"
+                     fetch="select">
             <column name="id_question_type" not-null="true" />
         </many-to-one>
         <property name="name" type="string">
@@ -42,12 +40,17 @@
         <property name="isRequiered" type="java.lang.Integer">
             <column name="is_requiered" />
         </property>
-        <set name="quepQuestionResponseOptions" table="quep_question_response_option" 
-             inverse="true" lazy="true" fetch="select">
+        <set name="quepQuestionResponseOptions" table="quep_question_response_option" inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="id_quep_question" not-null="true" />
+                <column name="id_response_option" not-null="true" />
             </key>
             <one-to-many class="es.upv.dsic.quep.model.QuepQuestionResponseOption" />
+        </set>
+        <set name="responses" table="response" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_response_option" not-null="true" />
+            </key>
+            <one-to-many class="es.upv.dsic.quep.model.Response" />
         </set>
     </class>
 </hibernate-mapping>

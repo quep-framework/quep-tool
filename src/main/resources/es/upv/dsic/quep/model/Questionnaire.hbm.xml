@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 20-sep-2016 10:46:43 by Hibernate Tools 4.3.1 -->
+<!-- Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="es.upv.dsic.quep.model.Questionnaire" table="questionnaire" schema="public" optimistic-lock="version">
         <composite-id name="id" class="es.upv.dsic.quep.model.QuestionnaireId">
@@ -15,10 +15,14 @@
                 <column name="id_role" />
             </key-property>
         </composite-id>
-        <many-to-one name="practice" class="es.upv.dsic.quep.model.Practice" update="false" insert="false" fetch="select">
+        <many-to-one name="practice" class="es.upv.dsic.quep.model.Practice" 
+                     lazy="false"
+                     update="false" insert="false" fetch="select">
             <column name="id_practice" not-null="true" />
         </many-to-one>
-        <many-to-one name="rolePractice" class="es.upv.dsic.quep.model.RolePractice" update="false" insert="false" fetch="select">
+        <many-to-one name="rolePractice" class="es.upv.dsic.quep.model.RolePractice" 
+                     lazy="false"
+                     update="false" insert="false" fetch="select">
             <column name="id_role" not-null="true" />
             <column name="id_practice" not-null="true" />
         </many-to-one>
