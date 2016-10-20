@@ -281,9 +281,9 @@ public class QuestionnaireDynamicBean implements Serializable {
         }
     }
 
-    public void save(ActionEvent actionEvent) {
+   /* public void save(ActionEvent actionEvent) {
         saveResponse();
-    }
+    }*/
 
     public void saveResponse() {
         List<Response> lstRsp = new ArrayList<Response>();
@@ -316,10 +316,11 @@ public class QuestionnaireDynamicBean implements Serializable {
             lstQRsp.add(oQResponse);
             
             //Response            
-            oResponse = new Response();
+            
             String sQId = String.valueOf(qqq.getQuepQuestion().getId());
             String[] lstRO = (String[]) requestParams.get(prefixQ + "idRO_" + sQId);
             for (String sRO : lstRO) {
+                oResponse = new Response();
                 ResponseId rId = new ResponseId(oRoleStakeholder.getStakeholder().getId(),
                         qqq.getQuepQuestion().getId(),
                         qqq.getQuepQuestion().getPractice().getId(),
@@ -356,15 +357,40 @@ public class QuestionnaireDynamicBean implements Serializable {
             }
         }
 
-        qdi.insertResponse(lstRsp, lstQRsp);
-
+        Map<Integer,String> mSave = qdi.insertResponse(lstRsp, lstQRsp);
+        if (mSave.containsKey(1)){
+            addMessage("Save", "Response have been saving.",1);
+        }
+        else{
+             addMessage("Error", "Please try again later."+ mSave.get(0),0);
+        }
+        bandSave=true;
     }
-
-    public void addMessage(String summary) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, null);
+    
+    boolean bandSave = false;
+    
+     public void save(ActionEvent ae) {
+         try {
+             if (!bandSave)
+             saveResponse();
+             
+         } catch (Exception e) {
+             
+         }
+    }
+     
+    public void addMessage(String summary, String detail,int band) {
+        if (band==1){
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        else if (band==0){
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, detail);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+        }
     }
 
+    
     public TabView getTabview() {
         return tabview;
     }

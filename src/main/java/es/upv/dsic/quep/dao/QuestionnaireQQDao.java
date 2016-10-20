@@ -11,6 +11,7 @@ import es.upv.dsic.quep.model.QuestionnaireResponse;
 import es.upv.dsic.quep.model.Response;
 import es.upv.dsic.quep.model.ResponseOption;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -21,6 +22,6 @@ public interface QuestionnaireQQDao {
     public List<QuestionnaireQuepQuestion> getQuestionnairesQQbyRole(int idRole);
     public List<ResponseOption> getResponseOptions(int idqq) ;
     public ResponseOption getResponseOption(int idqq,int idro);
-    public void insertResponse(List<Response> lstResponse, List<QuestionnaireResponse> lstQResponse);
+    public Map<Integer,String> insertResponse(List<Response> lstResponse, List<QuestionnaireResponse> lstQResponse);
  
 }

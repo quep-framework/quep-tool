@@ -12,6 +12,7 @@ import es.upv.dsic.quep.model.QuestionnaireQuepQuestion;
 import es.upv.dsic.quep.model.QuestionnaireResponse;
 import es.upv.dsic.quep.model.Response;
 import es.upv.dsic.quep.model.ResponseOption;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -99,8 +100,9 @@ public class QuestioannaireDaoImplement implements QuestionnaireQQDao {
     }
     
     @Override
-    public void insertResponse(List<Response> lstResponse, List<QuestionnaireResponse> lstQResponse) {
+    public Map<Integer,String> insertResponse(List<Response> lstResponse, List<QuestionnaireResponse> lstQResponse) {
         Session session = null;
+        Map<Integer,String> mMessage= new HashMap<>();
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
@@ -116,14 +118,16 @@ public class QuestioannaireDaoImplement implements QuestionnaireQQDao {
             }
 
             session.getTransaction().commit();
+            mMessage.put(1, null);
         } catch (HibernateException e) {
             System.out.println(e.getMessage());
             session.getTransaction().rollback();
-         
+            mMessage.put(0, e.getMessage());            
         }
         finally{
             if(session!=null)
                 session.close();
+            return mMessage;
         }
     }
 

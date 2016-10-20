@@ -149,7 +149,19 @@
 
                     <!-- content body start-->         
                     <div>
-                        <h:panelGrid binding="#{questionnaireDynamicBean.panel}"/>
+                        <h:form id="frmQ" >
+                            <h:panelGrid binding="#{questionnaireDynamicBean.panel}" >
+                                <p:growl id="message" showDetail="true" />
+                                <p:commandButton id="cmdSave" value="Save"  actionListener="#{questionnaireDynamicBean.save}" update="message,frmQ">
+                                    <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                                </p:commandButton>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton id="cmdSaveYes" value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton id="cmdSaveNo" value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
+                                <!--p:commandButton actionListener="{questionnaireDynamicBean.save}" id="btnSave" value="Save"  /-->
+                            </h:panelGrid>
+                        </h:form>
                         <!--h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
                             <p:outputLabel for="item" value="Item:" />
                             <p:selectOneRadio  id="item" value="{questionnaireDynamicBean.item}"   layout="grid" columns="3">
