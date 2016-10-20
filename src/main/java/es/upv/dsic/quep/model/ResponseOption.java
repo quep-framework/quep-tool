@@ -1,5 +1,5 @@
 package es.upv.dsic.quep.model;
-// Generated 20-sep-2016 10:46:39 by Hibernate Tools 4.3.1
+// Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -37,7 +39,8 @@ public class ResponseOption  implements java.io.Serializable {
      private String audit;
      private Integer weight;
      private Integer isRequiered;
-    private Set<QuepQuestionResponseOption> quepQuestionResponseOptions = new HashSet<QuepQuestionResponseOption>(0);
+     private Set<QuepQuestionResponseOption> quepQuestionResponseOptions = new HashSet<QuepQuestionResponseOption>(0);
+     private Set<Response> responses = new HashSet<Response>(0);
 
     public ResponseOption() {
     }
@@ -52,7 +55,7 @@ public class ResponseOption  implements java.io.Serializable {
         this.active = active;
         this.audit = audit;
     }
-   public ResponseOption(int id, QuestionType questionType, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, Integer weight, Integer isRequiered, Set<QuepQuestionResponseOption> quepQuestionResponseOptions) {
+    public ResponseOption(int id, QuestionType questionType, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, Integer weight, Integer isRequiered, Set<QuepQuestionResponseOption> quepQuestionResponseOptions, Set<Response> responses) {
        this.id = id;
        this.questionType = questionType;
        this.name = name;
@@ -65,10 +68,11 @@ public class ResponseOption  implements java.io.Serializable {
        this.weight = weight;
        this.isRequiered = isRequiered;
        this.quepQuestionResponseOptions = quepQuestionResponseOptions;
+       this.responses = responses;
     }
    
-     @Id 
-
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //add to mapped
     
     @Column(name="id", unique=true, nullable=false)
     public int getId() {
@@ -170,7 +174,7 @@ public class ResponseOption  implements java.io.Serializable {
     }
 
     
-    @Column(name="isRequiered")
+    @Column(name="is_requiered")
     public Integer getIsRequiered() {
         return this.isRequiered;
     }
@@ -179,13 +183,22 @@ public class ResponseOption  implements java.io.Serializable {
         this.isRequiered = isRequiered;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="quepQuestion")
+@OneToMany(fetch=FetchType.LAZY, mappedBy="responseOption")
     public Set<QuepQuestionResponseOption> getQuepQuestionResponseOptions() {
         return this.quepQuestionResponseOptions;
     }
     
     public void setQuepQuestionResponseOptions(Set<QuepQuestionResponseOption> quepQuestionResponseOptions) {
         this.quepQuestionResponseOptions = quepQuestionResponseOptions;
+    }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="responseOption")
+    public Set<Response> getResponses() {
+        return this.responses;
+    }
+    
+    public void setResponses(Set<Response> responses) {
+        this.responses = responses;
     }
 
 

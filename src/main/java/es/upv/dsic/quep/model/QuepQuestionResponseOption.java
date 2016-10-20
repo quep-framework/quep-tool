@@ -1,10 +1,8 @@
 package es.upv.dsic.quep.model;
-// Generated 20-sep-2016 10:46:39 by Hibernate Tools 4.3.1
+// Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -13,7 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -39,7 +36,6 @@ public class QuepQuestionResponseOption  implements java.io.Serializable {
      private String audit;
      private int idPrinciple;
      private int idPractice;
-     private Set<Response> responses = new HashSet<Response>(0);
 
     public QuepQuestionResponseOption() {
     }
@@ -56,7 +52,7 @@ public class QuepQuestionResponseOption  implements java.io.Serializable {
         this.idPrinciple = idPrinciple;
         this.idPractice = idPractice;
     }
-    public QuepQuestionResponseOption(QuepQuestionResponseOptionId id, QuepQuestion quepQuestion, ResponseOption responseOption, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, int idPrinciple, int idPractice, Set<Response> responses) {
+    public QuepQuestionResponseOption(QuepQuestionResponseOptionId id, QuepQuestion quepQuestion, ResponseOption responseOption, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, int idPrinciple, int idPractice) {
        this.id = id;
        this.quepQuestion = quepQuestion;
        this.responseOption = responseOption;
@@ -68,7 +64,6 @@ public class QuepQuestionResponseOption  implements java.io.Serializable {
        this.audit = audit;
        this.idPrinciple = idPrinciple;
        this.idPractice = idPractice;
-       this.responses = responses;
     }
    
      @EmbeddedId
@@ -185,14 +180,9 @@ public class QuepQuestionResponseOption  implements java.io.Serializable {
         this.idPractice = idPractice;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="quepQuestionResponseOption")
-    public Set<Response> getResponses() {
-        return this.responses;
-    }
-    
-    public void setResponses(Set<Response> responses) {
-        this.responses = responses;
-    }
+
+
 
 }
+
 

@@ -1,5 +1,5 @@
 package es.upv.dsic.quep.model;
-// Generated 20-sep-2016 10:46:39 by Hibernate Tools 4.3.1
+// Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -12,7 +12,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,11 +27,12 @@ public class Response  implements java.io.Serializable {
 
 
      private ResponseId id;
-     private QuepQuestionResponseOption quepQuestionResponseOption;
      private QuestionnaireQuepQuestion questionnaireQuepQuestion;
+     private QuestionnaireResponse questionnaireResponse;
+     private ResponseOption responseOption;
      private Stakeholder stakeholder;
      private int idPrinciple;
-     private String responseOption;
+     private String responseOption_1;
      private String comment;
      private String pagenumber;
      private Integer computedValue;
@@ -42,31 +42,32 @@ public class Response  implements java.io.Serializable {
      private Date modificationDate;
      private int active;
      private String audit;
-     private QuestionnaireResponse questionnaireResponse;
 
     public Response() {
     }
 
 	
-    public Response(ResponseId id, QuepQuestionResponseOption quepQuestionResponseOption, QuestionnaireQuepQuestion questionnaireQuepQuestion, Stakeholder stakeholder, int idPrinciple, String responseOption, String creationUser, Date creationDate, int active, String audit) {
+    public Response(ResponseId id, QuestionnaireQuepQuestion questionnaireQuepQuestion, QuestionnaireResponse questionnaireResponse, ResponseOption responseOption, Stakeholder stakeholder, int idPrinciple, String responseOption_1, String creationUser, Date creationDate, int active, String audit) {
         this.id = id;
-        this.quepQuestionResponseOption = quepQuestionResponseOption;
         this.questionnaireQuepQuestion = questionnaireQuepQuestion;
+        this.questionnaireResponse = questionnaireResponse;
+        this.responseOption = responseOption;
         this.stakeholder = stakeholder;
         this.idPrinciple = idPrinciple;
-        this.responseOption = responseOption;
+        this.responseOption_1 = responseOption_1;
         this.creationUser = creationUser;
         this.creationDate = creationDate;
         this.active = active;
         this.audit = audit;
     }
-    public Response(ResponseId id, QuepQuestionResponseOption quepQuestionResponseOption, QuestionnaireQuepQuestion questionnaireQuepQuestion, Stakeholder stakeholder, int idPrinciple, String responseOption, String comment, String pagenumber, Integer computedValue, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, QuestionnaireResponse questionnaireResponse) {
+    public Response(ResponseId id, QuestionnaireQuepQuestion questionnaireQuepQuestion, QuestionnaireResponse questionnaireResponse, ResponseOption responseOption, Stakeholder stakeholder, int idPrinciple, String responseOption_1, String comment, String pagenumber, Integer computedValue, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit) {
        this.id = id;
-       this.quepQuestionResponseOption = quepQuestionResponseOption;
        this.questionnaireQuepQuestion = questionnaireQuepQuestion;
+       this.questionnaireResponse = questionnaireResponse;
+       this.responseOption = responseOption;
        this.stakeholder = stakeholder;
        this.idPrinciple = idPrinciple;
-       this.responseOption = responseOption;
+       this.responseOption_1 = responseOption_1;
        this.comment = comment;
        this.pagenumber = pagenumber;
        this.computedValue = computedValue;
@@ -76,7 +77,6 @@ public class Response  implements java.io.Serializable {
        this.modificationDate = modificationDate;
        this.active = active;
        this.audit = audit;
-       this.questionnaireResponse = questionnaireResponse;
     }
    
      @EmbeddedId
@@ -88,25 +88,14 @@ public class Response  implements java.io.Serializable {
         @AttributeOverride(name="idPractice", column=@Column(name="id_practice", nullable=false) ), 
         @AttributeOverride(name="idQuestionnaire", column=@Column(name="id_questionnaire", nullable=false) ), 
         @AttributeOverride(name="idRole", column=@Column(name="id_role", nullable=false) ), 
-        @AttributeOverride(name="idOrganization", column=@Column(name="id_organization", nullable=false) ) } )
+        @AttributeOverride(name="idOrganization", column=@Column(name="id_organization", nullable=false) ), 
+        @AttributeOverride(name="idResponseOption", column=@Column(name="id_response_option", nullable=false) ) } )
     public ResponseId getId() {
         return this.id;
     }
     
     public void setId(ResponseId id) {
         this.id = id;
-    }
-
-@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumns( { 
-        @JoinColumn(name="id_quep_question", referencedColumnName="id_quep_question", nullable=false, insertable=false, updatable=false), 
-        @JoinColumn(name="id_response_option", referencedColumnName="id_response_option", insertable=false, updatable=false) } )
-    public QuepQuestionResponseOption getQuepQuestionResponseOption() {
-        return this.quepQuestionResponseOption;
-    }
-    
-    public void setQuepQuestionResponseOption(QuepQuestionResponseOption quepQuestionResponseOption) {
-        this.quepQuestionResponseOption = quepQuestionResponseOption;
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
@@ -121,6 +110,32 @@ public class Response  implements java.io.Serializable {
     
     public void setQuestionnaireQuepQuestion(QuestionnaireQuepQuestion questionnaireQuepQuestion) {
         this.questionnaireQuepQuestion = questionnaireQuepQuestion;
+    }
+
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumns( { 
+        @JoinColumn(name="id_stakeholder", referencedColumnName="id_questionnaire", nullable=false, insertable=false, updatable=false), 
+        @JoinColumn(name="id_quep_question", referencedColumnName="id_practice", nullable=false, insertable=false, updatable=false), 
+        @JoinColumn(name="id_practice", referencedColumnName="id_stakeholder", nullable=false, insertable=false, updatable=false), 
+        @JoinColumn(name="id_questionnaire", referencedColumnName="id_role", nullable=false, insertable=false, updatable=false), 
+        @JoinColumn(name="id_role", referencedColumnName="id_organization", nullable=false, insertable=false, updatable=false), 
+        @JoinColumn(name="id_organization", referencedColumnName="id_quep_question", nullable=false, insertable=false, updatable=false) } )
+    public QuestionnaireResponse getQuestionnaireResponse() {
+        return this.questionnaireResponse;
+    }
+    
+    public void setQuestionnaireResponse(QuestionnaireResponse questionnaireResponse) {
+        this.questionnaireResponse = questionnaireResponse;
+    }
+
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="id_response_option", nullable=false, insertable=false, updatable=false)
+    public ResponseOption getResponseOption() {
+        return this.responseOption;
+    }
+    
+    public void setResponseOption(ResponseOption responseOption) {
+        this.responseOption = responseOption;
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
@@ -145,12 +160,12 @@ public class Response  implements java.io.Serializable {
 
     
     @Column(name="response_option", nullable=false)
-    public String getResponseOption() {
-        return this.responseOption;
+    public String getResponseOption_1() {
+        return this.responseOption_1;
     }
     
-    public void setResponseOption(String responseOption) {
-        this.responseOption = responseOption;
+    public void setResponseOption_1(String responseOption_1) {
+        this.responseOption_1 = responseOption_1;
     }
 
     
@@ -241,15 +256,6 @@ public class Response  implements java.io.Serializable {
     
     public void setAudit(String audit) {
         this.audit = audit;
-    }
-
-@OneToOne(fetch=FetchType.LAZY, mappedBy="response")
-    public QuestionnaireResponse getQuestionnaireResponse() {
-        return this.questionnaireResponse;
-    }
-    
-    public void setQuestionnaireResponse(QuestionnaireResponse questionnaireResponse) {
-        this.questionnaireResponse = questionnaireResponse;
     }
 
 

@@ -1,5 +1,5 @@
 package es.upv.dsic.quep.model;
-// Generated 20-sep-2016 10:46:39 by Hibernate Tools 4.3.1
+// Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;

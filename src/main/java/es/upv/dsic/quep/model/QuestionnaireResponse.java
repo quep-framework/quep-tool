@@ -1,8 +1,10 @@
 package es.upv.dsic.quep.model;
-// Generated 20-sep-2016 10:46:39 by Hibernate Tools 4.3.1
+// Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -12,8 +14,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,7 +32,6 @@ public class QuestionnaireResponse  implements java.io.Serializable {
      private QuestionnaireResponseId id;
      private Organization organization;
      private Questionnaire questionnaire;
-     private Response response;
      private String creationUser;
      private Date creationDate;
      private String modificationUser;
@@ -40,25 +40,26 @@ public class QuestionnaireResponse  implements java.io.Serializable {
      private String audit;
      private int idPrinciple;
      private Integer computedValue;
+     private Set<Response> responses = new HashSet<Response>(0);
 
     public QuestionnaireResponse() {
     }
 
 	
-    public QuestionnaireResponse(Organization organization, Questionnaire questionnaire, Response response, String creationUser, Date creationDate, int active, String audit, int idPrinciple) {
+    public QuestionnaireResponse(QuestionnaireResponseId id, Organization organization, Questionnaire questionnaire, String creationUser, Date creationDate, int active, String audit, int idPrinciple) {
+        this.id = id;
         this.organization = organization;
         this.questionnaire = questionnaire;
-        this.response = response;
         this.creationUser = creationUser;
         this.creationDate = creationDate;
         this.active = active;
         this.audit = audit;
         this.idPrinciple = idPrinciple;
     }
-    public QuestionnaireResponse(Organization organization, Questionnaire questionnaire, Response response, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, int idPrinciple, Integer computedValue) {
+    public QuestionnaireResponse(QuestionnaireResponseId id, Organization organization, Questionnaire questionnaire, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, int idPrinciple, Integer computedValue, Set<Response> responses) {
+       this.id = id;
        this.organization = organization;
        this.questionnaire = questionnaire;
-       this.response = response;
        this.creationUser = creationUser;
        this.creationDate = creationDate;
        this.modificationUser = modificationUser;
@@ -67,6 +68,7 @@ public class QuestionnaireResponse  implements java.io.Serializable {
        this.audit = audit;
        this.idPrinciple = idPrinciple;
        this.computedValue = computedValue;
+       this.responses = responses;
     }
    
      @EmbeddedId
@@ -75,10 +77,10 @@ public class QuestionnaireResponse  implements java.io.Serializable {
     @AttributeOverrides( {
         @AttributeOverride(name="idQuestionnaire", column=@Column(name="id_questionnaire", nullable=false) ), 
         @AttributeOverride(name="idPractice", column=@Column(name="id_practice", nullable=false) ), 
-        @AttributeOverride(name="idRole", column=@Column(name="id_role", nullable=false) ), 
         @AttributeOverride(name="idStakeholder", column=@Column(name="id_stakeholder", nullable=false) ), 
-        @AttributeOverride(name="idQuepQuestion", column=@Column(name="id_quep_question", nullable=false) ), 
-        @AttributeOverride(name="idOrganization", column=@Column(name="id_organization", nullable=false) ) } )
+        @AttributeOverride(name="idRole", column=@Column(name="id_role", nullable=false) ), 
+        @AttributeOverride(name="idOrganization", column=@Column(name="id_organization", nullable=false) ), 
+        @AttributeOverride(name="idQuepQuestion", column=@Column(name="id_quep_question", nullable=false) ) } )
     public QuestionnaireResponseId getId() {
         return this.id;
     }
@@ -108,15 +110,6 @@ public class QuestionnaireResponse  implements java.io.Serializable {
     
     public void setQuestionnaire(Questionnaire questionnaire) {
         this.questionnaire = questionnaire;
-    }
-
-@OneToOne(fetch=FetchType.LAZY)@PrimaryKeyJoinColumn
-    public Response getResponse() {
-        return this.response;
-    }
-    
-    public void setResponse(Response response) {
-        this.response = response;
     }
 
     
@@ -197,6 +190,15 @@ public class QuestionnaireResponse  implements java.io.Serializable {
     
     public void setComputedValue(Integer computedValue) {
         this.computedValue = computedValue;
+    }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="questionnaireResponse")
+    public Set<Response> getResponses() {
+        return this.responses;
+    }
+    
+    public void setResponses(Set<Response> responses) {
+        this.responses = responses;
     }
 
 

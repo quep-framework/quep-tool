@@ -1,5 +1,5 @@
 package es.upv.dsic.quep.model;
-// Generated 20-sep-2016 10:46:39 by Hibernate Tools 4.3.1
+// Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1
 
 
 import javax.persistence.Column;
@@ -14,21 +14,21 @@ public class QuestionnaireResponseId  implements java.io.Serializable {
 
      private int idQuestionnaire;
      private int idPractice;
-     private int idRole;
      private int idStakeholder;
-     private int idQuepQuestion;
+     private int idRole;
      private int idOrganization;
+     private int idQuepQuestion;
 
     public QuestionnaireResponseId() {
     }
 
-    public QuestionnaireResponseId(int idQuestionnaire, int idPractice, int idRole, int idStakeholder, int idQuepQuestion, int idOrganization) {
+    public QuestionnaireResponseId(int idQuestionnaire, int idPractice, int idStakeholder, int idRole, int idOrganization, int idQuepQuestion) {
        this.idQuestionnaire = idQuestionnaire;
        this.idPractice = idPractice;
-       this.idRole = idRole;
        this.idStakeholder = idStakeholder;
-       this.idQuepQuestion = idQuepQuestion;
+       this.idRole = idRole;
        this.idOrganization = idOrganization;
+       this.idQuepQuestion = idQuepQuestion;
     }
    
 
@@ -53,16 +53,6 @@ public class QuestionnaireResponseId  implements java.io.Serializable {
     }
 
 
-    @Column(name="id_role", nullable=false)
-    public int getIdRole() {
-        return this.idRole;
-    }
-    
-    public void setIdRole(int idRole) {
-        this.idRole = idRole;
-    }
-
-
     @Column(name="id_stakeholder", nullable=false)
     public int getIdStakeholder() {
         return this.idStakeholder;
@@ -73,13 +63,13 @@ public class QuestionnaireResponseId  implements java.io.Serializable {
     }
 
 
-    @Column(name="id_quep_question", nullable=false)
-    public int getIdQuepQuestion() {
-        return this.idQuepQuestion;
+    @Column(name="id_role", nullable=false)
+    public int getIdRole() {
+        return this.idRole;
     }
     
-    public void setIdQuepQuestion(int idQuepQuestion) {
-        this.idQuepQuestion = idQuepQuestion;
+    public void setIdRole(int idRole) {
+        this.idRole = idRole;
     }
 
 
@@ -93,6 +83,16 @@ public class QuestionnaireResponseId  implements java.io.Serializable {
     }
 
 
+    @Column(name="id_quep_question", nullable=false)
+    public int getIdQuepQuestion() {
+        return this.idQuepQuestion;
+    }
+    
+    public void setIdQuepQuestion(int idQuepQuestion) {
+        this.idQuepQuestion = idQuepQuestion;
+    }
+
+
    public boolean equals(Object other) {
          if ( (this == other ) ) return true;
 		 if ( (other == null ) ) return false;
@@ -101,10 +101,10 @@ public class QuestionnaireResponseId  implements java.io.Serializable {
          
 		 return (this.getIdQuestionnaire()==castOther.getIdQuestionnaire())
  && (this.getIdPractice()==castOther.getIdPractice())
- && (this.getIdRole()==castOther.getIdRole())
  && (this.getIdStakeholder()==castOther.getIdStakeholder())
- && (this.getIdQuepQuestion()==castOther.getIdQuepQuestion())
- && (this.getIdOrganization()==castOther.getIdOrganization());
+ && (this.getIdRole()==castOther.getIdRole())
+ && (this.getIdOrganization()==castOther.getIdOrganization())
+ && (this.getIdQuepQuestion()==castOther.getIdQuepQuestion());
    }
    
    public int hashCode() {
@@ -112,10 +112,10 @@ public class QuestionnaireResponseId  implements java.io.Serializable {
          
          result = 37 * result + this.getIdQuestionnaire();
          result = 37 * result + this.getIdPractice();
-         result = 37 * result + this.getIdRole();
          result = 37 * result + this.getIdStakeholder();
-         result = 37 * result + this.getIdQuepQuestion();
+         result = 37 * result + this.getIdRole();
          result = 37 * result + this.getIdOrganization();
+         result = 37 * result + this.getIdQuepQuestion();
          return result;
    }   
 

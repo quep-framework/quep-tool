@@ -1,6 +1,5 @@
 package es.upv.dsic.quep.model;
-// Generated 20-sep-2016 10:46:39 by Hibernate Tools 4.3.1
-
+// Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -9,6 +8,8 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -91,8 +92,9 @@ public class QuepQuestion  implements java.io.Serializable {
        this.questionnaireQuepQuestions = questionnaireQuepQuestions;
     }
    
-     @Id 
-
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //add to mapped
+    
     
     @Column(name="id", unique=true, nullable=false)
     public int getId() {
@@ -303,4 +305,5 @@ public class QuepQuestion  implements java.io.Serializable {
 
 
 }
+
 
