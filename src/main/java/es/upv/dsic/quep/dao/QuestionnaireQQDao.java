@@ -5,6 +5,7 @@
  */
 package es.upv.dsic.quep.dao;
 
+import es.upv.dsic.quep.model.Principle;
 import es.upv.dsic.quep.model.QuepQuestion;
 import es.upv.dsic.quep.model.QuestionnaireQuepQuestion;
 import es.upv.dsic.quep.model.QuestionnaireResponse;
@@ -20,8 +21,20 @@ import java.util.Map;
 public interface QuestionnaireQQDao {
     
     public List<QuestionnaireQuepQuestion> getQuestionnairesQQbyRole(int idRole);
-    public List<ResponseOption> getResponseOptions(int idqq) ;
-    public ResponseOption getResponseOption(int idqq,int idro);
-    public Map<Integer,String> insertResponse(List<Response> lstResponse, List<QuestionnaireResponse> lstQResponse);
- 
+
+    public List<QuestionnaireQuepQuestion> getQuestionnairesQQRoleSthk(int idRole, int idStk);
+    
+    public List<QuestionnaireResponse> getQuestionnaireResponse(int idRole,int idStk);
+
+    public List<ResponseOption> getResponseOptions(int idqq);
+
+    public ResponseOption getResponseOption(int idqq, int idro);
+
+    public Map<Integer, String> insertResponse(List<Response> lstResponse);
+
+    public Map<Integer, String> insertQuestionnaireResponse(List<QuestionnaireResponse> lstQResponse);    
+
+    public List<Principle> getPrinciples(int idRole, int idStk);
+    
+    
 }

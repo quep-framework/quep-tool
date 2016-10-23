@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1 -->
+<!-- Generated 21-oct-2016 22:49:48 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="es.upv.dsic.quep.model.QuestionnaireResponse" table="questionnaire_response" schema="public" optimistic-lock="version">
         <composite-id name="id" class="es.upv.dsic.quep.model.QuestionnaireResponseId">
@@ -20,16 +20,13 @@
             <key-property name="idOrganization" type="int">
                 <column name="id_organization" />
             </key-property>
-            <key-property name="idQuepQuestion" type="int">
-                <column name="id_quep_question" />
-            </key-property>
         </composite-id>
         <many-to-one name="organization" class="es.upv.dsic.quep.model.Organization" 
                      lazy="false"
                      update="false" insert="false" fetch="select">
             <column name="id_organization" not-null="true" />
         </many-to-one>
-        <many-to-one name="questionnaire" class="es.upv.dsic.quep.model.Questionnaire"
+        <many-to-one name="questionnaire" class="es.upv.dsic.quep.model.Questionnaire" 
                      lazy="false"
                      update="false" insert="false" fetch="select">
             <column name="id_questionnaire" not-null="true" />
@@ -60,12 +57,14 @@
         <property name="computedValue" type="java.lang.Integer">
             <column name="computed_value" precision="5" scale="0" />
         </property>
+        <property name="status" type="int">
+            <column name="status" not-null="true"/>
+        </property>
         <set name="responses" table="response" inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="id_stakeholder" not-null="true" />
-                <column name="id_quep_question" not-null="true" />
-                <column name="id_practice" not-null="true" />
                 <column name="id_questionnaire" not-null="true" />
+                <column name="id_practice" not-null="true" />
+                <column name="id_stakeholder" not-null="true" />
                 <column name="id_role" not-null="true" />
                 <column name="id_organization" not-null="true" />
             </key>

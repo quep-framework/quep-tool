@@ -1,5 +1,5 @@
 package es.upv.dsic.quep.model;
-// Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1
+// Generated 21-oct-2016 22:49:47 by Hibernate Tools 4.3.1
 
 
 import javax.persistence.Column;
@@ -17,18 +17,16 @@ public class QuestionnaireResponseId  implements java.io.Serializable {
      private int idStakeholder;
      private int idRole;
      private int idOrganization;
-     private int idQuepQuestion;
 
     public QuestionnaireResponseId() {
     }
 
-    public QuestionnaireResponseId(int idQuestionnaire, int idPractice, int idStakeholder, int idRole, int idOrganization, int idQuepQuestion) {
+    public QuestionnaireResponseId(int idQuestionnaire, int idPractice, int idStakeholder, int idRole, int idOrganization) {
        this.idQuestionnaire = idQuestionnaire;
        this.idPractice = idPractice;
        this.idStakeholder = idStakeholder;
        this.idRole = idRole;
        this.idOrganization = idOrganization;
-       this.idQuepQuestion = idQuepQuestion;
     }
    
 
@@ -83,16 +81,6 @@ public class QuestionnaireResponseId  implements java.io.Serializable {
     }
 
 
-    @Column(name="id_quep_question", nullable=false)
-    public int getIdQuepQuestion() {
-        return this.idQuepQuestion;
-    }
-    
-    public void setIdQuepQuestion(int idQuepQuestion) {
-        this.idQuepQuestion = idQuepQuestion;
-    }
-
-
    public boolean equals(Object other) {
          if ( (this == other ) ) return true;
 		 if ( (other == null ) ) return false;
@@ -103,8 +91,7 @@ public class QuestionnaireResponseId  implements java.io.Serializable {
  && (this.getIdPractice()==castOther.getIdPractice())
  && (this.getIdStakeholder()==castOther.getIdStakeholder())
  && (this.getIdRole()==castOther.getIdRole())
- && (this.getIdOrganization()==castOther.getIdOrganization())
- && (this.getIdQuepQuestion()==castOther.getIdQuepQuestion());
+ && (this.getIdOrganization()==castOther.getIdOrganization());
    }
    
    public int hashCode() {
@@ -115,7 +102,6 @@ public class QuestionnaireResponseId  implements java.io.Serializable {
          result = 37 * result + this.getIdStakeholder();
          result = 37 * result + this.getIdRole();
          result = 37 * result + this.getIdOrganization();
-         result = 37 * result + this.getIdQuepQuestion();
          return result;
    }   
 

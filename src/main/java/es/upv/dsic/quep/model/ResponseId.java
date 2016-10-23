@@ -1,5 +1,5 @@
 package es.upv.dsic.quep.model;
-// Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1
+// Generated 21-oct-2016 22:49:47 by Hibernate Tools 4.3.1
 
 
 import javax.persistence.Column;

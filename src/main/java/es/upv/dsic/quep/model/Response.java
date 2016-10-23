@@ -1,5 +1,5 @@
 package es.upv.dsic.quep.model;
-// Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1
+// Generated 21-oct-2016 22:49:47 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -114,12 +114,11 @@ public class Response  implements java.io.Serializable {
 
 @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumns( { 
-        @JoinColumn(name="id_stakeholder", referencedColumnName="id_questionnaire", nullable=false, insertable=false, updatable=false), 
-        @JoinColumn(name="id_quep_question", referencedColumnName="id_practice", nullable=false, insertable=false, updatable=false), 
-        @JoinColumn(name="id_practice", referencedColumnName="id_stakeholder", nullable=false, insertable=false, updatable=false), 
-        @JoinColumn(name="id_questionnaire", referencedColumnName="id_role", nullable=false, insertable=false, updatable=false), 
-        @JoinColumn(name="id_role", referencedColumnName="id_organization", nullable=false, insertable=false, updatable=false), 
-        @JoinColumn(name="id_organization", referencedColumnName="id_quep_question", nullable=false, insertable=false, updatable=false) } )
+        @JoinColumn(name="id_questionnaire", referencedColumnName="id_questionnaire", nullable=false, insertable=false, updatable=false), 
+        @JoinColumn(name="id_practice", referencedColumnName="id_practice", nullable=false, insertable=false, updatable=false), 
+        @JoinColumn(name="id_stakeholder", referencedColumnName="id_stakeholder", nullable=false, insertable=false, updatable=false), 
+        @JoinColumn(name="id_role", referencedColumnName="id_role", nullable=false, insertable=false, updatable=false), 
+        @JoinColumn(name="id_organization", referencedColumnName="id_organization", nullable=false, insertable=false, updatable=false) } )
     public QuestionnaireResponse getQuestionnaireResponse() {
         return this.questionnaireResponse;
     }
