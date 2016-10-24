@@ -1,5 +1,7 @@
 package es.upv.dsic.quep.beans;
+
 import es.upv.dsic.quep.dao.QuestioannaireDaoImplement;
+import es.upv.dsic.quep.model.Organization;
 import es.upv.dsic.quep.model.Principle;
 import es.upv.dsic.quep.model.QuepQuestion;
 import es.upv.dsic.quep.model.QuestionType;
@@ -13,6 +15,7 @@ import es.upv.dsic.quep.model.RoleStakeholder;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -54,42 +57,23 @@ import org.primefaces.event.FlowEvent;
 
 public class QuestionnaireDynamicBean implements Serializable {
 
-    //private TabView tabview;
-    private Calendar cal;
-    //private Tab panel;
-    private PanelGrid panel;
-    private PanelGrid panelfrm;
-
-    private SelectOneMenu cmb;
-    private SelectOneRadio rB;
-    private SelectManyCheckbox chk;
-    private InputText txt;
-    //private OutputLabel lblTabview;
-    private List<QuestionnaireQuepQuestion> lstQuestionnaireQQ;
-    private Map<Principle, List<QuestionnaireQuepQuestion>> lstMapQuestionnaireQQ;
-
-    private UIForm form;
-    private CommandButton btnSave;
-    private Growl growl;
-    private ConfirmDialog confirmdialog;
-
-    private Wizard wizard;
-    private Tab tabwizad;
-    private PanelGrid pnlwizad;
-
-    private UISelectItems selectItems;
-
     private QuestioannaireDaoImplement qdi = new QuestioannaireDaoImplement();
 
-    private Response oResponse;
-    private QuestionnaireResponse oQResponse;
-    
-    List<QuestionnaireResponse> lstQuestionnaireResponse = new ArrayList<QuestionnaireResponse>();
+    private List<Response> lstResponse;
+    private List<QuestionnaireResponse> lstQuestionnaireResponse;
+    private List<QuestionnaireResponse> lstAuxQuestionnaireResponse;
+
+    private List<QuestionnaireQuepQuestion> lstQuestionnaireQQ;
+
+    private Map<Principle, List<QuestionnaireQuepQuestion>> lstMapQuestionnaireQQ;
+
+    private RoleStakeholder oRoleStakeholder = null;
+    private QuestionnaireResponse oQuestionnaireResponse;
+
+    private PanelGrid panel = new PanelGrid();
 
     @Inject
     private AccessBean accessBean;
-
-    private RoleStakeholder oRoleStakeholder = null;
 
     public QuestionnaireDynamicBean() {
         try {
@@ -98,49 +82,79 @@ public class QuestionnaireDynamicBean implements Serializable {
         } catch (Exception e) {
             System.out.printf(e.getMessage());
         }
-
     }
-    
 
-    public void buildQuestionnaire() {           
+    public void save(ActionEvent ae) {
+        try {
+            saveResponse(2);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void completed(ActionEvent ae) {
+        try {
+            if (validateComplete() == 1) {
+                saveResponse(1);
+            } else {
+                addMessage("Error", "Please fill all fields.", 2);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void buildQuestionnaire() {
+        lstMapQuestionnaireQQ = new HashMap<Principle, List<QuestionnaireQuepQuestion>>();
         lstQuestionnaireQQ = new ArrayList<QuestionnaireQuepQuestion>();
-        lstQuestionnaireQQ = qdi.getQuestionnairesQQRoleSthk(oRoleStakeholder.getRole().getId(), oRoleStakeholder.getStakeholder().getId());
+        lstResponse = new ArrayList<Response>();
+        lstQuestionnaireResponse = new ArrayList<QuestionnaireResponse>();
+
+        lstQuestionnaireResponse = qdi.getQuestionnaireResponse(oRoleStakeholder.getRole().getId(), oRoleStakeholder.getStakeholder().getId());
+
+        lstResponse = qdi.getListResponse(
+                oRoleStakeholder.getRole().getId(),
+                oRoleStakeholder.getStakeholder().getId(),
+                oRoleStakeholder.getOrganization().getId());
+
+        lstQuestionnaireQQ = qdi.getQuestionnairesQQRole(oRoleStakeholder.getRole().getId(), oRoleStakeholder.getOrganization().getId());
         lstMapQuestionnaireQQ = setMapQuestionnaireQQ(lstQuestionnaireQQ);
 
         if (lstMapQuestionnaireQQ != null) {
             panel = new PanelGrid();
             panel.setId("pnlMain");
 
-            form = new UIForm();
+            UIForm form = new UIForm();
             form.setId("frmQ");
 
-            panelfrm = new PanelGrid();
+            PanelGrid panelfrm = new PanelGrid();
             panelfrm.setId("pnlMain");
-            
+
+            Growl growl = new Growl();
+            growl.setId("message");
+            growl.setShowDetail(true);
+
             AccordionPanel apnl = new AccordionPanel();
             apnl.setId("tvQ");
             apnl.setMultiple(true);
 
-            for (Map.Entry<Principle, List<QuestionnaireQuepQuestion>> entry : lstMapQuestionnaireQQ.entrySet()) {                                
+            for (Map.Entry<Principle, List<QuestionnaireQuepQuestion>> entry : lstMapQuestionnaireQQ.entrySet()) {
                 Principle key = entry.getKey();
                 List<QuestionnaireQuepQuestion> lstQQQ = entry.getValue();
-                
-                Tab tabapnl=new Tab();
-                tabapnl.setId("tabapnl_"+ String.valueOf(key.getId()));
-                tabapnl.setTitle(key.getAbbreviation());
-                
+
+                Tab tabapnl = new Tab();
+                tabapnl.setId("tabapnl_" + String.valueOf(key.getId()));
+                tabapnl.setTitle(key.getAbbreviation() + "." + key.getName());
+
                 PanelGrid panelPrinciple = new PanelGrid();
                 panelPrinciple.setColumns(2);
                 panelPrinciple.getChildren().add(createPrinciplePanel(key, lstQQQ));
-                
+
                 tabapnl.getChildren().add(panelPrinciple);
                 apnl.getChildren().add(tabapnl);
             }
 
-            btnSave = new CommandButton();
-            growl = new Growl();
-            growl.setId("message");
-            growl.setShowDetail(true);
+            CommandButton btnSave = new CommandButton();
             btnSave.setId("cmdSave");
             btnSave.setValue("Save");
 
@@ -151,8 +165,22 @@ public class QuestionnaireDynamicBean implements Serializable {
                 }
             });
             btnSave.setUpdate("message,frmQ");
-            panelfrm.getChildren().add(growl);
             panelfrm.getChildren().add(btnSave);
+            
+            CommandButton btnCompleted = new CommandButton();
+            btnCompleted.setId("cmdComplete");
+            btnCompleted.setValue("Finish");
+
+            btnCompleted.addActionListener(new ActionListener() {
+                @Override
+                public void processAction(ActionEvent event) throws AbortProcessingException {
+                    completed(event);
+                }
+            });
+            btnCompleted.setUpdate("message,frmQ");
+            panelfrm.getChildren().add(btnCompleted);
+
+            panelfrm.getChildren().add(growl);//message
             form.getChildren().add(apnl);
             form.getChildren().add(panelfrm);
             panel.getChildren().add(form);
@@ -160,34 +188,16 @@ public class QuestionnaireDynamicBean implements Serializable {
         }
     }
 
-    public Map<Principle, List<QuestionnaireQuepQuestion>> setMapQuestionnaireQQ(List<QuestionnaireQuepQuestion> lstQQQ) {
-        List<Principle> lstPri = qdi.getPrinciples(oRoleStakeholder.getRole().getId(), oRoleStakeholder.getStakeholder().getId());
-        Map<Principle, List<QuestionnaireQuepQuestion>> MapQQQ = new HashMap<Principle, List<QuestionnaireQuepQuestion>>();
-
-        for (Iterator<Principle> itPri = lstPri.iterator(); itPri.hasNext();) {
-            Principle opri = itPri.next();
-            List<QuestionnaireQuepQuestion> lstAuxQQQ = new ArrayList<QuestionnaireQuepQuestion>();
-            for (Iterator<QuestionnaireQuepQuestion> itQQQM = lstQQQ.iterator(); itQQQM.hasNext();) {
-                QuestionnaireQuepQuestion qqqm = itQQQM.next();
-                if (qqqm.getQuepQuestion().getPractice().getPrinciple().getId() == opri.getId()) {
-                    lstAuxQQQ.add(qqqm);
-                }
-            }
-            MapQQQ.put(opri, lstAuxQQQ);
-        }
-        return MapQQQ;
-    }
-
     private PanelGrid createPrinciplePanel(Principle key, List<QuestionnaireQuepQuestion> lstQQQ) {
         PanelGrid panel = new PanelGrid();
         int j = 0;
         panel.setId("tab_" + String.valueOf(key.getId()));
-        
+
         //tab.setTitle(key.getName());        
         for (Iterator<QuestionnaireQuepQuestion> it = lstQQQ.iterator(); it.hasNext();) {
-            QuepQuestion qq = it.next().getQuepQuestion();
-            panel.getChildren().add(createQuestionPanel(qq, j));
-            panel.getChildren().add(createResponseOptionPanel(qq));
+            QuestionnaireQuepQuestion qqq = it.next();
+            panel.getChildren().add(createQuestionPanel(qqq.getQuepQuestion(), j));
+            panel.getChildren().add(createResponseOptionPanel(qqq));
             j++;
         }
         return panel;
@@ -206,212 +216,306 @@ public class QuestionnaireDynamicBean implements Serializable {
         return pnlQuestion;
     }
 
-    private PanelGrid createResponseOptionPanel(QuepQuestion qq) {
+    private PanelGrid createResponseOptionPanel(QuestionnaireQuepQuestion qqq) {
         PanelGrid pnlResponseOption = new PanelGrid();
         OutputLabel lblTxtComments;
         InputTextarea txtComments;
 
         //create dinamic component (response option)
         pnlResponseOption = new PanelGrid();
-        pnlResponseOption.setId("pnlResponseOption_" + String.valueOf(qq.getId()));
+        pnlResponseOption.setId("pnlResponseOption_" + String.valueOf(qqq.getQuepQuestion().getId()));
         pnlResponseOption.setColumns(2);
         pnlResponseOption.setStyleClass("panelNoBorder");
 
         //static component
         OutputLabel lblResponse = new OutputLabel();
         lblResponse.setValue("Response:");
-        lblResponse.setId("lblResponse_" + String.valueOf(qq.getId()));
-        lblResponse.setFor("idRO_" + String.valueOf(qq.getId()));
+        lblResponse.setId("lblResponse_" + String.valueOf(qqq.getQuepQuestion().getId()));
+        lblResponse.setFor("idRO_" + String.valueOf(qqq.getQuepQuestion().getId()));
         pnlResponseOption.getChildren().add(lblResponse);
 
         //response option components
         QuestionType qt = new QuestionType();
-        qt = qq.getQuestionType();
+        qt = qqq.getQuepQuestion().getQuestionType();
+
+        //get current response if there are
+        List<Response> lstCurrentResponses = new ArrayList<Response>();
+        if (lstResponse != null && lstResponse.size() > 0) {
+            lstCurrentResponses = getCurrentResponses(qqq);
+        }
 
         //create radio button
         if (qt.getName().toLowerCase().trim().contains("radio")) {
-            rB = new SelectOneRadio();
-            rB.setId("idRO_" + String.valueOf(qq.getId()));
+            SelectOneRadio rB = new SelectOneRadio();
+            rB.setId("idRO_" + String.valueOf(qqq.getQuepQuestion().getId()));
 
-            List<SelectItem> items = new ArrayList<SelectItem>();
-            List<ResponseOption> lstqQRO = new ArrayList<ResponseOption>(0);
-            lstqQRO = qdi.getResponseOptions(qq.getId());
+            UISelectItems selectItems = new UISelectItems();
+            selectItems = setSelectItems(qqq);
 
-            for (Iterator<ResponseOption> it1 = lstqQRO.iterator(); it1.hasNext();) {
-                ResponseOption ro = it1.next();
-                items.add(new SelectItem(ro.getId(), ro.getName()));
+            if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
+                //rB.setSelectItems(setCurrentResponseOption(lstCurrentResponses));
+                rB.setValue(setCurrentResponseOption(lstCurrentResponses));
             }
-            selectItems = new UISelectItems();
-            selectItems.setId("idItms_" + String.valueOf(qq.getId()));
-            selectItems.setValue(items);
+
             rB.getChildren().add(selectItems);
             rB.setColumns(qt.getItemNumber());
 
             pnlResponseOption.getChildren().add(rB);
         } else if (qt.getName().toLowerCase().trim().contains("check")) {
-            chk = new SelectManyCheckbox();
-            chk.setId("idRO_" + String.valueOf(qq.getId()));
+            SelectManyCheckbox chk = new SelectManyCheckbox();
+            chk.setId("idRO_" + String.valueOf(qqq.getQuepQuestion().getId()));
 
-            List<ResponseOption> lstqQRO = new ArrayList<ResponseOption>(0);
-            lstqQRO = qdi.getResponseOptions(qq.getId());
+            UISelectItems selectItems = new UISelectItems();
+            selectItems = setSelectItems(qqq);
 
-            List<SelectItem> items = new ArrayList<SelectItem>();
-            for (Iterator<ResponseOption> it1 = lstqQRO.iterator(); it1.hasNext();) {
-                ResponseOption ro = it1.next();
-                items.add(new SelectItem(ro.getId(), ro.getName()));
+            if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
+                chk.setValue(setLstCurrentResponseOption(lstCurrentResponses));
             }
-            selectItems = new UISelectItems();
-            selectItems.setId("idItms_" + String.valueOf(qq.getId()));
-            selectItems.setValue(items);
-
-            pnlResponseOption.getChildren().add(selectItems);
 
             chk.getChildren().add(selectItems);
             chk.setColumns(qt.getItemNumber());
 
             pnlResponseOption.getChildren().add(chk);
         } else if (qt.getName().toLowerCase().trim().contains("text")) {
-            txt = new InputText();
-            txt.setId("idRO_" + String.valueOf(qq.getId()));
+            InputText txt = new InputText();
+            txt.setId("idRO_" + String.valueOf(qqq.getQuepQuestion().getId()));
+
+            if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
+                txt.setValue(lstCurrentResponses.get(0).getResponseOption().getName());
+            }
 
             pnlResponseOption.getChildren().add(txt);
         } else if (qt.getName().toLowerCase().trim().contains("combo")) {
-            cmb = new SelectOneMenu();
-            cmb.setId("idRO_" + String.valueOf(qq.getId()));
+            SelectOneMenu cmb = new SelectOneMenu();
+            cmb.setId("idRO_" + String.valueOf(qqq.getQuepQuestion().getId()));
 
-            List<SelectItem> items = new ArrayList<SelectItem>();
-            List<ResponseOption> lstqQRO = new ArrayList<ResponseOption>(0);
-            lstqQRO = qdi.getResponseOptions(qq.getId());
+            UISelectItems selectItems = new UISelectItems();
+            selectItems = setSelectItems(qqq);
 
-            for (Iterator<ResponseOption> it1 = lstqQRO.iterator(); it1.hasNext();) {
-                ResponseOption ro = it1.next();
-                items.add(new SelectItem(ro.getId(), ro.getName()));
+            if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
+                cmb.setValue(lstCurrentResponses.get(0).getResponseOption().getId());
             }
-
-            selectItems = new UISelectItems();
-            selectItems.setValue(items);
 
             cmb.getChildren().add(selectItems);
 
             pnlResponseOption.getChildren().add(cmb);
         }
 
-        //text area component (comments)
-        if (qq.getHasComment() == 1) {
+        if (qqq.getQuepQuestion().getHasComment() == 1) {
             lblTxtComments = new OutputLabel();
             lblTxtComments.setValue("Comments:");
             pnlResponseOption.getChildren().add(lblTxtComments);
             txtComments = new InputTextarea();
+            txtComments.setAccesskey("txtComments_" + String.valueOf(qqq.getQuepQuestion().getId()));
+            txtComments.setId("txtComments_" + String.valueOf(qqq.getQuepQuestion().getId()));
 
-            txtComments.setAccesskey("txtComments_" + String.valueOf(qq.getId()));
-            txtComments.setId("txtComments_" + String.valueOf(qq.getId()));
-            //txtComments.setValue(#{this..});
+            if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
+                txtComments.setValue(lstCurrentResponses.get(0).getComment());
+            }
             pnlResponseOption.getChildren().add(txtComments);
         }
-
-        //has page number
-        if (qq.getHasPageNumber() == 1) {
+        if (qqq.getQuepQuestion().getHasPageNumber() == 1) {
             OutputLabel lblTxtPageNumber = new OutputLabel();
             lblTxtPageNumber.setValue("Page Number:");
             pnlResponseOption.getChildren().add(lblTxtPageNumber);
             InputText txtPageNumber = new InputText();
-            txtPageNumber.setId("txtPageNumber_" + String.valueOf(qq.getId()));
+            txtPageNumber.setId("txtPageNumber_" + String.valueOf(qqq.getQuepQuestion().getId()));
+
+            if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
+                txtPageNumber.setValue(lstCurrentResponses.get(0).getPagenumber());
+            }
             pnlResponseOption.getChildren().add(txtPageNumber);
         }
 
         return pnlResponseOption;
     }
 
-    public Map<Integer, String> updateQuestionnaireResponse(int band) {
-        lstQuestionnaireResponse = new ArrayList<QuestionnaireResponse>();
-        lstQuestionnaireResponse = qdi.getQuestionnaireResponse(oRoleStakeholder.getRole().getId(), oRoleStakeholder.getStakeholder().getId());
-        for (QuestionnaireResponse qr : lstQuestionnaireResponse) {
-            if (qr.getStatus()!=band &&  band==1){
-                qr.setStatus(band);
-            }
-            else if(qr.getStatus()==0){
-                qr.setStatus(2);
-            }
-        }                
-        return qdi.insertQuestionnaireResponse(lstQuestionnaireResponse);
-    }
+    public UISelectItems setSelectItems(QuestionnaireQuepQuestion qqq) {
+        List<SelectItem> items = new ArrayList<SelectItem>();
+        List<ResponseOption> lstqQRO = new ArrayList<ResponseOption>(0);
+        lstqQRO = qdi.getResponseOptions(qqq.getQuepQuestion().getId());
 
-   
-     public void completed(ActionEvent ae) {
-        try {
-            saveResponse(1);
-
-        } catch (Exception e) {
-
+        for (Iterator<ResponseOption> it1 = lstqQRO.iterator(); it1.hasNext();) {
+            ResponseOption ro = it1.next();
+            items.add(new SelectItem(ro.getId(), ro.getName()));
         }
+        UISelectItems sitms = new UISelectItems();
+        sitms.setValue(items);
+
+        return sitms;
     }
-   
+
+    public List<Response> getCurrentResponses(QuestionnaireQuepQuestion qqq) {
+        boolean b = false;
+        List<Response> lResponses = new ArrayList<Response>();
+
+        for (Response r : lstResponse) {
+            if (r.getId().getIdRole() == qqq.getId().getIdRole()
+                    && r.getId().getIdQuestionnaire() == qqq.getId().getIdQuestionnaire()
+                    && r.getId().getIdQuepQuestion() == qqq.getId().getIdQuepQuestion()
+                    && r.getId().getIdPractice() == qqq.getId().getIdPractice()) {
+                lResponses.add(r);
+            }
+        }
+        return lResponses;
+    }
+
+    public String[] setLstCurrentResponseOption(List<Response> lstCurrentResponses) {
+        String[] ls = new String[lstCurrentResponses.size()];
+        for (int i = 0; i < lstCurrentResponses.size(); i++) {
+            String s = String.valueOf(lstCurrentResponses.get(i).getResponseOption().getId());
+            ls[i] = s;
+        }
+        return ls;
+    }
+
+    public String setCurrentResponseOption(List<Response> lstCurrentResponses) {
+        String s = new String();
+        s = String.valueOf(lstCurrentResponses.get(0).getResponseOption().getId());
+        return s;
+    }
+
+    public Map<Principle, List<QuestionnaireQuepQuestion>> setMapQuestionnaireQQ(List<QuestionnaireQuepQuestion> lstQQQ) {
+        List<Principle> lstPri = qdi.getPrinciples(oRoleStakeholder.getRole().getId(), oRoleStakeholder.getOrganization().getId());
+        Map<Principle, List<QuestionnaireQuepQuestion>> MapQQQ = new HashMap<Principle, List<QuestionnaireQuepQuestion>>();
+
+        for (Iterator<Principle> itPri = lstPri.iterator(); itPri.hasNext();) {
+            Principle opri = itPri.next();
+            List<QuestionnaireQuepQuestion> lstAuxQQQ = new ArrayList<QuestionnaireQuepQuestion>();
+            for (Iterator<QuestionnaireQuepQuestion> itQQQM = lstQQQ.iterator(); itQQQM.hasNext();) {
+                QuestionnaireQuepQuestion qqqm = itQQQM.next();
+                if (qqqm.getQuepQuestion().getPractice().getPrinciple().getId() == opri.getId()) {
+                    lstAuxQQQ.add(qqqm);
+                }
+            }
+            MapQQQ.put(opri, lstAuxQQQ);
+        }
+        return MapQQQ;
+    }
+
+    public Map<QuestionnaireResponse, List<Response>> setMapResponses(List<Response> lstR, List<QuestionnaireResponse> lstQR) {
+        Map<QuestionnaireResponse, List<Response>> mapR = new HashMap<QuestionnaireResponse, List<Response>>();
+
+        for (Iterator<QuestionnaireResponse> itQR = lstQR.iterator(); itQR.hasNext();) {
+            QuestionnaireResponse oQR = itQR.next();
+            List<Response> lstAuxR = new ArrayList<Response>();
+            for (Iterator<Response> itR = lstR.iterator(); itR.hasNext();) {
+                Response r = itR.next();
+                if (r.getId().getIdRole() == oQR.getId().getIdRole()
+                        && r.getId().getIdStakeholder() == oQR.getId().getIdStakeholder()
+                        && r.getId().getIdQuestionnaire() == oQR.getId().getIdQuestionnaire()
+                        && r.getId().getIdPractice() == oQR.getId().getIdPractice()
+                        && r.getId().getIdOrganization() == oQR.getId().getIdOrganization()) {
+                    lstAuxR.add(r);
+                }
+            }
+            mapR.put(oQR, lstAuxR);
+        }
+        return mapR;
+    }
+
+    public int validateComplete() {
+        //verificar que todas las preguntas hayan sido respondidas completas
+        boolean band=false;
+        int size=0;
+        Map<String, String[]> requestParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterValuesMap();
+        for (Iterator<QuestionnaireQuepQuestion> it = lstQuestionnaireQQ.iterator(); it.hasNext();) {
+            QuestionnaireQuepQuestion qqq = it.next();
+            String sQId = String.valueOf(qqq.getQuepQuestion().getId());
+            String[] lstRO = (String[]) requestParams.get(prefixQ + "idRO_" + sQId);
+            if (lstRO != null) {
+                for (String sRO : lstRO) {
+                    if (sRO!=null && sRO!=""){
+                        size++;
+                    }
+                }
+            }
+        }
+        if (lstQuestionnaireQQ.size()==size)
+        {
+            return 1;
+        }
+        else{
+            return 2;
+        }                
+    }
+
+    private static final String prefixQ = "frmQ:tvQ:";
     
     public void saveResponse(int band) {
         List<Response> lstRsp = new ArrayList<Response>();
-
         Map<String, String[]> requestParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterValuesMap();
-        Map<String, Object> obj_requestParams = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-        //FacesContext.getCurrentInstance().getExternalContext().getRequestParameterValuesMap()
-        String prefixQ = "frmQ:tvQ:";
+        
+
+        lstAuxQuestionnaireResponse = new ArrayList<QuestionnaireResponse>();
+        for (QuestionnaireResponse qr : lstQuestionnaireResponse) {
+            lstAuxQuestionnaireResponse.add(qr);
+        }
+        //lstAuxQuestionnaireResponse=lstQuestionnaireResponse;
 
         for (Iterator<QuestionnaireQuepQuestion> it = lstQuestionnaireQQ.iterator(); it.hasNext();) {
             QuestionnaireQuepQuestion qqq = it.next();
 
-            //Response            
+            //QUestionnaire Response            
+            setObjectQuestionnaireResponse(qqq, band);
+
+            //Response           
+            
             String sQId = String.valueOf(qqq.getQuepQuestion().getId());
             String[] lstRO = (String[]) requestParams.get(prefixQ + "idRO_" + sQId);
-            for (String sRO : lstRO) {
-                oResponse = new Response();
-                ResponseId rId = new ResponseId(oRoleStakeholder.getStakeholder().getId(),
-                        qqq.getQuepQuestion().getId(),
-                        qqq.getQuepQuestion().getPractice().getId(),
-                        qqq.getQuestionnaire().getId().getId(),
-                        oRoleStakeholder.getRole().getId(),
-                        oRoleStakeholder.getOrganization().getId(),
-                        Integer.parseInt(sRO));
-                oResponse.setId(rId);
+            if (lstRO != null) {
+                for (String sRO : lstRO) {
+                    Response oResponse = new Response();
+                    ResponseId rId = new ResponseId(oRoleStakeholder.getStakeholder().getId(),
+                            qqq.getQuepQuestion().getId(),
+                            qqq.getQuepQuestion().getPractice().getId(),
+                            qqq.getQuestionnaire().getId().getId(),
+                            oRoleStakeholder.getRole().getId(),
+                            oRoleStakeholder.getOrganization().getId(),
+                            Integer.parseInt(sRO));
+                    oResponse.setId(rId);
 
-                oResponse.setResponseOption(qdi.getResponseOption(qqq.getQuepQuestion().getId(), Integer.parseInt(sRO)));
-                oResponse.setResponseOption_1(qdi.getResponseOption(qqq.getQuepQuestion().getId(), Integer.parseInt(sRO)).getName());
+                    ResponseOption ro = new ResponseOption();
+                    ro = qdi.getResponseOption(qqq.getQuepQuestion().getId(), Integer.parseInt(sRO));
+                    oResponse.setResponseOption(ro);
+                    oResponse.setResponseOption_1(ro.getName());
 
-                oResponse.setQuestionnaireQuepQuestion(qqq);
-                oResponse.setStakeholder(oRoleStakeholder.getStakeholder());
-                oResponse.setIdPrinciple(qqq.getIdPrinciple());
+                    oResponse.setQuestionnaireQuepQuestion(qqq);
+                    oResponse.setStakeholder(oRoleStakeholder.getStakeholder());
+                    oResponse.setIdPrinciple(qqq.getIdPrinciple());
 
-                if (qqq.getQuepQuestion().getHasComment() == 1) {
-                    oResponse.setComment(requestParams.get(prefixQ + "txtComments_" + sQId)[0]);
+                    if (qqq.getQuepQuestion().getHasComment() == 1) {
+                        oResponse.setComment(requestParams.get(prefixQ + "txtComments_" + sQId)[0]);
+                    }
+
+                    if (qqq.getQuepQuestion().getHasPageNumber() == 1) {
+                        oResponse.setPagenumber(requestParams.get(prefixQ + "txtPageNumber_" + sQId)[0]);
+                    }
+
+                    oResponse.setComputedValue(0);
+                    oResponse.setCreationUser(oRoleStakeholder.getStakeholder().getEmail());
+                    oResponse.setCreationDate(new Date());
+                    oResponse.setActive(1);
+                    oResponse.setAudit("I");
+
+                    oResponse.setQuestionnaireResponse(oQuestionnaireResponse);
+
+                    if (searchPreviousResponse(oResponse)) {
+                        oResponse.setModificationUser(oRoleStakeholder.getStakeholder().getEmail());
+                        oResponse.setModificationDate(new Date());
+                    }
+
+                    lstRsp.add(oResponse);
                 }
-
-                if (qqq.getQuepQuestion().getHasPageNumber() == 1) {
-                    oResponse.setPagenumber(requestParams.get(prefixQ + "txtPageNumber_" + sQId)[0]);
-                }
-
-                oResponse.setComputedValue(0);
-                oResponse.setCreationUser(oRoleStakeholder.getStakeholder().getEmail());
-                oResponse.setCreationDate(new Date());
-                oResponse.setActive(1);
-                oResponse.setAudit("I");
-
-                oResponse.setQuestionnaireResponse(oQResponse);
-                lstRsp.add(oResponse);
             }
         }
 
-        Map<Integer, String> mSave = qdi.insertResponse(lstRsp);
-        if (mSave.containsKey(1) && updateQuestionnaireResponse(band).containsKey(1)) {
+        Map<Integer, String> mSave = qdi.insertResponse(setMapResponses(lstRsp, lstAuxQuestionnaireResponse), setMapResponses(lstResponse, lstQuestionnaireResponse));
+        if (mSave.containsKey(1)) {
             addMessage("Save", "Response have been saving.", 1);
+            buildQuestionnaire();
         } else {
-            addMessage("Error", "Please try again later." , 0);
-        }
-    }
-
-    public void save(ActionEvent ae) {
-        try {
-            saveResponse(0);
-
-        } catch (Exception e) {
-
+            addMessage("Error", "Please try again later.", 0);
         }
     }
 
@@ -420,86 +524,118 @@ public class QuestionnaireDynamicBean implements Serializable {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
             FacesContext.getCurrentInstance().addMessage(null, message);
         } else if (band == 0) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, summary, detail);
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, summary, detail);
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        else if (band == 2) {
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, summary, detail);
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
     }
 
-    private boolean skip;
-
-    public String onFlowProcess(FlowEvent event) {
-        if (skip) {
-            skip = false;   //reset in case user goes back
-            return "confirm";
-        } else {
-            return event.getNewStep();
+    public boolean searchPreviousResponse(Response rsp) {
+        boolean band = false;
+        if (lstResponse.size() > 0) {
+            for (Response r : lstResponse) {
+                if (rsp.getId().getIdStakeholder() == r.getId().getIdStakeholder()
+                        && rsp.getId().getIdRole() == r.getId().getIdRole()
+                        && rsp.getId().getIdOrganization() == r.getId().getIdOrganization()
+                        && rsp.getId().getIdPractice() == r.getId().getIdPractice()
+                        && rsp.getId().getIdQuestionnaire() == r.getId().getIdQuestionnaire()
+                        && rsp.getId().getIdQuepQuestion() == r.getId().getIdQuepQuestion()
+                        && rsp.getId().getIdResponseOption() == r.getId().getIdResponseOption()) {
+                    band = true;
+                    break;
+                }
+            }
         }
+        return band;
     }
 
-    
-    
-    public void configureQuestionnaireResponse() {
-        List<QuestionnaireResponse> lstQRsp = new ArrayList<QuestionnaireResponse>();
-        for (Iterator<QuestionnaireQuepQuestion> it = lstQuestionnaireQQ.iterator(); it.hasNext();) {
-            QuestionnaireQuepQuestion qqq = it.next();
-            oQResponse = new QuestionnaireResponse();
-            QuestionnaireResponseId qrId = new QuestionnaireResponseId(qqq.getQuestionnaire().getId().getId(),
+    public boolean searchPreviousQuestionnaireResponse(QuestionnaireQuepQuestion qqq) {
+        boolean band = false;
+        if (lstQuestionnaireResponse.size() > 0) {
+            for (QuestionnaireResponse qr : lstQuestionnaireResponse) {
+                if (oRoleStakeholder.getStakeholder().getId() == qr.getId().getIdStakeholder()
+                        && oRoleStakeholder.getRole().getId() == qr.getId().getIdRole()
+                        && oRoleStakeholder.getOrganization().getId() == qr.getId().getIdOrganization()
+                        && qqq.getQuestionnaire().getPractice().getId() == qr.getId().getIdPractice()
+                        && qqq.getQuestionnaire().getId().getId() == qr.getId().getIdQuestionnaire()) {
+                    lstAuxQuestionnaireResponse.remove(qr);
+                    oQuestionnaireResponse = new QuestionnaireResponse();
+                    oQuestionnaireResponse = qr;
+                    band = true;
+                    break;
+                }
+            }
+        }
+        return band;
+    }
+
+    public boolean searchAuxQuestionnaireResponse(QuestionnaireQuepQuestion qqq) {
+        boolean band = false;
+        if (lstAuxQuestionnaireResponse.size() > 0) {
+            for (QuestionnaireResponse qr : lstAuxQuestionnaireResponse) {
+                if (oRoleStakeholder.getStakeholder().getId() == qr.getId().getIdStakeholder()
+                        && oRoleStakeholder.getRole().getId() == qr.getId().getIdRole()
+                        && oRoleStakeholder.getOrganization().getId() == qr.getId().getIdOrganization()
+                        && qqq.getQuestionnaire().getPractice().getId() == qr.getId().getIdPractice()
+                        && qqq.getQuestionnaire().getId().getId() == qr.getId().getIdQuestionnaire()) {
+                    lstAuxQuestionnaireResponse.remove(qr);
+                    oQuestionnaireResponse = new QuestionnaireResponse();
+                    oQuestionnaireResponse = qr;
+                    band = true;
+                    break;
+                }
+            }
+        }
+        return band;
+    }
+
+    public void setObjectQuestionnaireResponse(QuestionnaireQuepQuestion qqq, int band) {
+        if (searchPreviousQuestionnaireResponse(qqq)) {
+            //exista en la lista actual o auxiliar (update memoria)
+            oQuestionnaireResponse.setStatus(band);
+            oQuestionnaireResponse.setModificationUser(oRoleStakeholder.getStakeholder().getEmail());
+            oQuestionnaireResponse.setModificationDate(new Date());
+        } else if (searchAuxQuestionnaireResponse(qqq) == false) {
+            oQuestionnaireResponse = new QuestionnaireResponse();
+            QuestionnaireResponseId qrId = new QuestionnaireResponseId(
+                    qqq.getQuestionnaire().getId().getId(),
                     qqq.getQuepQuestion().getPractice().getId(),
                     oRoleStakeholder.getStakeholder().getId(), oRoleStakeholder.getRole().getId(),
                     oRoleStakeholder.getOrganization().getId());
 
-            oQResponse.setId(qrId);
-            oQResponse.setOrganization(oRoleStakeholder.getOrganization());
-            oQResponse.setQuestionnaire(qqq.getQuestionnaire());
-            oQResponse.setCreationUser(oRoleStakeholder.getStakeholder().getEmail());
-            oQResponse.setCreationDate(new Date());
-            oQResponse.setActive(1);
-            oQResponse.setAudit("I");
-            oQResponse.setIdPrinciple(qqq.getIdPrinciple());
-            oQResponse.setComputedValue(0);
-            lstQRsp.add(oQResponse);
+            oQuestionnaireResponse.setId(qrId);
+            oQuestionnaireResponse.setOrganization(oRoleStakeholder.getOrganization());
+            oQuestionnaireResponse.setQuestionnaire(lstQuestionnaireQQ.get(0).getQuestionnaire());
+            oQuestionnaireResponse.setCreationUser(oRoleStakeholder.getStakeholder().getEmail());
+            oQuestionnaireResponse.setCreationDate(new Date());
+            oQuestionnaireResponse.setActive(1);
+            oQuestionnaireResponse.setAudit("I");
+            oQuestionnaireResponse.setIdPrinciple(lstQuestionnaireQQ.get(0).getIdPrinciple());
+            oQuestionnaireResponse.setComputedValue(0);
+            oQuestionnaireResponse.setStatus(0);
         }
+        lstAuxQuestionnaireResponse.add(oQuestionnaireResponse);
     }
 
-   /* public TabView getTabview() {
-        return tabview;
+
+    public List<QuestionnaireResponse> getLstAuxQuestionnaireResponse() {
+        return lstAuxQuestionnaireResponse;
     }
 
-    public void setTabview(TabView tabview) {
-        this.tabview = tabview;
-    }*/
-
-    public Calendar getCal() {
-        return cal;
+    public void setLstAuxQuestionnaireResponse(List<QuestionnaireResponse> lstAuxQuestionnaireResponse) {
+        this.lstAuxQuestionnaireResponse = lstAuxQuestionnaireResponse;
     }
 
-    public void setCal(Calendar cal) {
-        this.cal = cal;
+    public QuestionnaireResponse getoQuestionnaireResponse() {
+        return oQuestionnaireResponse;
     }
 
-    public PanelGrid getPanel() {
-        return panel;
+    public void setoQuestionnaireResponse(QuestionnaireResponse oQuestionnaireResponse) {
+        this.oQuestionnaireResponse = oQuestionnaireResponse;
     }
-
-    public void setPanel(PanelGrid panel) {
-        this.panel = panel;
-    }
-
-    public SelectOneRadio getrB() {
-        return rB;
-    }
-
-    public void setrB(SelectOneRadio rB) {
-        this.rB = rB;
-    }
-
-   /* public OutputLabel getLbl() {
-        return lblTabview;
-    }
-
-    public void setLbl(OutputLabel lblTabview) {
-        this.lblTabview = lblTabview;
-    }*/
 
     public List<QuestionnaireQuepQuestion> getLstQuestionnaireQQ() {
         return lstQuestionnaireQQ;
@@ -525,140 +661,12 @@ public class QuestionnaireDynamicBean implements Serializable {
         this.oRoleStakeholder = oRoleStakeholder;
     }
 
-    public SelectManyCheckbox getChk() {
-        return chk;
-    }
-
-    public void setChk(SelectManyCheckbox chk) {
-        this.chk = chk;
-    }
-
-   /*public OutputLabel getLblTabview() {
-        return lblTabview;
-    }
-
-    public void setLblTabview(OutputLabel lblTabview) {
-        this.lblTabview = lblTabview;
-    }*/
-
-    public InputText getTxt() {
-        return txt;
-    }
-
-    public void setTxt(InputText txt) {
-        this.txt = txt;
-    }
-
-    public SelectOneMenu getCmb() {
-        return cmb;
-    }
-
-    public void setCmb(SelectOneMenu cmb) {
-        this.cmb = cmb;
-    }
-
-    public CommandButton getBtnSave() {
-        return btnSave;
-    }
-
-    public void setBtnSave(CommandButton btnSave) {
-        this.btnSave = btnSave;
-    }
-
-    public Response getoResponse() {
-        return oResponse;
-    }
-
-    public void setoResponse(Response oResponse) {
-        this.oResponse = oResponse;
-    }
-
     public QuestioannaireDaoImplement getQdi() {
         return qdi;
     }
 
     public void setQdi(QuestioannaireDaoImplement qdi) {
         this.qdi = qdi;
-    }
-
-    public QuestionnaireResponse getoQResponse() {
-        return oQResponse;
-    }
-
-    public void setoQResponse(QuestionnaireResponse oQResponse) {
-        this.oQResponse = oQResponse;
-    }
-
-    public UISelectItems getSelectItems() {
-        return selectItems;
-    }
-
-    public void setSelectItems(UISelectItems selectItems) {
-        this.selectItems = selectItems;
-    }
-
-    public UIForm getForm() {
-        return form;
-    }
-
-    public void setForm(UIForm form) {
-        this.form = form;
-    }
-
-    public PanelGrid getPanelfrm() {
-        return panelfrm;
-    }
-
-    public void setPanelfrm(PanelGrid panelfrm) {
-        this.panelfrm = panelfrm;
-    }
-
-    public Growl getGrowl() {
-        return growl;
-    }
-
-    public void setGrowl(Growl growl) {
-        this.growl = growl;
-    }
-
-    public ConfirmDialog getConfirmdialog() {
-        return confirmdialog;
-    }
-
-    public void setConfirmdialog(ConfirmDialog confirmdialog) {
-        this.confirmdialog = confirmdialog;
-    }
-
-    public Wizard getWizard() {
-        return wizard;
-    }
-
-    public void setWizard(Wizard wizard) {
-        this.wizard = wizard;
-    }
-
-    public Tab getTabwizad() {
-        return tabwizad;
-    }
-
-    public void setTabwizad(Tab tabwizad) {
-        this.tabwizad = tabwizad;
-    }
-
-    public PanelGrid getPnlwizad() {
-        return pnlwizad;
-    }
-
-    public void setPnlwizad(PanelGrid pnlwizad) {
-        this.pnlwizad = pnlwizad;
-    }
-
-    public boolean isSkip() {
-        return skip;
-    }
-
-    public void setSkip(boolean skip) {
-        this.skip = skip;
     }
 
     public Map<Principle, List<QuestionnaireQuepQuestion>> getLstMapQuestionnaireQQ() {
@@ -669,6 +677,22 @@ public class QuestionnaireDynamicBean implements Serializable {
         this.lstMapQuestionnaireQQ = lstMapQuestionnaireQQ;
     }
 
+    public List<Response> getLstResponse() {
+        return lstResponse;
+    }
+
+    public void setLstResponse(List<Response> lstResponse) {
+        this.lstResponse = lstResponse;
+    }
+
+    public PanelGrid getPanel() {
+        return panel;
+    }
+
+    public void setPanel(PanelGrid panel) {
+        this.panel = panel;
+    }
+
     public List<QuestionnaireResponse> getLstQuestionnaireResponse() {
         return lstQuestionnaireResponse;
     }
@@ -676,7 +700,5 @@ public class QuestionnaireDynamicBean implements Serializable {
     public void setLstQuestionnaireResponse(List<QuestionnaireResponse> lstQuestionnaireResponse) {
         this.lstQuestionnaireResponse = lstQuestionnaireResponse;
     }
-    
-    
 
 }

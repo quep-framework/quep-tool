@@ -22,7 +22,7 @@ public interface QuestionnaireQQDao {
     
     public List<QuestionnaireQuepQuestion> getQuestionnairesQQbyRole(int idRole);
 
-    public List<QuestionnaireQuepQuestion> getQuestionnairesQQRoleSthk(int idRole, int idStk);
+    public List<QuestionnaireQuepQuestion> getQuestionnairesQQRole(int idRole,int idOrg);
     
     public List<QuestionnaireResponse> getQuestionnaireResponse(int idRole,int idStk);
 
@@ -30,11 +30,13 @@ public interface QuestionnaireQQDao {
 
     public ResponseOption getResponseOption(int idqq, int idro);
 
-    public Map<Integer, String> insertResponse(List<Response> lstResponse);
+//    public Map<Integer, String> insertResponse(Map<QuestionnaireResponse,List<Response>> mapResponse);
+    
+    public Map<Integer, String> insertResponse(Map<QuestionnaireResponse, List<Response>> mapLastResponse,Map<QuestionnaireResponse, List<Response>> mapPreviousResponse) ;
+   
+    public List<Response> getListResponse(int idRole,int idStk,int idOrg);  
 
-    public Map<Integer, String> insertQuestionnaireResponse(List<QuestionnaireResponse> lstQResponse);    
-
-    public List<Principle> getPrinciples(int idRole, int idStk);
+    public List<Principle> getPrinciples(int idRole,int idOrg);
     
     
 }
