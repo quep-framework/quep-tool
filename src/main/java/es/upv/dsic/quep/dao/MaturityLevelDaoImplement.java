@@ -24,7 +24,7 @@ public class MaturityLevelDaoImplement implements MaturityLevelDao {
         List<MaturityLevel> list = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
-            Query query = session.createQuery("from MaturityLevel");
+            Query query = session.createQuery("from MaturityLevel where active=1");
             list = (List<MaturityLevel>) query.list();
         } catch (Exception e) {
             System.out.println(e.getMessage());
