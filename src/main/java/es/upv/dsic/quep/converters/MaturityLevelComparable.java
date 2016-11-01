@@ -7,13 +7,14 @@ package es.upv.dsic.quep.converters;
 
 import es.upv.dsic.quep.model.MaturityLevel;
 import java.util.Comparator;
+import java.util.Map;
 
 /**
  *
  * @author agna8685
  */
 public class MaturityLevelComparable implements Comparable<MaturityLevel> {
-    MaturityLevel oMaturityLevel;
+    MaturityLevel oMaturityLevel;    
     
     public MaturityLevelComparable(MaturityLevel ml){
         this.oMaturityLevel=new MaturityLevel();

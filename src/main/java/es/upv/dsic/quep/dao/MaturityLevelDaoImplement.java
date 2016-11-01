@@ -7,6 +7,7 @@ package es.upv.dsic.quep.dao;
 
 import es.upv.dsic.quep.model.MaturityLevel;
 import es.upv.dsic.quep.hibernate.HibernateUtil;
+import es.upv.dsic.quep.model.MaturityLevelPractice;
 import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -26,6 +27,24 @@ public class MaturityLevelDaoImplement implements MaturityLevelDao {
             session = HibernateUtil.getSessionFactory().openSession();
             Query query = session.createQuery("from MaturityLevel where active=1");
             list = (List<MaturityLevel>) query.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return list;
+    }
+    
+     @Override
+    public List<MaturityLevelPractice> getMaturityLevelsPractice() {
+        Session session = null;
+        List<MaturityLevelPractice> list = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            Query query = session.createQuery("from MaturityLevelPractice where active=1");
+            list = (List<MaturityLevelPractice>) query.list();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         } finally {

@@ -6,6 +6,7 @@
 package es.upv.dsic.quep.dao;
 
 import es.upv.dsic.quep.model.MaturityLevel;
+import es.upv.dsic.quep.model.MaturityLevelPractice;
 import java.util.List;
 
 /**
@@ -18,4 +19,6 @@ public interface MaturityLevelDao {
     public void insertMaturityLevel(MaturityLevel ml);
     public void updateMaturityLevel(MaturityLevel ml);
     public void deleteMaturityLevel(MaturityLevel ml);
+    
+    public List<MaturityLevelPractice> getMaturityLevelsPractice() ;
 }
