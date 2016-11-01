@@ -115,7 +115,7 @@
                          <h:panelGrid id="pnl" binding="#{resultsChartViewBean.panel}"/>      
                     </div>
                     <p:panel>
-                        <p:chart id="idchart" type="bar" model="#{resultsChartViewBean.horizontalBarModel}" style="height:300px;">
+                        <p:chart id="idchart" type="bar" model="#{resultsChartViewBean.horizontalBarModel}" style="height:550px;">
                             <p:ajax event="itemSelect" listener="#{resultsChartViewBean.listener}" update="idchart" process="@this"></p:ajax>
                         </p:chart>
                     </p:panel>
