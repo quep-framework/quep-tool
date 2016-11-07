@@ -18,6 +18,7 @@ import es.upv.dsic.quep.model.QuepQuestion;
 import es.upv.dsic.quep.model.QuepQuestionResponseOption;
 import es.upv.dsic.quep.model.Response;
 import es.upv.dsic.quep.model.RoleStakeholder;
+import java.awt.MenuItem;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +27,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.PostConstruct;
+import javax.el.ELContext;
+import javax.el.ExpressionFactory;
+import javax.el.MethodExpression;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -42,6 +46,7 @@ import javax.faces.event.ActionListener;
 import javax.faces.event.BehaviorEvent;
 import javax.faces.event.ComponentSystemEvent;
 import javax.faces.event.ExceptionQueuedEvent;
+import javax.faces.event.MethodExpressionActionListener;
 import org.primefaces.behavior.ajax.AjaxBehavior;
 import org.primefaces.component.breadcrumb.BreadCrumb;
 import org.primefaces.component.menuitem.UIMenuItem;
@@ -52,8 +57,7 @@ import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.HorizontalBarChartModel;
 import org.primefaces.model.chart.ChartSeries;
-import org.primefaces.model.menu.MenuElement;
-//import org.primefaces.model.menu.DefaultMenuItem;
+import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.MenuModel;
 
 /**
@@ -74,8 +78,8 @@ public class ResultsChartViewBean implements Serializable {
 
     private Map<Practice, ResponseEstimate> mapSumPractices;
     private Map<Principle, ResponseEstimate> mapSumPrinciple;
+    private final Double umbral=50.00;
 
-    private MenuModel bMenu;
 
     private PanelGrid panel = new PanelGrid();
 
@@ -84,13 +88,13 @@ public class ResultsChartViewBean implements Serializable {
         createHorizontalBarMaturityLevel();
     }
 
-    //@PostConstruct
-    /*  public void init() {
-        oRoleStakeholder = (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
-        //model = null;
-        //createBarModels();
-        createHorizontalBarMaturityLevel();
-    }*/
+//    @PostConstruct
+//      public void init() {
+//        oRoleStakeholder = (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
+//        //model = null;
+//        //createBarModels();
+//        createHorizontalBarMaturityLevel();
+//    }
     public HorizontalBarChartModel getHorizontalBarModel() {
         return horizontalBarModel;
     }
@@ -99,6 +103,9 @@ public class ResultsChartViewBean implements Serializable {
         setMenuModel(1);
         setHorizontalBarModel(new HorizontalBarChartModel());
 
+        ChartSeries chartTolerable = new ChartSeries();
+        chartTolerable.setLabel("% tolerable");
+        
         ChartSeries chartComplete = new ChartSeries();
         chartComplete.setLabel("% complete");
 
@@ -122,13 +129,20 @@ public class ResultsChartViewBean implements Serializable {
                 if (oMaturityLevel.getId() == oML.getId()) {
                     chartComplete.set(oML.getLevelAbbreviation() + ". " + oML.getName(), result.getComplete());
                     chartPerComplete.set(oML.getLevelAbbreviation() + ". " + oML.getName(), result.getPerComplete());
+                    chartTolerable.set(oML.getLevelAbbreviation() + ". " + oML.getName(),  this.umbral);
                 }
             }
 
         }
 
-        getHorizontalBarModel().addSeries(chartComplete);
+        getHorizontalBarModel().addSeries(chartComplete);        
+        //getHorizontalBarModel().addSeries(chartTolerable);
         getHorizontalBarModel().addSeries(chartPerComplete);
+        getHorizontalBarModel().setShowDatatip(true);
+        getHorizontalBarModel().setShowPointLabels(true);
+        
+        //getHorizontalBarModel().setDatatipFormat(getHorizontalBarModel().getDatatipFormat());
+        //getHorizontalBarModel().setMouseoverHighlight(true);
 
         getHorizontalBarModel().setTitle(oRoleStakeholder.getOrganization().getName());
         getHorizontalBarModel().setAnimate(true);
@@ -146,6 +160,10 @@ public class ResultsChartViewBean implements Serializable {
 
         Axis yAxis = getHorizontalBarModel().getAxis(AxisType.Y);
         yAxis.setLabel("Maturity Levels");
+       
+        //yAxis.setTickFormat("%s"+"NT");
+        
+        
     }
 
     public void createHorizontalBarPrinciplesByLevel(String sMaturityLevelId) {
@@ -180,6 +198,8 @@ public class ResultsChartViewBean implements Serializable {
 
         getHorizontalBarModel().addSeries(chartComplete);
         getHorizontalBarModel().addSeries(chartPerComplete);
+        getHorizontalBarModel().setShowDatatip(true);
+        getHorizontalBarModel().setShowPointLabels(true);
 
         //getHorizontalBarModel().setTitle(oRoleStakeholder.getOrganization().getName());
         getHorizontalBarModel().setTitle("Level "+sMaturityLevelId);
@@ -337,8 +357,8 @@ public class ResultsChartViewBean implements Serializable {
         return mapSumResponseOp;
     }
 
-    public Map<Practice, ResponseEstimate> calculatePractices(Map<QuepQuestion, ResultsChartViewBean.ResponseEstimate> mapSumQuestions) {
-        Map<Practice, ResultsChartViewBean.ResponseEstimate> mapPracticeEstimate = new HashMap<Practice, ResultsChartViewBean.ResponseEstimate>();
+    public Map<Practice, ResponseEstimate> calculatePractices(Map<QuepQuestion, ResponseEstimate> mapSumQuestions) {
+        Map<Practice, ResponseEstimate> mapPracticeEstimate = new HashMap<Practice, ResponseEstimate>();
         List<Practice> lstPractice = new ArrayList<Practice>();
 
         PracticeDaoImplement prdao = new PracticeDaoImplement();
@@ -346,11 +366,11 @@ public class ResultsChartViewBean implements Serializable {
 
         for (Practice oPr : lstPractice) {
             int size = 0;
-            ResultsChartViewBean.ResponseEstimate oREstimate = new ResultsChartViewBean.ResponseEstimate();
+            ResponseEstimate oREstimate = new ResponseEstimate();
             Double avg = new Double(0.0);
-            for (Map.Entry<QuepQuestion, ResultsChartViewBean.ResponseEstimate> oSumQ : mapSumQuestions.entrySet()) {
+            for (Map.Entry<QuepQuestion, ResponseEstimate> oSumQ : mapSumQuestions.entrySet()) {
                 QuepQuestion qq = oSumQ.getKey();
-                ResultsChartViewBean.ResponseEstimate rsp = oSumQ.getValue();
+                ResponseEstimate rsp = oSumQ.getValue();
                 if (qq.getPractice().getId() == oPr.getId()) {
                     avg = avg + rsp.getAvg();
                     size++;
@@ -374,11 +394,11 @@ public class ResultsChartViewBean implements Serializable {
 
         for (Principle p : lstPrinciple) {
             int size = 0;
-            ResultsChartViewBean.ResponseEstimate oREstimate = new ResultsChartViewBean.ResponseEstimate();
+            ResponseEstimate oREstimate = new ResponseEstimate();
             Double avg = new Double(0.0);
-            for (Map.Entry<Practice, ResultsChartViewBean.ResponseEstimate> mPra : mapSumPractices.entrySet()) {
+            for (Map.Entry<Practice, ResponseEstimate> mPra : mapSumPractices.entrySet()) {
                 Practice pr = mPra.getKey();
-                ResultsChartViewBean.ResponseEstimate rsp = mPra.getValue();
+                ResponseEstimate rsp = mPra.getValue();
                 if (pr.getPrinciple().getId() == p.getId()) {
                     avg = avg + rsp.getAvg();
                     size++;
@@ -431,8 +451,8 @@ public class ResultsChartViewBean implements Serializable {
         return mapPrincipleEstimate;
     }
 
-    public Map<MaturityLevel, ResponseEstimate> calculateMaturityLevel(Map<Practice, ResultsChartViewBean.ResponseEstimate> mapSumPractices) {
-        Map<MaturityLevel, ResultsChartViewBean.ResponseEstimate> mapMaturityLevelEstimate = new HashMap<MaturityLevel, ResultsChartViewBean.ResponseEstimate>();
+    public Map<MaturityLevel, ResponseEstimate> calculateMaturityLevel(Map<Practice, ResponseEstimate> mapSumPractices) {
+        Map<MaturityLevel, ResponseEstimate> mapMaturityLevelEstimate = new HashMap<MaturityLevel, ResponseEstimate>();
 
         MaturityLevelDaoImplement mldao = new MaturityLevelDaoImplement();
         PrincipleDaoImplement pdi = new PrincipleDaoImplement();
@@ -443,21 +463,21 @@ public class ResultsChartViewBean implements Serializable {
         List<MaturityLevel> lstMaturityLevel = new ArrayList<MaturityLevel>();
         lstMaturityLevel = mldao.getMaturityLevels();
         
-        ResponseEstimate oREstimate = new ResultsChartViewBean.ResponseEstimate();
+        ResponseEstimate oREstimate = new ResponseEstimate();
         
         Double sumLastLevel =0.0;
         int sizeLevels=0;
         MaturityLevel oLastMaturityLevel = new MaturityLevel();
         for (MaturityLevel ml : lstMaturityLevel) {
             if (ml.getId() != 10) { //add un campo mas que indique que es el último nivel en la BD
-                oREstimate = new ResultsChartViewBean.ResponseEstimate();
+                oREstimate = new ResponseEstimate();
                 Double avg = new Double(0.0);
                 int size = 0;
                 for (MaturityLevelPractice mlp : lstMaturityLevelPractice) {
                     //if(mlp.getId().getIdMaturityLevel()==ml.getId()){
-                    for (Map.Entry<Practice, ResultsChartViewBean.ResponseEstimate> mPra : mapSumPractices.entrySet()) {
+                    for (Map.Entry<Practice, ResponseEstimate> mPra : mapSumPractices.entrySet()) {
                         Practice pra = mPra.getKey();
-                        ResultsChartViewBean.ResponseEstimate rsp = mPra.getValue();
+                        ResponseEstimate rsp = mPra.getValue();
                         if (pra.getId() == mlp.getId().getIdPractice()
                                 && mlp.getId().getIdMaturityLevel() == ml.getId()) {
                             avg = avg + rsp.getAvg();
@@ -481,7 +501,7 @@ public class ResultsChartViewBean implements Serializable {
         }
         
         //setting last level
-        oREstimate = new ResultsChartViewBean.ResponseEstimate();
+        oREstimate = new ResponseEstimate();
         oREstimate.setAvg(sumLastLevel/sizeLevels);        
         mapMaturityLevelEstimate.put(oLastMaturityLevel, oREstimate);
 
@@ -506,14 +526,20 @@ public class ResultsChartViewBean implements Serializable {
     UIForm form = new UIForm();
 
     public void setMenuModel(int band) {
+       // MenuModel menuModel=new DefaultMenuModel();
+        
         if (band == 2) {
             UIMenuItem mp = new UIMenuItem();
             mp.setValue("Principles");
+            mp.setUrl("#");
 
             RequestContext context = RequestContext.getCurrentInstance();
             context.update("frmMenu");
 
             bc.getChildren().add(mp);
+            //menuModel.addElement(mp);
+            //bc.setModel(menuModel);
+            
             form.getChildren().add(bc);
             form.setSubmitted(true);
             panel.getChildren().add(form);
@@ -529,37 +555,64 @@ public class ResultsChartViewBean implements Serializable {
 
             UIMenuItem mh = new UIMenuItem();
             mh.setValue("Home");
-            mh.addActionListener(new ActionListener() {
-                @Override
-                public void processAction(ActionEvent event) throws AbortProcessingException {
-                    onClickOnLevel(event);
-                }
-            });
-            bc.getChildren().add(mh);
+            mh.setUrl("#");
+            //menuModel.addElement(mh);           
+            bc.getChildren().add(mh); 
 
+            
             UIMenuItem mml = new UIMenuItem();
-            mml.setValue("Maturity Levels");
+            mml.setId("mml");
+            mml.setValue("Maturity Levels");    
+            mml.setUrl("#");
+//            mml.setOnclick("onClickMenuItem()");
+            //mml.addActionListener(new MenuActionListener());
             mml.addActionListener(new ActionListener() {
                 @Override
                 public void processAction(ActionEvent event) throws AbortProcessingException {
                     onClickOnLevel(event);
                 }
             });
-            bc.getChildren().add(mml);
+            bc.getChildren().add(mml); 
+            /*ExpressionFactory factory = FacesContext.getCurrentInstance().getApplication().getExpressionFactory();
+            ELContext elContext = FacesContext.getCurrentInstance().getELContext();
+            MethodExpression expression = factory.createMethodExpression(elContext, "#{resultsChartViewBean.onClickOnLevel(" + mml + ")}", null, new Class[]{UIMenuItem.class});
+            mml.addActionListener(new MethodExpressionActionListener(expression));
+            menuModel.addElement(mml);*/
+            //           
+            
+           // bc.setModel(menuModel);
             bc.isDynamic();
+            
             form.getChildren().add(bc);
             form.setSubmitted(true);
             panel.getChildren().add(form);
         }
     }
 
-    public void onClickOnLevel(ActionEvent ae) {
+   /*class MenuActionListener implements ActionListener{
+    @Override
+    public void processAction(ActionEvent event) throws AbortProcessingException {
+     onClickOnLevel(event);    
+    }
+*/
+    
+   public void onClickOnLevel(ActionEvent ae) {
         try {
-            createHorizontalBarMaturityLevel();
+            //createHorizontalBarMaturityLevel();
+            ResultsChartViewBean resultsChartViewBean = new ResultsChartViewBean();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
+//   
+//   public void onClickOnL() {
+//        try {
+//                        ResultsChartViewBean resultsChartViewBean = new ResultsChartViewBean();
+//            //createHorizontalBarMaturityLevel();
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
 
     public UIForm getForm() {
         return form;
@@ -668,14 +721,7 @@ public class ResultsChartViewBean implements Serializable {
         this.lstMaturityLevel = lstMaturityLevel;
     }
 
-    public MenuModel getbMenu() {
-        return bMenu;
-    }
-
-    public void setbMenu(MenuModel bMenu) {
-        this.bMenu = bMenu;
-    }
-
+   
     public PanelGrid getPanel() {
         return panel;
     }

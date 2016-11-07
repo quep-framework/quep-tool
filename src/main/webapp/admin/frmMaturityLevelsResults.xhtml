@@ -115,7 +115,7 @@
                          <h:panelGrid id="pnl" binding="#{resultsChartViewBean.panel}"/>      
                     </div>
                     <p:panel>
-                        <p:chart id="idchart" type="bar" model="#{resultsChartViewBean.horizontalBarModel}" style="height:550px;">
+                        <p:chart id="idchart" type="bar" model="#{resultsChartViewBean.horizontalBarModel}"  style="height:550px;">
                             <p:ajax event="itemSelect" listener="#{resultsChartViewBean.listener}" update="idchart" process="@this"></p:ajax>
                         </p:chart>
                     </p:panel>
@@ -134,7 +134,11 @@
         </div>
 
         <!--script type="text/javascript" src="/QuEP-Tool/resource/js/sh.js"></script-->
-
+        <!--script>
+function onClickMenuItem() {
+    document.getElementById("frmMenu:mml").action;
+}
+        </script-->
 
         <!--/h:form-->   
         
