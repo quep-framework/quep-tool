@@ -107,7 +107,7 @@ public class QuestionnaireDynamicBean implements Serializable {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        //Test Oscar
+        //Test Agna
     }
 
     public void buildQuestionnaire() {
