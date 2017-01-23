@@ -69,13 +69,11 @@ public class QuestionnaireDynamicBean implements Serializable {
     private QuestionnaireResponse oQuestionnaireResponse;
 
     private PanelGrid panel = new PanelGrid();
-    
+
     private static final String prefixQ = "frmQ:tvQ:";
     private static final String prefixIdRO = "idRO_";
     private static final String prefixTxtPageNumber = "txtPageNumber_";
     private static final String prefixTxtComments = "txtComments_";
-    
-    
 
     @Inject
     private AccessBean accessBean;
@@ -87,30 +85,16 @@ public class QuestionnaireDynamicBean implements Serializable {
         } catch (Exception e) {
             System.out.printf(e.getMessage());
         }
-    }
-
-    public void save(ActionEvent ae) {
-        try {
-            saveResponse(2);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void completed(ActionEvent ae) {
-        try {
-            if (validateComplete() == 1) {
-                saveResponse(1);
-            } else {
-                addMessage("Error", "Please fill all fields.", 2);
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        //Test Agna
-    }
-
-    public void buildQuestionnaire() {
+    } 
+    
+    /* ------- 
+     Inicialización de listas (recuperación de datos)
+    - lstQuestionnaireResponse: lista que recupera el cuestionario de respuestas en caso de tenerlas
+    - lstResponse: lista de respuestas asociadas al cuestionario de respuestas
+    - lstQuestionnaireQQ: lista que recupera el cuestionarios de preguntas configurados para el rol actual
+    - lstMapQuestionnaireQQ: Hashmap que almacena como key o clave el principio asociado a una lista de cuestionario de preguntas "lstQuestionnaireQQ"
+    ---*/    
+    public void initList(){
         lstMapQuestionnaireQQ = new HashMap<Principle, List<QuestionnaireQuepQuestion>>();
         lstQuestionnaireQQ = new ArrayList<QuestionnaireQuepQuestion>();
         lstResponse = new ArrayList<Response>();
@@ -125,7 +109,15 @@ public class QuestionnaireDynamicBean implements Serializable {
 
         lstQuestionnaireQQ = qdi.getQuestionnairesQQRole(oRoleStakeholder.getRole().getId(), oRoleStakeholder.getOrganization().getId());
         lstMapQuestionnaireQQ = setMapQuestionnaireQQ(lstQuestionnaireQQ);
-
+    }
+       
+    /* ------- 
+    Construcción del Cuestionario para el rol logeado
+    Se crean todos los componentes (botones, tabs, paneles, ...) dinámicamente según los datos recuperados en las listas
+    Se llama al proceso que crea un panel por cada uno de los principios 
+    ---*/
+    public void buildQuestionnaire() {
+        initList();
         if (lstMapQuestionnaireQQ != null) {
             panel = new PanelGrid();
             panel.setId("pnlMain");
@@ -147,11 +139,10 @@ public class QuestionnaireDynamicBean implements Serializable {
             for (Map.Entry<Principle, List<QuestionnaireQuepQuestion>> entry : lstMapQuestionnaireQQ.entrySet()) {
                 Principle key = entry.getKey();
                 List<QuestionnaireQuepQuestion> lstQQQ = entry.getValue();
-                
+
                 Tab tabapnl = new Tab();
                 tabapnl.setId("tabapnl_" + String.valueOf(key.getId()));
                 tabapnl.setTitle(key.getAbbreviation() + "." + key.getName());
-                
 
                 PanelGrid panelPrinciple = new PanelGrid();
                 panelPrinciple.setColumns(2);
@@ -173,7 +164,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             });
             btnSave.setUpdate("message,frmQ");
             panelfrm.getChildren().add(btnSave);
-            
+
             CommandButton btnCompleted = new CommandButton();
             btnCompleted.setId("cmdComplete");
             btnCompleted.setValue("Finish");
@@ -189,12 +180,38 @@ public class QuestionnaireDynamicBean implements Serializable {
 
             panelfrm.getChildren().add(growl);//message
             form.getChildren().add(apnl);
-            form.getChildren().add(panelfrm);                                        
-            panel.getChildren().add(form);       
+            form.getChildren().add(panelfrm);
+            panel.getChildren().add(form);
 
         }
     }
+    
+    public void save(ActionEvent ae) {
+        try {
+            saveResponse(2);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
+    public void completed(ActionEvent ae) {
+        try {
+            if (validateComplete() == 1) {
+                saveResponse(1);
+            } else {
+                addMessage("Error", "Please fill all fields.", 2);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        //Test Agna
+    }
+
+    /* ------- 
+    Se crea un panel por cada uno de los principios existentes en el hashmap lstMapQuestionnaireQQ
+    a) Se llama al proceso de creación del panel de las preguntas 
+    b) Se llama al proceso de creación del panel de las opciones de respuesta
+    ---*/
     private PanelGrid createPrinciplePanel(Principle key, List<QuestionnaireQuepQuestion> lstQQQ) {
         PanelGrid panel = new PanelGrid();
         int j = 0;
@@ -210,6 +227,10 @@ public class QuestionnaireDynamicBean implements Serializable {
         return panel;
     }
 
+     /* ------- 
+     a) Creación del panel correspondiente a cada una de las preguntas obtenidas en el hashmap
+        de questionario de preguntas según el rol
+    ---*/    
     private PanelGrid createQuestionPanel(QuepQuestion qq, int j) {
         PanelGrid pnlQuestion = new PanelGrid();
         //create dinamic component (label question)
@@ -223,6 +244,9 @@ public class QuestionnaireDynamicBean implements Serializable {
         return pnlQuestion;
     }
 
+    /* ------- 
+     b) Creación del panel correspondiente de las Opciones de Respuesta para cada pregunta
+    ---*/    
     private PanelGrid createResponseOptionPanel(QuestionnaireQuepQuestion qqq) {
         PanelGrid pnlResponseOption = new PanelGrid();
         OutputLabel lblTxtComments;
@@ -252,7 +276,6 @@ public class QuestionnaireDynamicBean implements Serializable {
         }
 
         //create radio button
-       
         if (qt.getName().toLowerCase().trim().contains("radio")) {
             SelectOneRadio rB = new SelectOneRadio();
             rB.setId(prefixIdRO + String.valueOf(qqq.getQuepQuestion().getId()));
@@ -267,10 +290,10 @@ public class QuestionnaireDynamicBean implements Serializable {
 
             rB.getChildren().add(selectItems);
             rB.setColumns(qt.getItemNumber());
-            
+
             ///////--------------------------------------------------------------------------------            
-            rB.setOnchange("validateQuestion(this.id,'"+prefixQ+"','"+prefixIdRO+"');");
-          /*  AjaxBehavior ajaxBehavior = (AjaxBehavior) FacesContext.getCurrentInstance().getApplication().createBehavior(AjaxBehavior.BEHAVIOR_ID);
+            rB.setOnchange("validateQuestion(this.id,'" + prefixQ + "','" + prefixIdRO + "');");
+            /*  AjaxBehavior ajaxBehavior = (AjaxBehavior) FacesContext.getCurrentInstance().getApplication().createBehavior(AjaxBehavior.BEHAVIOR_ID);
             ajaxBehavior.addAjaxBehaviorListener(new CustomAjaxListener());
             ajaxBehavior.setTransient(true);*/
             //rB.addClientBehavior("change", ajaxBehavior);
@@ -317,74 +340,72 @@ public class QuestionnaireDynamicBean implements Serializable {
             pnlResponseOption.getChildren().add(cmb);
         }
 
+        if (qqq.getQuepQuestion().getHasComment() == 1) {
+            lblTxtComments = new OutputLabel();
+            lblTxtComments.setId("lblComments_" + String.valueOf(qqq.getQuepQuestion().getId()));
+            lblTxtComments.setValue("Comments:");
+            pnlResponseOption.getChildren().add(lblTxtComments);
+            txtComments = new InputTextarea();
+            txtComments.setAccesskey(prefixTxtComments + String.valueOf(qqq.getQuepQuestion().getId()));
+            txtComments.setId(prefixTxtComments + String.valueOf(qqq.getQuepQuestion().getId()));
 
-            if (qqq.getQuepQuestion().getHasComment() == 1) {
-                lblTxtComments = new OutputLabel();
-                lblTxtComments.setId("lblComments_"+ String.valueOf(qqq.getQuepQuestion().getId()));
-                lblTxtComments.setValue("Comments:");
-                pnlResponseOption.getChildren().add(lblTxtComments);
-                txtComments = new InputTextarea();
-                txtComments.setAccesskey(prefixTxtComments + String.valueOf(qqq.getQuepQuestion().getId()));
-                txtComments.setId(prefixTxtComments + String.valueOf(qqq.getQuepQuestion().getId()));
-                
-                ///////--------------------------------------------------------------------------------
-                AjaxBehavior ajaxBehavior = (AjaxBehavior) FacesContext.getCurrentInstance().getApplication().createBehavior(AjaxBehavior.BEHAVIOR_ID);
-                ajaxBehavior.addAjaxBehaviorListener(new CustomAjaxListener());
-                ajaxBehavior.setTransient(true);
-                txtComments
-                        .addClientBehavior("change", ajaxBehavior);
-                /////
-                //txtComments.addClientBehavior(prefixQ, behavior);
+            ///////--------------------------------------------------------------------------------
+            AjaxBehavior ajaxBehavior = (AjaxBehavior) FacesContext.getCurrentInstance().getApplication().createBehavior(AjaxBehavior.BEHAVIOR_ID);
+            ajaxBehavior.addAjaxBehaviorListener(new CustomAjaxListener());
+            ajaxBehavior.setTransient(true);
+            txtComments
+                    .addClientBehavior("change", ajaxBehavior);
+            /////
+            //txtComments.addClientBehavior(prefixQ, behavior);
 
-                if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
-                    txtComments.setValue(lstCurrentResponses.get(0).getComment());
-                }
-                pnlResponseOption.getChildren().add(txtComments);
+            if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
+                txtComments.setValue(lstCurrentResponses.get(0).getComment());
             }
-            if (qqq.getQuepQuestion().getHasPageNumber() == 1) {
-                OutputLabel lblTxtPageNumber = new OutputLabel();
-                lblTxtPageNumber.setId("lblPageNumber_"+ String.valueOf(qqq.getQuepQuestion().getId()));
-                lblTxtPageNumber.setValue("Page Number:");
-                pnlResponseOption.getChildren().add(lblTxtPageNumber);
-                InputText txtPageNumber = new InputText();
-                txtPageNumber.setId(prefixTxtPageNumber + String.valueOf(qqq.getQuepQuestion().getId()));
+            pnlResponseOption.getChildren().add(txtComments);
+        }
+        if (qqq.getQuepQuestion().getHasPageNumber() == 1) {
+            OutputLabel lblTxtPageNumber = new OutputLabel();
+            lblTxtPageNumber.setId("lblPageNumber_" + String.valueOf(qqq.getQuepQuestion().getId()));
+            lblTxtPageNumber.setValue("Page Number:");
+            pnlResponseOption.getChildren().add(lblTxtPageNumber);
+            InputText txtPageNumber = new InputText();
+            txtPageNumber.setId(prefixTxtPageNumber + String.valueOf(qqq.getQuepQuestion().getId()));
 
-                if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
-                    txtPageNumber.setValue(lstCurrentResponses.get(0).getPagenumber());
-                }
-                pnlResponseOption.getChildren().add(txtPageNumber);
+            if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
+                txtPageNumber.setValue(lstCurrentResponses.get(0).getPagenumber());
             }
-        
+            pnlResponseOption.getChildren().add(txtPageNumber);
+        }
 
         return pnlResponseOption;
-    }   
+    }
 
-  
     public class CustomAjaxListener implements AjaxBehaviorListener {
+
         @Override
         public void processAjaxBehavior(AjaxBehaviorEvent event) throws AbortProcessingException {
             SelectOneRadio rb = (SelectOneRadio) event.getComponent();
             //Map<String, String[]> requestParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterValuesMap();
             String srbId = rb.getId().trim().split(prefixIdRO)[1];
-             
-             if (rb.getValue().toString().equals("2")){
-              Map<String, Object> requestParamsCookie = FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap();
-              Map<String, Object> requestParamsObj = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
-              Map<String, String[]> requestParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterValuesMap();
-              String[] lstRO = (String[]) requestParams.get(prefixQ + prefixIdRO + srbId);
-              String s=requestParams.get(prefixQ + prefixTxtComments + srbId)[0];
-              
-              Object oCookie=requestParamsCookie.get(prefixQ + prefixTxtComments + srbId);
-              Object obj=requestParamsObj.get(prefixQ + prefixTxtComments + srbId);
-              
-              InputTextarea txtComments= new InputTextarea();
-              txtComments.setId(prefixQ + prefixTxtComments + srbId);
-              txtComments.setRendered(false);
-                           
-             }
-         }
+
+            if (rb.getValue().toString().equals("2")) {
+                Map<String, Object> requestParamsCookie = FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap();
+                Map<String, Object> requestParamsObj = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+                Map<String, String[]> requestParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterValuesMap();
+                String[] lstRO = (String[]) requestParams.get(prefixQ + prefixIdRO + srbId);
+                String s = requestParams.get(prefixQ + prefixTxtComments + srbId)[0];
+
+                Object oCookie = requestParamsCookie.get(prefixQ + prefixTxtComments + srbId);
+                Object obj = requestParamsObj.get(prefixQ + prefixTxtComments + srbId);
+
+                InputTextarea txtComments = new InputTextarea();
+                txtComments.setId(prefixQ + prefixTxtComments + srbId);
+                txtComments.setRendered(false);
+
+            }
+        }
     }
-              
+
     public UISelectItems setSelectItems(QuestionnaireQuepQuestion qqq) {
         List<SelectItem> items = new ArrayList<SelectItem>();
         List<ResponseOption> lstqQRO = new ArrayList<ResponseOption>(0);
@@ -399,7 +420,7 @@ public class QuestionnaireDynamicBean implements Serializable {
 
         return sitms;
     }
-    
+
     public List<Response> getCurrentResponses(QuestionnaireQuepQuestion qqq) {
         boolean b = false;
         List<Response> lResponses = new ArrayList<Response>();
@@ -431,7 +452,7 @@ public class QuestionnaireDynamicBean implements Serializable {
 
     public Map<Principle, List<QuestionnaireQuepQuestion>> setMapQuestionnaireQQ(List<QuestionnaireQuepQuestion> lstQQQ) {
         List<Principle> lstPri = qdi.getPrinciples(oRoleStakeholder.getRole().getId(), oRoleStakeholder.getOrganization().getId());
-       // Map<Principle, List<QuestionnaireQuepQuestion>> MapQQQ = new HashMap<Principle, List<QuestionnaireQuepQuestion>>();
+        // Map<Principle, List<QuestionnaireQuepQuestion>> MapQQQ = new HashMap<Principle, List<QuestionnaireQuepQuestion>>();
         Map<Principle, List<QuestionnaireQuepQuestion>> MapQQQ = new HashMap<Principle, List<QuestionnaireQuepQuestion>>();
 
         for (Principle opri : lstPri) {
@@ -447,10 +468,6 @@ public class QuestionnaireDynamicBean implements Serializable {
         Map<Principle, List<QuestionnaireQuepQuestion>> treeMap = new TreeMap<Principle, List<QuestionnaireQuepQuestion>>(MapQQQ);
         return treeMap;
     }
-  
-            
-
-
 
     public Map<QuestionnaireResponse, List<Response>> setMapResponses(List<Response> lstR, List<QuestionnaireResponse> lstQR) {
         Map<QuestionnaireResponse, List<Response>> mapR = new HashMap<QuestionnaireResponse, List<Response>>();
@@ -475,8 +492,12 @@ public class QuestionnaireDynamicBean implements Serializable {
 
     public int validateComplete() {
         //verificar que todas las preguntas hayan sido respondidas completas
-        boolean band=false;
-        int size=0;
+        /* '0 None
+            1 Completed
+            2 InProgress
+            3 Deleted';*/
+        boolean band = false;
+        int size = 0;
         Map<String, String[]> requestParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterValuesMap();
         for (Iterator<QuestionnaireQuepQuestion> it = lstQuestionnaireQQ.iterator(); it.hasNext();) {
             QuestionnaireQuepQuestion qqq = it.next();
@@ -484,25 +505,26 @@ public class QuestionnaireDynamicBean implements Serializable {
             String[] lstRO = (String[]) requestParams.get(prefixQ + prefixIdRO + sQId);
             if (lstRO != null) {
                 for (String sRO : lstRO) {
-                    if (sRO!=null && sRO!=""){
+                    if (sRO != null && sRO != "") {
                         size++;
                     }
                 }
             }
         }
-        if (lstQuestionnaireQQ.size()==size)
-        {
+        if (lstQuestionnaireQQ.size() == size) {
             return 1;
-        }
-        else{
+        } else {
             return 2;
-        }                
-    }    
+        }
+    }
     
+    
+    /*
+      Procedimiento que guarda las respuestas de las preguntas
+    */
     public void saveResponse(int band) {
         List<Response> lstRsp = new ArrayList<Response>();
         Map<String, String[]> requestParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterValuesMap();
-        
 
         lstAuxQuestionnaireResponse = new ArrayList<QuestionnaireResponse>();
         for (QuestionnaireResponse qr : lstQuestionnaireResponse) {
@@ -517,7 +539,6 @@ public class QuestionnaireDynamicBean implements Serializable {
             setObjectQuestionnaireResponse(qqq, band);
 
             //Response           
-            
             String sQId = String.valueOf(qqq.getQuepQuestion().getId());
             String[] lstRO = (String[]) requestParams.get(prefixQ + prefixIdRO + sQId);
             if (lstRO != null) {
@@ -583,8 +604,7 @@ public class QuestionnaireDynamicBean implements Serializable {
         } else if (band == 0) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, summary, detail);
             FacesContext.getCurrentInstance().addMessage(null, message);
-        }
-        else if (band == 2) {
+        } else if (band == 2) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, summary, detail);
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
@@ -676,7 +696,6 @@ public class QuestionnaireDynamicBean implements Serializable {
         }
         lstAuxQuestionnaireResponse.add(oQuestionnaireResponse);
     }
-
 
     public List<QuestionnaireResponse> getLstAuxQuestionnaireResponse() {
         return lstAuxQuestionnaireResponse;
