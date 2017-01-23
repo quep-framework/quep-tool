@@ -33,7 +33,7 @@ public class RoleStakeholderDaoImplement implements RoleStakeholderDao {
         //List<RoleStakeholderId> listRS = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
-             Query queryR = session.createQuery("from RoleStakeholder where stakeholder.email='" + user + "' and stakeholder.password = '" + password + "'");
+             Query queryR = session.createQuery("from RoleStakeholder where active=1 and stakeholder.email='" + user + "' and stakeholder.password = '" + password + "'");
      
             listR = (List<RoleStakeholder>) queryR.list();
 

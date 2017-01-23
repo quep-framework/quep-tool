@@ -178,6 +178,14 @@ public class LoginBean implements Serializable {
     public void setBandOrganization(boolean bandOrganization) {
         this.bandOrganization = bandOrganization;
     }*/
+    
+   /* public String getUserName() {
+        if (stakeholder != null)
+        return  "usr";//stakeholder.getEmail().substring(0,stakeholder.getEmail().indexOf("@"));
+        else return "";
+    }
+*/
+    
 
     
 }

@@ -2,6 +2,7 @@ package es.upv.dsic.quep.model;
 // Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1
 
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,8 +39,8 @@ public class Practice  implements java.io.Serializable {
      private Date modificationDate;
      private int active;
      private Integer idTechnique;
-     private Integer umbral;
-     private Integer weight;
+     private BigDecimal umbral;
+     private BigDecimal weight;
      private String audit;
      private String description;
      private Set<Technique> techniques = new HashSet<Technique>(0);
@@ -61,7 +62,7 @@ public class Practice  implements java.io.Serializable {
         this.active = active;
         this.audit = audit;
     }
-    public Practice(int id, Principle principle, String abbreviation, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, Integer idTechnique, Integer umbral, Integer weight, String audit, String description, Set<Technique> techniques, Set<Questionnaire> questionnaires, Set<MaturityLevelPractice> maturityLevelPractices, Set<RolePractice> rolePractices, Set<QuepQuestion> quepQuestions) {
+    public Practice(int id, Principle principle, String abbreviation, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, Integer idTechnique, BigDecimal umbral, BigDecimal weight, String audit, String description, Set<Technique> techniques, Set<Questionnaire> questionnaires, Set<MaturityLevelPractice> maturityLevelPractices, Set<RolePractice> rolePractices, Set<QuepQuestion> quepQuestions) {
        this.id = id;
        this.principle = principle;
        this.abbreviation = abbreviation;
@@ -186,22 +187,22 @@ public class Practice  implements java.io.Serializable {
     }
 
     
-    @Column(name="umbral", precision=5, scale=0)
-    public Integer getUmbral() {
+    @Column(name="umbral", precision=5)
+    public BigDecimal getUmbral() {
         return this.umbral;
     }
     
-    public void setUmbral(Integer umbral) {
+    public void setUmbral(BigDecimal umbral) {
         this.umbral = umbral;
     }
 
     
-    @Column(name="weight", precision=5, scale=0)
-    public Integer getWeight() {
+    @Column(name="weight", precision=5)
+    public BigDecimal getWeight() {
         return this.weight;
     }
     
-    public void setWeight(Integer weight) {
+    public void setWeight(BigDecimal weight) {
         this.weight = weight;
     }
 

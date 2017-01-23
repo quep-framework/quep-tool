@@ -2,6 +2,8 @@ package es.upv.dsic.quep.model;
 // Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1
 
 
+import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +25,7 @@ import javax.persistence.TemporalType;
 @Table(name="principle"
     ,schema="public"
 )
-public class Principle  implements java.io.Serializable {
+public class Principle  implements Comparable<Principle> {
 
 
      private int id;
@@ -34,9 +36,9 @@ public class Principle  implements java.io.Serializable {
      private String modificationUser;
      private Date modificationDate;
      private int active;
-     private Integer umbral;
+     private BigDecimal umbral;
      private String audit;
-     private Integer weight;
+     private BigDecimal weight;
      private String description;
      private Set<Practice> practices = new HashSet<Practice>(0);
 
@@ -53,7 +55,7 @@ public class Principle  implements java.io.Serializable {
         this.active = active;
         this.audit = audit;
     }
-    public Principle(int id, String abbreviation, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, Integer umbral, String audit, Integer weight, String description, Set<Practice> practices) {
+    public Principle(int id, String abbreviation, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, BigDecimal umbral, String audit, BigDecimal weight, String description, Set<Practice> practices) {
        this.id = id;
        this.abbreviation = abbreviation;
        this.name = name;
@@ -153,12 +155,12 @@ public class Principle  implements java.io.Serializable {
     }
 
     
-    @Column(name="umbral", precision=5, scale=0)
-    public Integer getUmbral() {
+    @Column(name="umbral", precision=5)
+    public BigDecimal getUmbral() {
         return this.umbral;
     }
     
-    public void setUmbral(Integer umbral) {
+    public void setUmbral(BigDecimal umbral) {
         this.umbral = umbral;
     }
 
@@ -173,12 +175,12 @@ public class Principle  implements java.io.Serializable {
     }
 
     
-    @Column(name="weight", precision=5, scale=0)
-    public Integer getWeight() {
+    @Column(name="weight", precision=5)
+    public BigDecimal getWeight() {
         return this.weight;
     }
     
-    public void setWeight(Integer weight) {
+    public void setWeight(BigDecimal weight) {
         this.weight = weight;
     }
 
@@ -202,6 +204,18 @@ public class Principle  implements java.io.Serializable {
     }
 
 
+    @Override
+    public int compareTo(Principle o) {
+        return abbreviation.compareTo(o.abbreviation);
+    }
+
+   /* public static final Comparator<Principle> BY_AGE_COMPARATOR = new Comparator<Principle>() {
+            @Override
+            public int compare(Principle o1, Principle o2) {
+                return o1. < o2.age ? -1 : (o1.age == o2.age ? 0 : 1);
+            }
+        };
+*/
 
 
 }

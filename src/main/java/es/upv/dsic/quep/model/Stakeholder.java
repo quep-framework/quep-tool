@@ -215,9 +215,6 @@ public class Stakeholder  implements java.io.Serializable {
         this.responses = responses;
     }
 
-
-
-
 }
 
 

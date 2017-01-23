@@ -1,6 +1,7 @@
 package es.upv.dsic.quep.model;
 // Generated 20-sep-2016 10:46:39 by Hibernate Tools 4.3.1
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,8 +35,8 @@ public class MaturityLevel implements java.io.Serializable {
     private Date modificationDate;
     private int active;
     private String audit;
-    private Integer umbral;
-    private Integer weight;
+    private BigDecimal umbral;
+    private BigDecimal weight;
     private Set<MaturityLevelPractice> maturityLevelPractices = new HashSet<MaturityLevelPractice>(0);
 
     public MaturityLevel() {
@@ -51,7 +52,7 @@ public class MaturityLevel implements java.io.Serializable {
         this.audit = audit;
     }
 
-    public MaturityLevel(int id, String levelAbbreviation, String name, String description, String type, String creationUser, Date fechaCreado, String actualizado, Date modificationDate, int active, String audit, Integer umbral, Integer weight, Set<MaturityLevelPractice> maturityLevelPractices) {
+    public MaturityLevel(int id, String levelAbbreviation, String name, String description, String type, String creationUser, Date fechaCreado, String actualizado, Date modificationDate, int active, String audit, BigDecimal umbral, BigDecimal weight, Set<MaturityLevelPractice> maturityLevelPractices) {
         this.id = id;
         this.levelAbbreviation = levelAbbreviation;
         this.name = name;
@@ -172,21 +173,21 @@ public class MaturityLevel implements java.io.Serializable {
         this.audit = audit;
     }
 
-    @Column(name = "umbral", precision = 5, scale = 0)
-    public Integer getUmbral() {
+    @Column(name = "umbral", precision = 5)
+    public BigDecimal getUmbral() {
         return this.umbral;
     }
 
-    public void setUmbral(Integer umbral) {
+    public void setUmbral(BigDecimal umbral) {
         this.umbral = umbral;
     }
 
-    @Column(name = "weight", precision = 5, scale = 0)
-    public Integer getWeight() {
+    @Column(name = "weight", precision = 5)
+    public BigDecimal getWeight() {
         return this.weight;
     }
 
-    public void setWeight(Integer weight) {
+    public void setWeight(BigDecimal weight) {
         this.weight = weight;
     }
 

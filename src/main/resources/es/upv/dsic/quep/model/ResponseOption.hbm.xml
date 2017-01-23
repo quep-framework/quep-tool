@@ -34,7 +34,7 @@
         <property name="audit" type="string">
             <column name="audit" not-null="true" />
         </property>
-        <property name="weight" type="java.lang.Integer">
+        <property name="weight" type="big_decimal">
             <column name="weight" precision="5" scale="0" />
         </property>
         <property name="isRequiered" type="java.lang.Integer">

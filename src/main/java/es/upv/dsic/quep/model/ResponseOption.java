@@ -2,6 +2,7 @@ package es.upv.dsic.quep.model;
 // Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1
 
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +38,7 @@ public class ResponseOption  implements java.io.Serializable {
      private Date modificationDate;
      private int active;
      private String audit;
-     private Integer weight;
+     private BigDecimal weight;
      private Integer isRequiered;
      private Set<QuepQuestionResponseOption> quepQuestionResponseOptions = new HashSet<QuepQuestionResponseOption>(0);
      private Set<Response> responses = new HashSet<Response>(0);
@@ -55,7 +56,7 @@ public class ResponseOption  implements java.io.Serializable {
         this.active = active;
         this.audit = audit;
     }
-    public ResponseOption(int id, QuestionType questionType, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, Integer weight, Integer isRequiered, Set<QuepQuestionResponseOption> quepQuestionResponseOptions, Set<Response> responses) {
+    public ResponseOption(int id, QuestionType questionType, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, BigDecimal weight, Integer isRequiered, Set<QuepQuestionResponseOption> quepQuestionResponseOptions, Set<Response> responses) {
        this.id = id;
        this.questionType = questionType;
        this.name = name;
@@ -164,12 +165,12 @@ public class ResponseOption  implements java.io.Serializable {
     }
 
     
-    @Column(name="weight", precision=5, scale=0)
-    public Integer getWeight() {
+    @Column(name="weight", precision=5)
+    public BigDecimal getWeight() {
         return this.weight;
     }
     
-    public void setWeight(Integer weight) {
+    public void setWeight(BigDecimal weight) {
         this.weight = weight;
     }
 

@@ -15,13 +15,13 @@ import es.upv.dsic.quep.model.RoleStakeholder;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIForm;
 import javax.faces.component.UISelectItems;
@@ -29,12 +29,13 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
+import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.AjaxBehaviorListener;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.behavior.ajax.AjaxBehavior;
 import org.primefaces.component.accordionpanel.AccordionPanel;
-import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.commandbutton.CommandButton;
-import org.primefaces.component.confirmdialog.ConfirmDialog;
 import org.primefaces.component.growl.Growl;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.inputtextarea.InputTextarea;
@@ -44,9 +45,6 @@ import org.primefaces.component.selectmanycheckbox.SelectManyCheckbox;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.component.selectoneradio.SelectOneRadio;
 import org.primefaces.component.tabview.Tab;
-import org.primefaces.component.tabview.TabView;
-import org.primefaces.component.wizard.Wizard;
-import org.primefaces.event.FlowEvent;
 
 /**
  *
@@ -71,6 +69,13 @@ public class QuestionnaireDynamicBean implements Serializable {
     private QuestionnaireResponse oQuestionnaireResponse;
 
     private PanelGrid panel = new PanelGrid();
+    
+    private static final String prefixQ = "frmQ:tvQ:";
+    private static final String prefixIdRO = "idRO_";
+    private static final String prefixTxtPageNumber = "txtPageNumber_";
+    private static final String prefixTxtComments = "txtComments_";
+    
+    
 
     @Inject
     private AccessBean accessBean;
@@ -141,10 +146,11 @@ public class QuestionnaireDynamicBean implements Serializable {
             for (Map.Entry<Principle, List<QuestionnaireQuepQuestion>> entry : lstMapQuestionnaireQQ.entrySet()) {
                 Principle key = entry.getKey();
                 List<QuestionnaireQuepQuestion> lstQQQ = entry.getValue();
-
+                
                 Tab tabapnl = new Tab();
                 tabapnl.setId("tabapnl_" + String.valueOf(key.getId()));
                 tabapnl.setTitle(key.getAbbreviation() + "." + key.getName());
+                
 
                 PanelGrid panelPrinciple = new PanelGrid();
                 panelPrinciple.setColumns(2);
@@ -182,8 +188,8 @@ public class QuestionnaireDynamicBean implements Serializable {
 
             panelfrm.getChildren().add(growl);//message
             form.getChildren().add(apnl);
-            form.getChildren().add(panelfrm);
-            panel.getChildren().add(form);
+            form.getChildren().add(panelfrm);                                        
+            panel.getChildren().add(form);       
 
         }
     }
@@ -231,7 +237,7 @@ public class QuestionnaireDynamicBean implements Serializable {
         OutputLabel lblResponse = new OutputLabel();
         lblResponse.setValue("Response:");
         lblResponse.setId("lblResponse_" + String.valueOf(qqq.getQuepQuestion().getId()));
-        lblResponse.setFor("idRO_" + String.valueOf(qqq.getQuepQuestion().getId()));
+        lblResponse.setFor(prefixIdRO + String.valueOf(qqq.getQuepQuestion().getId()));
         pnlResponseOption.getChildren().add(lblResponse);
 
         //response option components
@@ -245,9 +251,10 @@ public class QuestionnaireDynamicBean implements Serializable {
         }
 
         //create radio button
+       
         if (qt.getName().toLowerCase().trim().contains("radio")) {
             SelectOneRadio rB = new SelectOneRadio();
-            rB.setId("idRO_" + String.valueOf(qqq.getQuepQuestion().getId()));
+            rB.setId(prefixIdRO + String.valueOf(qqq.getQuepQuestion().getId()));
 
             UISelectItems selectItems = new UISelectItems();
             selectItems = setSelectItems(qqq);
@@ -259,11 +266,19 @@ public class QuestionnaireDynamicBean implements Serializable {
 
             rB.getChildren().add(selectItems);
             rB.setColumns(qt.getItemNumber());
+            
+            ///////--------------------------------------------------------------------------------            
+            rB.setOnchange("validateQuestion(this.id,'"+prefixQ+"','"+prefixIdRO+"');");
+          /*  AjaxBehavior ajaxBehavior = (AjaxBehavior) FacesContext.getCurrentInstance().getApplication().createBehavior(AjaxBehavior.BEHAVIOR_ID);
+            ajaxBehavior.addAjaxBehaviorListener(new CustomAjaxListener());
+            ajaxBehavior.setTransient(true);*/
+            //rB.addClientBehavior("change", ajaxBehavior);
+            /////-------------------------------------------------------------------------------
 
             pnlResponseOption.getChildren().add(rB);
         } else if (qt.getName().toLowerCase().trim().contains("check")) {
             SelectManyCheckbox chk = new SelectManyCheckbox();
-            chk.setId("idRO_" + String.valueOf(qqq.getQuepQuestion().getId()));
+            chk.setId(prefixIdRO + String.valueOf(qqq.getQuepQuestion().getId()));
 
             UISelectItems selectItems = new UISelectItems();
             selectItems = setSelectItems(qqq);
@@ -278,7 +293,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             pnlResponseOption.getChildren().add(chk);
         } else if (qt.getName().toLowerCase().trim().contains("text")) {
             InputText txt = new InputText();
-            txt.setId("idRO_" + String.valueOf(qqq.getQuepQuestion().getId()));
+            txt.setId(prefixIdRO + String.valueOf(qqq.getQuepQuestion().getId()));
 
             if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
                 txt.setValue(lstCurrentResponses.get(0).getResponseOption().getName());
@@ -287,7 +302,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             pnlResponseOption.getChildren().add(txt);
         } else if (qt.getName().toLowerCase().trim().contains("combo")) {
             SelectOneMenu cmb = new SelectOneMenu();
-            cmb.setId("idRO_" + String.valueOf(qqq.getQuepQuestion().getId()));
+            cmb.setId(prefixIdRO + String.valueOf(qqq.getQuepQuestion().getId()));
 
             UISelectItems selectItems = new UISelectItems();
             selectItems = setSelectItems(qqq);
@@ -301,35 +316,74 @@ public class QuestionnaireDynamicBean implements Serializable {
             pnlResponseOption.getChildren().add(cmb);
         }
 
-        if (qqq.getQuepQuestion().getHasComment() == 1) {
-            lblTxtComments = new OutputLabel();
-            lblTxtComments.setValue("Comments:");
-            pnlResponseOption.getChildren().add(lblTxtComments);
-            txtComments = new InputTextarea();
-            txtComments.setAccesskey("txtComments_" + String.valueOf(qqq.getQuepQuestion().getId()));
-            txtComments.setId("txtComments_" + String.valueOf(qqq.getQuepQuestion().getId()));
 
-            if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
-                txtComments.setValue(lstCurrentResponses.get(0).getComment());
-            }
-            pnlResponseOption.getChildren().add(txtComments);
-        }
-        if (qqq.getQuepQuestion().getHasPageNumber() == 1) {
-            OutputLabel lblTxtPageNumber = new OutputLabel();
-            lblTxtPageNumber.setValue("Page Number:");
-            pnlResponseOption.getChildren().add(lblTxtPageNumber);
-            InputText txtPageNumber = new InputText();
-            txtPageNumber.setId("txtPageNumber_" + String.valueOf(qqq.getQuepQuestion().getId()));
+            if (qqq.getQuepQuestion().getHasComment() == 1) {
+                lblTxtComments = new OutputLabel();
+                lblTxtComments.setId("lblComments_"+ String.valueOf(qqq.getQuepQuestion().getId()));
+                lblTxtComments.setValue("Comments:");
+                pnlResponseOption.getChildren().add(lblTxtComments);
+                txtComments = new InputTextarea();
+                txtComments.setAccesskey(prefixTxtComments + String.valueOf(qqq.getQuepQuestion().getId()));
+                txtComments.setId(prefixTxtComments + String.valueOf(qqq.getQuepQuestion().getId()));
+                
+                ///////--------------------------------------------------------------------------------
+                AjaxBehavior ajaxBehavior = (AjaxBehavior) FacesContext.getCurrentInstance().getApplication().createBehavior(AjaxBehavior.BEHAVIOR_ID);
+                ajaxBehavior.addAjaxBehaviorListener(new CustomAjaxListener());
+                ajaxBehavior.setTransient(true);
+                txtComments
+                        .addClientBehavior("change", ajaxBehavior);
+                /////
+                //txtComments.addClientBehavior(prefixQ, behavior);
 
-            if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
-                txtPageNumber.setValue(lstCurrentResponses.get(0).getPagenumber());
+                if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
+                    txtComments.setValue(lstCurrentResponses.get(0).getComment());
+                }
+                pnlResponseOption.getChildren().add(txtComments);
             }
-            pnlResponseOption.getChildren().add(txtPageNumber);
-        }
+            if (qqq.getQuepQuestion().getHasPageNumber() == 1) {
+                OutputLabel lblTxtPageNumber = new OutputLabel();
+                lblTxtPageNumber.setId("lblPageNumber_"+ String.valueOf(qqq.getQuepQuestion().getId()));
+                lblTxtPageNumber.setValue("Page Number:");
+                pnlResponseOption.getChildren().add(lblTxtPageNumber);
+                InputText txtPageNumber = new InputText();
+                txtPageNumber.setId(prefixTxtPageNumber + String.valueOf(qqq.getQuepQuestion().getId()));
+
+                if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
+                    txtPageNumber.setValue(lstCurrentResponses.get(0).getPagenumber());
+                }
+                pnlResponseOption.getChildren().add(txtPageNumber);
+            }
+        
 
         return pnlResponseOption;
-    }
+    }   
 
+  
+    public class CustomAjaxListener implements AjaxBehaviorListener {
+        @Override
+        public void processAjaxBehavior(AjaxBehaviorEvent event) throws AbortProcessingException {
+            SelectOneRadio rb = (SelectOneRadio) event.getComponent();
+            //Map<String, String[]> requestParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterValuesMap();
+            String srbId = rb.getId().trim().split(prefixIdRO)[1];
+             
+             if (rb.getValue().toString().equals("2")){
+              Map<String, Object> requestParamsCookie = FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap();
+              Map<String, Object> requestParamsObj = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
+              Map<String, String[]> requestParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterValuesMap();
+              String[] lstRO = (String[]) requestParams.get(prefixQ + prefixIdRO + srbId);
+              String s=requestParams.get(prefixQ + prefixTxtComments + srbId)[0];
+              
+              Object oCookie=requestParamsCookie.get(prefixQ + prefixTxtComments + srbId);
+              Object obj=requestParamsObj.get(prefixQ + prefixTxtComments + srbId);
+              
+              InputTextarea txtComments= new InputTextarea();
+              txtComments.setId(prefixQ + prefixTxtComments + srbId);
+              txtComments.setRendered(false);
+                           
+             }
+         }
+    }
+              
     public UISelectItems setSelectItems(QuestionnaireQuepQuestion qqq) {
         List<SelectItem> items = new ArrayList<SelectItem>();
         List<ResponseOption> lstqQRO = new ArrayList<ResponseOption>(0);
@@ -344,7 +398,7 @@ public class QuestionnaireDynamicBean implements Serializable {
 
         return sitms;
     }
-
+    
     public List<Response> getCurrentResponses(QuestionnaireQuepQuestion qqq) {
         boolean b = false;
         List<Response> lResponses = new ArrayList<Response>();
@@ -370,28 +424,32 @@ public class QuestionnaireDynamicBean implements Serializable {
     }
 
     public String setCurrentResponseOption(List<Response> lstCurrentResponses) {
-        String s = new String();
-        s = String.valueOf(lstCurrentResponses.get(0).getResponseOption().getId());
+        String s = String.valueOf(lstCurrentResponses.get(0).getResponseOption().getId());
         return s;
     }
 
     public Map<Principle, List<QuestionnaireQuepQuestion>> setMapQuestionnaireQQ(List<QuestionnaireQuepQuestion> lstQQQ) {
         List<Principle> lstPri = qdi.getPrinciples(oRoleStakeholder.getRole().getId(), oRoleStakeholder.getOrganization().getId());
+       // Map<Principle, List<QuestionnaireQuepQuestion>> MapQQQ = new HashMap<Principle, List<QuestionnaireQuepQuestion>>();
         Map<Principle, List<QuestionnaireQuepQuestion>> MapQQQ = new HashMap<Principle, List<QuestionnaireQuepQuestion>>();
 
-        for (Iterator<Principle> itPri = lstPri.iterator(); itPri.hasNext();) {
-            Principle opri = itPri.next();
+        for (Principle opri : lstPri) {
             List<QuestionnaireQuepQuestion> lstAuxQQQ = new ArrayList<QuestionnaireQuepQuestion>();
-            for (Iterator<QuestionnaireQuepQuestion> itQQQM = lstQQQ.iterator(); itQQQM.hasNext();) {
-                QuestionnaireQuepQuestion qqqm = itQQQM.next();
+            for (QuestionnaireQuepQuestion qqqm : lstQQQ) {
                 if (qqqm.getQuepQuestion().getPractice().getPrinciple().getId() == opri.getId()) {
                     lstAuxQQQ.add(qqqm);
                 }
             }
             MapQQQ.put(opri, lstAuxQQQ);
         }
-        return MapQQQ;
+        //sort map
+        Map<Principle, List<QuestionnaireQuepQuestion>> treeMap = new TreeMap<Principle, List<QuestionnaireQuepQuestion>>(MapQQQ);
+        return treeMap;
     }
+  
+            
+
+
 
     public Map<QuestionnaireResponse, List<Response>> setMapResponses(List<Response> lstR, List<QuestionnaireResponse> lstQR) {
         Map<QuestionnaireResponse, List<Response>> mapR = new HashMap<QuestionnaireResponse, List<Response>>();
@@ -422,7 +480,7 @@ public class QuestionnaireDynamicBean implements Serializable {
         for (Iterator<QuestionnaireQuepQuestion> it = lstQuestionnaireQQ.iterator(); it.hasNext();) {
             QuestionnaireQuepQuestion qqq = it.next();
             String sQId = String.valueOf(qqq.getQuepQuestion().getId());
-            String[] lstRO = (String[]) requestParams.get(prefixQ + "idRO_" + sQId);
+            String[] lstRO = (String[]) requestParams.get(prefixQ + prefixIdRO + sQId);
             if (lstRO != null) {
                 for (String sRO : lstRO) {
                     if (sRO!=null && sRO!=""){
@@ -438,9 +496,7 @@ public class QuestionnaireDynamicBean implements Serializable {
         else{
             return 2;
         }                
-    }
-
-    private static final String prefixQ = "frmQ:tvQ:";
+    }    
     
     public void saveResponse(int band) {
         List<Response> lstRsp = new ArrayList<Response>();
@@ -462,7 +518,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             //Response           
             
             String sQId = String.valueOf(qqq.getQuepQuestion().getId());
-            String[] lstRO = (String[]) requestParams.get(prefixQ + "idRO_" + sQId);
+            String[] lstRO = (String[]) requestParams.get(prefixQ + prefixIdRO + sQId);
             if (lstRO != null) {
                 for (String sRO : lstRO) {
                     Response oResponse = new Response();
@@ -485,11 +541,11 @@ public class QuestionnaireDynamicBean implements Serializable {
                     oResponse.setIdPrinciple(qqq.getIdPrinciple());
 
                     if (qqq.getQuepQuestion().getHasComment() == 1) {
-                        oResponse.setComment(requestParams.get(prefixQ + "txtComments_" + sQId)[0]);
+                        oResponse.setComment(requestParams.get(prefixQ + prefixTxtComments + sQId)[0]);
                     }
 
                     if (qqq.getQuepQuestion().getHasPageNumber() == 1) {
-                        oResponse.setPagenumber(requestParams.get(prefixQ + "txtPageNumber_" + sQId)[0]);
+                        oResponse.setPagenumber(requestParams.get(prefixQ + prefixTxtPageNumber + sQId)[0]);
                     }
 
                     oResponse.setComputedValue(0);

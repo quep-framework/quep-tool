@@ -41,11 +41,11 @@
         <property name="audit" type="string">
             <column name="audit" not-null="true" />
         </property>
-        <property name="umbral" type="java.lang.Integer">
-            <column name="umbral" precision="5" scale="0" />
+        <property name="umbral" type="big_decimal">
+            <column name="umbral" precision="5" />
         </property>
-        <property name="weight" type="java.lang.Integer">
-            <column name="weight" precision="5" scale="0" />
+        <property name="weight" type="big_decimal">
+            <column name="weight" precision="5"  />
         </property>
         <set name="maturityLevelPractices" table="maturity_level_practice" inverse="true" lazy="true" fetch="select">
             <key>
