@@ -22,3 +22,11 @@ border: hidden;
 border-color: white;
 }
 
+.red{color:#ce3426;}
+
+.mandatory-astk {
+    color:#d62010;    
+    font-size: 18px;  
+    font-weight: bold;  
+    /*//font-family: 'exoregular', "Trebuchet MS", Arial, Helvetica, sans-serif;*/
+}

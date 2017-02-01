@@ -199,7 +199,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             if (validateComplete() == 1) {
                 saveResponse(1);
             } else {
-                addMessage("Error", "Please fill all fields.", 2);
+                addMessage("Error", "Please fill all requiered fields, which is marked with *.", 2);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -217,9 +217,8 @@ public class QuestionnaireDynamicBean implements Serializable {
         int j = 0;
         panel.setId("tab_" + String.valueOf(key.getId()));
 
-        //tab.setTitle(key.getName());        
-        for (Iterator<QuestionnaireQuepQuestion> it = lstQQQ.iterator(); it.hasNext();) {
-            QuestionnaireQuepQuestion qqq = it.next();
+        //tab.setTitle(key.getName());
+        for (QuestionnaireQuepQuestion qqq : lstQQQ) {
             panel.getChildren().add(createQuestionPanel(qqq.getQuepQuestion(), j));
             panel.getChildren().add(createResponseOptionPanel(qqq));
             j++;
@@ -235,12 +234,22 @@ public class QuestionnaireDynamicBean implements Serializable {
         PanelGrid pnlQuestion = new PanelGrid();
         //create dinamic component (label question)
         pnlQuestion.setId("pnlQuestion_" + String.valueOf(qq.getId()));
-        pnlQuestion.setColumns(1);
+        pnlQuestion.setColumns(2);
         pnlQuestion.setStyleClass("panelNoBorder");
         OutputLabel lblQuestion = new OutputLabel();
-        lblQuestion.setId("lblTabview" + String.valueOf(qq.getId()));
-        lblQuestion.setValue(String.valueOf(j + 1) + ". " + qq.getDescription());
+        lblQuestion.setId("lblTabview" + String.valueOf(qq.getId()));     
+        lblQuestion.setValue(String.valueOf(j + 1) + ". " + qq.getDescription()); 
+        
+        OutputLabel lblMandatory = new OutputLabel();
+        lblMandatory.setId("lblMandatory" + String.valueOf(qq.getId()));
+        if (qq.getIsMandatory()==1) {    
+            lblMandatory.setStyleClass("mandatory-astk");
+            lblMandatory.setValue("*");            
+        }                     
+        else lblMandatory.setValue("");
+        
         pnlQuestion.getChildren().add(lblQuestion);
+        pnlQuestion.getChildren().add(lblMandatory);
         return pnlQuestion;
     }
 
@@ -472,11 +481,9 @@ public class QuestionnaireDynamicBean implements Serializable {
     public Map<QuestionnaireResponse, List<Response>> setMapResponses(List<Response> lstR, List<QuestionnaireResponse> lstQR) {
         Map<QuestionnaireResponse, List<Response>> mapR = new HashMap<QuestionnaireResponse, List<Response>>();
 
-        for (Iterator<QuestionnaireResponse> itQR = lstQR.iterator(); itQR.hasNext();) {
-            QuestionnaireResponse oQR = itQR.next();
+        for (QuestionnaireResponse oQR : lstQR) {
             List<Response> lstAuxR = new ArrayList<Response>();
-            for (Iterator<Response> itR = lstR.iterator(); itR.hasNext();) {
-                Response r = itR.next();
+            for (Response r : lstR) {
                 if (r.getId().getIdRole() == oQR.getId().getIdRole()
                         && r.getId().getIdStakeholder() == oQR.getId().getIdStakeholder()
                         && r.getId().getIdQuestionnaire() == oQR.getId().getIdQuestionnaire()
@@ -498,9 +505,14 @@ public class QuestionnaireDynamicBean implements Serializable {
             3 Deleted';*/
         boolean band = false;
         int size = 0;
+        int lessSize=0;
         Map<String, String[]> requestParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterValuesMap();
         for (Iterator<QuestionnaireQuepQuestion> it = lstQuestionnaireQQ.iterator(); it.hasNext();) {
             QuestionnaireQuepQuestion qqq = it.next();
+            if (qqq.getQuepQuestion().getIsMandatory()==0) {
+                lessSize ++;
+            }
+            else{
             String sQId = String.valueOf(qqq.getQuepQuestion().getId());
             String[] lstRO = (String[]) requestParams.get(prefixQ + prefixIdRO + sQId);
             if (lstRO != null) {
@@ -510,8 +522,9 @@ public class QuestionnaireDynamicBean implements Serializable {
                     }
                 }
             }
+            }
         }
-        if (lstQuestionnaireQQ.size() == size) {
+        if (lstQuestionnaireQQ.size() - lessSize == size) {
             return 1;
         } else {
             return 2;
@@ -598,15 +611,27 @@ public class QuestionnaireDynamicBean implements Serializable {
     }
 
     public void addMessage(String summary, String detail, int band) {
-        if (band == 1) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
-            FacesContext.getCurrentInstance().addMessage(null, message);
-        } else if (band == 0) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, summary, detail);
-            FacesContext.getCurrentInstance().addMessage(null, message);
-        } else if (band == 2) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, summary, detail);
-            FacesContext.getCurrentInstance().addMessage(null, message);
+        switch (band) {
+            case 1:
+                {
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                    break;
+                }
+            case 0:
+                {
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, summary, detail);
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                    break;
+                }
+            case 2:
+                {
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, summary, detail);
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                    break;
+                }
+            default:
+                break;
         }
     }
 

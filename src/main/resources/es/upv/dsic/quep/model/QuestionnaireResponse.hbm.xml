@@ -60,7 +60,7 @@
         <property name="status" type="int">
             <column name="status" not-null="true"/>
         </property>
-        <set name="responses" table="response" inverse="true" lazy="true" fetch="select">
+        <set name="responses" table="response" inverse="true" lazy="false" fetch="select">
             <key>
                 <column name="id_questionnaire" not-null="true" />
                 <column name="id_practice" not-null="true" />
