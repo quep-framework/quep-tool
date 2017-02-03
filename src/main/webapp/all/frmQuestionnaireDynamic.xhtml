@@ -48,25 +48,21 @@
             }  
             
               function validateQuestion(id1,prefix,prefixIdRO) {
-                  //var id2txtComment=id2+'txtComments'+cutFromString(id1, id2);
-                  //var id2lblComment=id2+'lblComments'+cutFromString(id1, id2); 
-                  
                   var id2txtPageNumber=prefix+'txtPageNumber_'+cutFromString(id1, prefix,prefixIdRO);
                   var id2lblPageNumber=prefix+'lblPageNumber_'+cutFromString(id1, prefix,prefixIdRO);  
-                 
+                  var id2PanelTechnique=prefix+'fs_'+cutFromString(id1, prefix,prefixIdRO);                 
                   if(document.getElementById(id1).value === '1') {
-                      //document.getElementById(id2txtComment).disabled = false;
-                      //document.getElementById(id2lblComment).disabled = false;                      
                       document.getElementById(id2lblPageNumber).hidden = false;
-                      document.getElementById(id2txtPageNumber).hidden = false;
-                  } else {
-                      //document.getElementById(id2txtComment).disabled = true; 
-                      //document.getElementById(id2lblComment).disabled = true;                       
+                      document.getElementById(id2txtPageNumber).hidden = false;                      
+                      document.getElementById(id2PanelTechnique).style.visibility = "hidden";          
+                      //document.getElementById(id2PanelTechnique).;
+                  } else {         
                       document.getElementById(id2lblPageNumber).hidden = true; 
-                      document.getElementById(id2txtPageNumber).hidden = true; 
-                  }
-              }      
-              
+                      document.getElementById(id2txtPageNumber).hidden = true;                       
+                      document.getElementById(id2PanelTechnique).style.visibility = "visible";                      
+                  }                  
+              }                       
+                   
         </script>
 
     </h:head>

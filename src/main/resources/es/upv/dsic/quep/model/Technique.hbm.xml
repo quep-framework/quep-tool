@@ -30,10 +30,10 @@
             <column name="creation_user" not-null="true" />
         </property>
         <property name="creationDate" type="date">
-            <column name="creation_date" length="13" />
+            <column name="creation_date" length="13"  not-null="true" />
         </property>
         <property name="modificationUser" type="string">
-            <column name="modification_user" not-null="true" />
+            <column name="modification_user" />
         </property>
         <property name="modificationDate" type="date">
             <column name="modification_date" length="13" />

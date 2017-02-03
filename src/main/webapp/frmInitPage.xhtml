@@ -34,7 +34,7 @@
                     <p:password id="password" value="#{credentialBean.password}" required="true" label="password" />
 
                     <f:facet name="footer">
-                        <p:commandButton value="Login" update="growl"  action ="#{loginBean.login}" 
+                        <p:commandButton value="Login" update="growl"   action ="#{loginBean.login}" 
                                          oncomplete ="handleLoginRequest(xhr, status, args)" />
                         
                         <!--p:commandButton value="Login" 
@@ -103,9 +103,10 @@
                                 <span class="defaultText">QuEP is a framework for the assessment and improvement of the management of emergency plans within organizations. 
                                     It is inspired by the Total Quality Management strategy, and provides a hierarchy of emergency plan management maturity levels. 
                                     The aim of QuEP is to guide organizations to assess and improve their emergency 
-                                    preparedness by following a set of principles, practices and techniques at the technical, human and strategic levels.</span>                               
+                                    preparedness by following a set of principles, practices and techniques at the technical, human and strategic levels.</span>                                                              
                             </div>
-
+                            
+     
                             <div class="ContentSideSections overHidden">                               
                                 <div class="Content33 floatLeft overHidden" style="min-height:200px">
                                     <div class="BoxesIndent">                                      
@@ -115,9 +116,18 @@
                                         <span class="floatLeft PFGrayText fontSize18 mediumFont overHidden">More Information<br /><span class="green fontSize24">QuEP Portal</span></span>
                                         <h:panelGrid columns="1" cellpadding="5">
                                             <!--p:graphicImage name="resource/images/login.png" /-->
-                                            <a href="http://quep.webs.upv.es/">
+                                            <!--a href="http://quep.webs.upv.es/">
                                                 <img src="resource/images/home/ws-construction-en.png" alt="portal" />                                    
-                                            </a>                                
+                                            </a-->                                             
+                                            <p:imageSwitch effect="shuffle" > 
+                                                <p:graphicImage url="resource/init/Figure7.png" width="296px" height="282px" title="QuEP Tool in progress" />  
+                                                <p:graphicImage url="resource/init/Figure1.png" width="296px" height="282px" title="life cicly Emergency Plans Management"  />
+                                                <p:graphicImage url="resource/init/Figure2.png" width="296px" height="282px" title="View 3V" />
+                                                <p:graphicImage url="resource/init/Figure3.png" width="296px" height="282px" title="Maturity levels" />
+                                                <!--p:graphicImage url="resource/init/Figure4.png" width="360px" height="282px" title="Including Resilience Characteristics" /-->                                                
+                                                <p:graphicImage url="resource/init/Figure5.png" width="360px" height="282px" title="Mockup Questionnaires" />
+                                                <p:graphicImage url="resource/init/Figure6.png" width="360px" height="282px" title="Mockup Results" />                                                                                                 
+                                            </p:imageSwitch>
                                             <h:outputText id="lblPortalWeb" value="Access to QuEP Framework Portal Web" />
                                         </h:panelGrid>
                                         <div class="dispTable overHidden Content100 gray fontSize14" style=" padding-top:20px;">                                                                
@@ -125,8 +135,8 @@
                                         </div>
                                     </div>
                                 </div>   
-                                
-                                 <!--div class="Content33 floatLeft overHidden" style="min-height:200px">
+
+                                <!--div class="Content33 floatLeft overHidden" style="min-height:200px">
                                     <div class="BoxesIndent">
                                         <img src="resource/images/home/news.png" class="floatLeft overHidden" style="height:60px; margin-right:20px;"/>
                                         <span class="floatLeft PFGrayText fontSize18 mediumFont overHidden">Blog<br /><span class="green fontSize24">NEWS</span></span>

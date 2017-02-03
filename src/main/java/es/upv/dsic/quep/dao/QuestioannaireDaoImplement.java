@@ -9,6 +9,7 @@ import es.upv.dsic.quep.hibernate.HibernateUtil;
 import es.upv.dsic.quep.model.Principle;
 import es.upv.dsic.quep.model.QuepQuestion;
 import es.upv.dsic.quep.model.QuepQuestionResponseOption;
+import es.upv.dsic.quep.model.QuepQuestionTechnique;
 import es.upv.dsic.quep.model.QuestionnaireQuepQuestion;
 import es.upv.dsic.quep.model.QuestionnaireResponse;
 import es.upv.dsic.quep.model.Response;
@@ -74,7 +75,7 @@ public class QuestioannaireDaoImplement implements QuestionnaireQQDao {
         return list;
     }
     
-     @Override
+    @Override
     public List<QuestionnaireResponse> getQuestionnaireResponse(int idRole,int idStk){
         Session session = null;
         List<QuestionnaireResponse> list = null;
@@ -155,6 +156,7 @@ public class QuestioannaireDaoImplement implements QuestionnaireQQDao {
         return oRO;
     }
 
+     @Override
     public List<QuepQuestionResponseOption> getQuepQuestionResponseOption(int idqq) {
         Session session = null;
         List<QuepQuestionResponseOption> lstQQRO = null;
@@ -172,6 +174,25 @@ public class QuestioannaireDaoImplement implements QuestionnaireQQDao {
         return lstQQRO;
     }
 
+    @Override
+    public List<QuepQuestionTechnique> getQuepQuestionTechnique(int idqq) {
+        Session session = null;
+        List<QuepQuestionTechnique> lstQQT = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            Query query = session.createQuery("from QuepQuestionTechnique qqt  where qqt.active=1 and qqt.quepQuestion.id='" + idqq + "'");//cmb
+            lstQQT = (List<QuepQuestionTechnique>) query.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return lstQQT;
+    }
+
+    
    /* @Override
     public Map<Integer, String> insertResponse(Map<QuestionnaireResponse, List<Response>> mapLastResponse, Map<QuestionnaireResponse, List<Response>> mapPreviousResponse) {
         Map<Integer, String> mMessage = new HashMap<Integer, String>();
@@ -327,5 +348,7 @@ public class QuestioannaireDaoImplement implements QuestionnaireQQDao {
         }
         return list;
     }
+    
+   
 
 }

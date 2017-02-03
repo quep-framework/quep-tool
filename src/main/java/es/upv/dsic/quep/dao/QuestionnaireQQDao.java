@@ -7,6 +7,8 @@ package es.upv.dsic.quep.dao;
 
 import es.upv.dsic.quep.model.Principle;
 import es.upv.dsic.quep.model.QuepQuestion;
+import es.upv.dsic.quep.model.QuepQuestionResponseOption;
+import es.upv.dsic.quep.model.QuepQuestionTechnique;
 import es.upv.dsic.quep.model.QuestionnaireQuepQuestion;
 import es.upv.dsic.quep.model.QuestionnaireResponse;
 import es.upv.dsic.quep.model.Response;
@@ -29,6 +31,8 @@ public interface QuestionnaireQQDao {
     public List<ResponseOption> getResponseOptions(int idqq);
 
     public ResponseOption getResponseOption(int idqq, int idro);
+    
+    public List<QuepQuestionResponseOption> getQuepQuestionResponseOption(int idqq) ;
 
 //    public Map<Integer, String> insertResponse(Map<QuestionnaireResponse,List<Response>> mapResponse);
     
@@ -37,6 +41,8 @@ public interface QuestionnaireQQDao {
     public List<Response> getListResponse(int idRole,int idStk,int idOrg);  
 
     public List<Principle> getPrinciples(int idRole,int idOrg);
+    
+    public List<QuepQuestionTechnique> getQuepQuestionTechnique(int idqq);
     
     
 }
