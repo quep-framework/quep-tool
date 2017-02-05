@@ -26,6 +26,7 @@ import java.util.TreeMap;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIForm;
 import javax.faces.component.UISelectItems;
+import javax.faces.component.html.HtmlOutputLabel;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AbortProcessingException;
 import javax.faces.event.ActionEvent;
@@ -37,6 +38,7 @@ import javax.inject.Named;
 import org.omg.CORBA.portable.StreamableValue;
 import org.primefaces.behavior.ajax.AjaxBehavior;
 import org.primefaces.component.accordionpanel.AccordionPanel;
+import org.primefaces.component.calendar.Calendar;
 import org.primefaces.component.column.Column;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.confirmdialog.ConfirmDialog;
@@ -44,11 +46,17 @@ import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.dialog.Dialog;
 import org.primefaces.component.fieldset.Fieldset;
 import org.primefaces.component.growl.Growl;
+import org.primefaces.component.inputmask.InputMask;
+import org.primefaces.component.inputnumber.InputNumber;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.outputlabel.OutputLabel;
+import org.primefaces.component.outputpanel.OutputPanel;
 import org.primefaces.component.overlaypanel.OverlayPanel;
+import org.primefaces.component.panel.Panel;
 import org.primefaces.component.panelgrid.PanelGrid;
+import org.primefaces.component.row.Row;
+
 import org.primefaces.component.selectmanycheckbox.SelectManyCheckbox;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.component.selectoneradio.SelectOneRadio;
@@ -69,7 +77,6 @@ public class QuestionnaireDynamicBean implements Serializable {
     private List<QuestionnaireResponse> lstQuestionnaireResponse;
     private List<QuestionnaireResponse> lstAuxQuestionnaireResponse;
     private List<QuestionnaireQuepQuestion> lstQuestionnaireQQ;
-    
 
     private Map<Principle, List<QuestionnaireQuepQuestion>> lstMapQuestionnaireQQ;
 
@@ -78,9 +85,9 @@ public class QuestionnaireDynamicBean implements Serializable {
 
     private PanelGrid panel = new PanelGrid();
 
-    public static final  String prefixQ = "frmQ:tvQ:";
-    public static final  String prefixIdRO = "idRO_";
-    public static final  String prefixTxtPageNumber = "txtPageNumber_";
+    public static final String prefixQ = "frmQ:tvQ:";
+    public static final String prefixIdRO = "idRO_";
+    public static final String prefixTxtPageNumber = "txtPageNumber_";
     public static final String prefixTxtComments = "txtComments_";
 
     @Inject
@@ -90,10 +97,10 @@ public class QuestionnaireDynamicBean implements Serializable {
         try {
             oRoleStakeholder = (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
             try {
-                buildQuestionnaire();   
+                buildQuestionnaire();
             } catch (Exception e) {
                 addMessage("Error", "You don't have questionnaires available. Please contact Administrator or quep.framework@gmail.com ", 0);
-            }            
+            }
         } catch (Exception e) {
             System.out.printf(e.getMessage());
         }
@@ -133,6 +140,7 @@ public class QuestionnaireDynamicBean implements Serializable {
         if (lstMapQuestionnaireQQ != null) {
             panel = new PanelGrid();
             panel.setId("pnlMain");
+            // panel.setStyle("padding: 20px;");
 
             UIForm form = new UIForm();
             form.setId("frmQ");
@@ -159,67 +167,79 @@ public class QuestionnaireDynamicBean implements Serializable {
                 }
             });
             btnSave.setUpdate("message,frmQ");
-            panelfrm.getChildren().add(btnSave);                
-          
+            panelfrm.getChildren().add(btnSave);
+
             CommandButton btnDlg = new CommandButton();
-            btnDlg.setId("cmdComplete");
+            btnDlg.setId("cmdComplete");            
             btnDlg.setValue("Send");
             btnDlg.setTitle("Send final answer");
             btnDlg.setOnclick("PF('dlg').show();");
             btnDlg.setType("button");
             btnDlg.setIcon("ui-icon-mail-open");
-            
-            ConfirmDialog dlgCD =new ConfirmDialog();
+
+            ConfirmDialog dlgCD = new ConfirmDialog();
             dlgCD.setHeader("Confirm send final reponse");
             dlgCD.setWidgetVar("dlg");
-            dlgCD.setMessage("Are you Sure?");  
+            dlgCD.setMessage("Are you Sure?");
             //dlgCD.setGlobal(true);
             dlgCD.setShowEffect("fade");
             dlgCD.setHideEffect("fade");
             CommandButton yesComplete = new CommandButton();
-            yesComplete.setValue("Yes");
+            yesComplete.setValue("Yes");            
             yesComplete.setIcon("ui-icon-check");
             yesComplete.setStyleClass("ui-confirmdialog-yes");
-            yesComplete.setOncomplete("PF('dlg').hide();");            
+            yesComplete.setOncomplete("PF('dlg').hide(); refreshPage();");
+            //yesComplete.setOnclick("window.location.reload();");
+            //rB.setOnchange("validateQuestion(this.id,'" + prefixQ + "','" + prefixIdRO + "');"); 
             yesComplete.addActionListener(new ActionListener() {
                 @Override
                 public void processAction(ActionEvent event) throws AbortProcessingException {
                     completed(event);
                 }
-            });                        
-            yesComplete.setUpdate("message"); 
+            });
+            yesComplete.setUpdate("message,frmQ");
+            //yesComplete.setUpdate("@form");
+           // yesComplete.setConfirmationScript("location.reload();");
             CommandButton noComplete = new CommandButton();
             noComplete.setValue("No");
             noComplete.setIcon("ui-icon-close");
             noComplete.setStyleClass("ui-confirmdialog-no");
-            noComplete.setOnclick("PF('dlg').hide(); return false;"); 
-                                
+            noComplete.setOnclick("PF('dlg').hide(); return false;");
+
             dlgCD.getChildren().add(yesComplete);
             dlgCD.getChildren().add(noComplete);
-            
+
             panelfrm.getChildren().add(btnDlg);
             panelfrm.getChildren().add(dlgCD);
             panelfrm.getChildren().add(growl);//message 
+
+            //** desabilitar en caso que el cuestionario se haya enviado o este completo
+            if (lstQuestionnaireResponse.get(0).getStatus() == 1){
+                btnDlg.setDisabled(true);
+                btnSave.setDisabled(true);
+            }     
             
             form.getChildren().add(panelfrm);
-                           
+
             ///**************************
             //Sección del panel correspondiente a la construcción de las preguntas de cuestionario
             AccordionPanel apnl = new AccordionPanel();
             apnl.setId("tvQ");
             apnl.setMultiple(true);
-
+            apnl.setStyleClass("panelNoBorder");
+            apnl.setStyle("width:1024px;");
             for (Map.Entry<Principle, List<QuestionnaireQuepQuestion>> entry : lstMapQuestionnaireQQ.entrySet()) {
-                Principle key = entry.getKey();
+                Principle oPrinciple = entry.getKey();
                 List<QuestionnaireQuepQuestion> lstQQQ = entry.getValue();
 
                 Tab tabapnl = new Tab();
-                tabapnl.setId("tabapnl_" + String.valueOf(key.getId()));
-                tabapnl.setTitle(key.getAbbreviation() + "." + key.getName());
+                tabapnl.setId("tabapnl_" + String.valueOf(oPrinciple.getId()));
+                tabapnl.setTitle(oPrinciple.getAbbreviation() + "." + oPrinciple.getName());
 
                 PanelGrid panelPrinciple = new PanelGrid();
                 panelPrinciple.setColumns(2);
-                panelPrinciple.getChildren().add(createPrinciplePanel(key, lstQQQ));
+                panelPrinciple.getChildren().add(createPrinciplePanel(oPrinciple, lstQQQ));
+                panelPrinciple.setStyle("width:1024px;");
 
                 tabapnl.getChildren().add(panelPrinciple);
                 apnl.getChildren().add(tabapnl);
@@ -231,30 +251,35 @@ public class QuestionnaireDynamicBean implements Serializable {
         }
     }
 
-    
     public void destroyWorld() {
-        addMessage("System Error", "Please try again later.",1);
+        addMessage("System Error", "Please try again later.", 1);
     }
-  
-    
+
     public void save(ActionEvent ae) {
         try {
             saveResponse(2);
+            buildQuestionnaire();
         } catch (Exception e) {
             addMessage("Error", "Please contact Administrator", 0);
         }
     }
+    
 
     public void completed(ActionEvent ae) {
+        //String sPage="/all/frmQuestionnaireDynamic.xhtml?faces-redirect=true";
+         //String sPage="frmQuestionnaireDynamic.xhtml";
         try {
             if (validateComplete() == 1) {
-                saveResponse(1);
+                saveResponse(1); 
+                buildQuestionnaire();
+                //sPage= NavigationBean.redirectPage("");                
             } else {
                 addMessage("Error", "Please fill all requiered fields, which is marked with *.", 2);
             }
         } catch (Exception e) {
             addMessage("Error", "Please contact Administrator", 0);
         }
+        //return sPage;
         //Test Agna
     }
 
@@ -270,24 +295,22 @@ public class QuestionnaireDynamicBean implements Serializable {
 
         //tab.setTitle(key.getName());
         for (QuestionnaireQuepQuestion qqq : lstQQQ) {
-            int idQQ = qqq.getQuepQuestion().getId();     
-            List<QuepQuestionTechnique> lstTechnique =  getLstTechniques(idQQ);
-            String sTechnique = getsTechniques(lstTechnique);
+            int idQQ = qqq.getQuepQuestion().getId();
+            List<QuepQuestionTechnique> lstTechnique = getLstTechniques(idQQ);
+            String[] sTechnique = getSTechniques(lstTechnique);
             String sResilience = getsResilience(lstTechnique);
-            panel.getChildren().add(createQuestionPanel(qqq.getQuepQuestion(), j,sTechnique, sResilience));
-            panel.getChildren().add(createResponseOptionPanel(qqq,sTechnique));
+            panel.getChildren().add(createQuestionPanel(qqq.getQuepQuestion(), j, getSTechniquesTxt(lstTechnique), sResilience));
+            panel.getChildren().add(createResponseOptionPanel(qqq, sTechnique));
             j++;
         }
         return panel;
     }
-    
-    
 
     /* ------- 
      a) Creación del panel correspondiente a cada una de las preguntas obtenidas en el hashmap
         de questionario de preguntas según el rol
     ---*/
-    private PanelGrid createQuestionPanel(QuepQuestion qq, int j, String sTechnique, String sResilience ) {
+    private PanelGrid createQuestionPanel(QuepQuestion qq, int j, String sTechnique, String sResilience) {
         PanelGrid pnlQuestion = new PanelGrid();
         //create dinamic component (label question)
         pnlQuestion.setId("pnlQuestion_" + String.valueOf(qq.getId()));
@@ -296,7 +319,7 @@ public class QuestionnaireDynamicBean implements Serializable {
         OutputLabel lblQuestion = new OutputLabel();
         lblQuestion.setId("lblTabview" + String.valueOf(qq.getId()));
         lblQuestion.setValue(String.valueOf(j + 1) + ". " + qq.getDescription());
-
+        lblQuestion.setStyle("display: block; width: 800px;"); ////////////////*****************----------
         OutputLabel lblMandatory = new OutputLabel();
         lblMandatory.setId("lblMandatory" + String.valueOf(qq.getId()));
         if (qq.getIsMandatory() == 1) {
@@ -305,7 +328,7 @@ public class QuestionnaireDynamicBean implements Serializable {
         } else {
             lblMandatory.setValue("");
         }
-        
+        lblMandatory.setStyle("width: 50px");
         pnlQuestion.getChildren().add(lblQuestion);
         pnlQuestion.getChildren().add(lblMandatory);
 
@@ -322,43 +345,28 @@ public class QuestionnaireDynamicBean implements Serializable {
             pnlTech.setFor("btnTech_" + String.valueOf(qq.getId()));
             pnlTech.setHideEffect("fade");
             
-            /*DataTable dtTech= new DataTable();
-            dtTech.setId("dtTech_"+ String.valueOf(qq.getId())); //var="movies" value="#{movieView.movieList}" rows="5" paginator="true">
-            //dtTech.setValue("#{questionnaireDynamicBean.lstTechnique}");
-            //dtTech.setVar("dtTech");
-            dtTech.setRows(2);
-            //dtTech.setPaginator(true);
-            Column clTech1 = new Column();
-            clTech1.setId("cl1_dtTech_"+ String.valueOf(qq.getId()));
-            clTech1.setHeaderText("Techniques");     */       
+
             PanelGrid pnlBP = new PanelGrid();
             pnlBP.setId("pnlBP_" + String.valueOf(qq.getId()));
             pnlBP.setColumns(1);
             OutputLabel oTech = new OutputLabel();
             oTech.setId("oTech_" + String.valueOf(qq.getId()));
-            oTech.setValue("Techniques: "+sTechnique); // value="#{movies.genres}" 
+            oTech.setValue("Techniques: <br/>"+sTechnique); // value="#{movies.genres}" 
             oTech.setEscape(false);
             oTech.setStyle("white-space:pre;");
-            //clTech1.getChildren().add(oTech);
             
-            /*Column clTech2 = new Column();
-            clTech2.setId("cl2_dtTech_"+ String.valueOf(qq.getId()));
-            clTech2.setHeaderText("Resilience Characteristic");     */       
             OutputLabel oTech2 = new OutputLabel();
             oTech2.setId("oTech2_" + String.valueOf(qq.getId()));
-            oTech2.setValue("Resilience: "+sResilience);
+            oTech2.setValue("Resilience: <br/>" + sResilience);
             oTech2.setEscape(false);
             oTech2.setStyle("white-space:pre;");
-            //clTech2.getChildren().add(oTech2);
             
-            //dtTech.getChildren().add(clTech1);
-            //dtTech.getChildren().add(clTech2);  
             pnlBP.getChildren().add(oTech);
-            pnlBP.getChildren().add(oTech2); 
-            
+            pnlBP.getChildren().add(oTech2);
+            //btnTech.setStyle("width: 50px");
+
             pnlTech.getChildren().add(pnlBP);
-            
-            //pnlTech.getChildren().add(dtTech);
+
             pnlQuestion.getChildren().add(btnTech);
             pnlQuestion.getChildren().add(pnlTech);
         }
@@ -368,17 +376,19 @@ public class QuestionnaireDynamicBean implements Serializable {
     /* ------- 
      b) Creación del panel correspondiente de las Opciones de Respuesta para cada pregunta
     ---*/
-    private PanelGrid createResponseOptionPanel(QuestionnaireQuepQuestion qqq, String sTechnique) {
+    private PanelGrid createResponseOptionPanel(QuestionnaireQuepQuestion qqq, String[] sTechnique) {
         PanelGrid pnlResponseOption = new PanelGrid();
         OutputLabel lblTxtComments;
         InputTextarea txtComments;
 
-        //create dinamic component (response option)
+        //create dinamic component (response option)         
         pnlResponseOption = new PanelGrid();
         pnlResponseOption.setId("pnlResponseOption_" + String.valueOf(qqq.getQuepQuestion().getId()));
         pnlResponseOption.setColumns(3);
-        pnlResponseOption.setStyleClass("panelNoBorder");
-
+        //pnlResponseOption.setStyleClass("ui-panelgrid-blank, ui-fluid");
+        //pnlResponseOption.setColumnClasses("ui-grid-col-2,ui-grid-col-10");
+        //pnlResponseOption.setLayout("grid");
+        
         //static component
         OutputLabel lblResponse = new OutputLabel();
         lblResponse.setValue("Response:");
@@ -404,45 +414,54 @@ public class QuestionnaireDynamicBean implements Serializable {
             UISelectItems selectItems = new UISelectItems();
             selectItems = setSelectItems(qqq);
 
-            String sRBValue="";
+            String sRBValue = "";
             if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
                 //rB.setSelectItems(setCurrentResponseOption(lstCurrentResponses));  
                 sRBValue = setCurrentResponseOption(lstCurrentResponses);
-                rB.setValue(sRBValue);                
+                rB.setValue(sRBValue);
             }
 
             rB.getChildren().add(selectItems);
             rB.setColumns(qt.getItemNumber());
-
-            ///////--------------------------------------------------------------------------------  
-                //if there Techniques 
             
+            //** desabilitar en caso que el cuestionario se haya enviado o este completo
+            if (lstQuestionnaireResponse.get(0).getStatus() == 1) rB.setDisabled(true);  
+            
+            rB.setOnchange("validateQuestion(this.id,'" + prefixQ + "','" + prefixIdRO + "');");            
+            pnlResponseOption.getChildren().add(rB);
+            
+            ///////--------------------------------------------------------------------------------  
+            //if there Techniques                      
             Fieldset fs = new Fieldset();
             fs.setId("fs_" + String.valueOf(qqq.getQuepQuestion().getId()));
-            fs.setLegend("Technique");
+            fs.setLegend("Technique");            
             fs.setToggleable(true);
+            fs.setCollapsed(true);
             fs.setToggleSpeed(500);
             PanelGrid pnfs = new PanelGrid();
-            pnfs.setId("pnfs_" + String.valueOf(qqq.getQuepQuestion().getId()));            
+            pnfs.setId("pnfs_" + String.valueOf(qqq.getQuepQuestion().getId()));
             pnfs.setColumns(1);
-            if (!sTechnique.equals("")) {
-                OutputLabel ofs = new OutputLabel();
-                ofs.setId("ofs_" + String.valueOf(qqq.getQuepQuestion().getId()));
-                ofs.setValue(sTechnique);
-                ofs.setStyle("white-space:pre;");
-                pnfs.getChildren().add(ofs);
-
-                OutputLabel lblfsAux = new OutputLabel();
-                lblfsAux.setValue("");
-                lblfsAux.setId("lblfsAux_" + String.valueOf(qqq.getQuepQuestion().getId()));
+            
+            if (sTechnique.length>0) {                
+                for (int i = 0; i < sTechnique.length; i++) {
+                    HtmlOutputLabel ol = new HtmlOutputLabel();
+                    ol.setId("ofs_" + String.valueOf(qqq.getQuepQuestion().getId())+ String.valueOf(i));
+                    ol.setValue(sTechnique[i] + "</br>");
+                    ol.setStyle("white-space:pre-line;width:300px;");
+                    ol.setEscape(false);
+                    
+                    fs.getChildren().add(ol);
+                }
                 fs.getChildren().add(pnfs);
-                fs.getChildren().add(lblfsAux);
             }
-            rB.setOnchange("validateQuestion(this.id,'" + prefixQ + "','" + prefixIdRO + "');");
-            pnlResponseOption.getChildren().add(rB);
+            /*OutputLabel lblFsTechAux = new OutputLabel();
+            lblFsTechAux.setValue("");
+            lblFsTechAux.setId("lblFsTechAux_" + String.valueOf(qqq.getQuepQuestion().getId()));      
+            pnlResponseOption.getChildren().add(lblFsTechAux);*/
             pnlResponseOption.getChildren().add(fs);            
-            fs.setStyle("visibility: hidden");
-
+            fs.setStyle("visibility: hidden; ");
+            fs.setStyleClass("panelNoBorder");
+            
         } else if (qt.getName().toLowerCase().trim().contains("check")) {
             SelectManyCheckbox chk = new SelectManyCheckbox();
             chk.setId(prefixIdRO + String.valueOf(qqq.getQuepQuestion().getId()));
@@ -481,77 +500,122 @@ public class QuestionnaireDynamicBean implements Serializable {
             cmb.getChildren().add(selectItems);
 
             pnlResponseOption.getChildren().add(cmb);
+        } else if (qt.getName().toLowerCase().trim().contains("date")) {
+            //<p:calendar id="button" value="#{calendarView.date3}" showOn="button" />
+            Calendar cldr = new Calendar();
+            cldr.setId(prefixIdRO + String.valueOf(qqq.getQuepQuestion().getId()));
+            cldr.setShowOn("button");
+            
+            if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
+                cldr.setValue(lstCurrentResponses.get(0).getResponseOption().getName());
+            }
+            
+            pnlResponseOption.getChildren().add(cldr);
         }
-        
+
         ///
         if (qqq.getQuepQuestion().getHasComment() == 1) {
             lblTxtComments = new OutputLabel();
             lblTxtComments.setId("lblComments_" + String.valueOf(qqq.getQuepQuestion().getId()));
             lblTxtComments.setValue("Comments:");
+                       
+            
             pnlResponseOption.getChildren().add(lblTxtComments);
             txtComments = new InputTextarea();
             txtComments.setAccesskey(prefixTxtComments + String.valueOf(qqq.getQuepQuestion().getId()));
             txtComments.setId(prefixTxtComments + String.valueOf(qqq.getQuepQuestion().getId()));
+            txtComments.setStyle("display: block; width: 350px; height:80px;");
 
             ///////--------------------------------------------------------------------------------
             AjaxBehavior ajaxBehavior = (AjaxBehavior) FacesContext.getCurrentInstance().getApplication().createBehavior(AjaxBehavior.BEHAVIOR_ID);
             ajaxBehavior.addAjaxBehaviorListener(new CustomAjaxListener());
             ajaxBehavior.setTransient(true);
             txtComments.addClientBehavior("change", ajaxBehavior);
-            /////
-            //txtComments.addClientBehavior(prefixQ, behavior);
-
+            
             if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
                 txtComments.setValue(lstCurrentResponses.get(0).getComment());
             }
+
+            OutputLabel lblCmmAux = new OutputLabel();
+            lblCmmAux.setValue("");
+            lblCmmAux.setId("lblCmmAux_" + String.valueOf(qqq.getQuepQuestion().getId()));
             pnlResponseOption.getChildren().add(txtComments);
+            pnlResponseOption.getChildren().add(lblCmmAux);
+             
+            //** desabilitar en caso que el cuestionario se haya enviado o este completo
+            if (lstQuestionnaireResponse.get(0).getStatus() == 1) txtComments.setDisabled(true);                
+            
         }
         if (qqq.getQuepQuestion().getHasPageNumber() == 1) {
             OutputLabel lblTxtPageNumber = new OutputLabel();
             lblTxtPageNumber.setId("lblPageNumber_" + String.valueOf(qqq.getQuepQuestion().getId()));
-            lblTxtPageNumber.setValue("Page Number:");
+            lblTxtPageNumber.setValue("Page Number:");           
+           
             pnlResponseOption.getChildren().add(lblTxtPageNumber);
             InputText txtPageNumber = new InputText();
             txtPageNumber.setId(prefixTxtPageNumber + String.valueOf(qqq.getQuepQuestion().getId()));
+            txtPageNumber.setStyle("width: 50px;");
+                   
+            //txtPageNumber.setConverter((Converter) Integer);
+            
 
             if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
                 txtPageNumber.setValue(lstCurrentResponses.get(0).getPagenumber());
+                //txtPageNumber.set
             }
+            //txtPageNumber.setMask("9999999");    
+            OutputLabel lblNmPAux = new OutputLabel();
+            lblNmPAux.setValue("");
+            lblNmPAux.setId("lblNmPAux_" + String.valueOf(qqq.getQuepQuestion().getId()));
             pnlResponseOption.getChildren().add(txtPageNumber);
-        }
-
+            pnlResponseOption.getChildren().add(lblNmPAux);
+            
+            //** desabilitar en caso que el cuestionario se haya enviado o este completo
+            if (lstQuestionnaireResponse.get(0).getStatus() == 1) txtPageNumber.setDisabled(true);                
+        }        
         return pnlResponseOption;
     }
-    
-    public String getsTechniques(List<QuepQuestionTechnique> lstQQTech){
-        String strTechniques="";        
+
+    public String[] getSTechniques(List<QuepQuestionTechnique> lstQQTech) {
+        String[] strTechniques = new String[lstQQTech.size()];
+        int i = 0;
         for (QuepQuestionTechnique qqTechnique : lstQQTech) {
             try {
-            strTechniques= strTechniques +"* "+ qqTechnique.getTechnique().getDescription() +"&#10;";           
+                strTechniques[i] = "* " + qqTechnique.getTechnique().getDescription();
+                //strTechniques = strTechniques + "* " + qqTechnique.getTechnique().getDescription();
+                i++;
             } catch (Exception e) {
             }
         }
         return strTechniques;
     }
-    
+    public String getSTechniquesTxt(List<QuepQuestionTechnique> lstQQTech) {
+        String strTechniques = "";
+        for (QuepQuestionTechnique qqTechnique : lstQQTech) {
+            try {
+                strTechniques = strTechniques + "* " + qqTechnique.getTechnique().getDescription() + "<br/SW>";
+            } catch (Exception e) {
+            }
+        }
+        return strTechniques;
+    }
+
     public String getsResilience(List<QuepQuestionTechnique> lstQQTech) {
         String sResilience = "";
 
         for (QuepQuestionTechnique qqTechnique : lstQQTech) {
             try {
-                sResilience = sResilience + "* " + qqTechnique.getTechnique().getResilienceCharacteristic().getDescription() + "&#10;";
+                sResilience = sResilience + "* " + qqTechnique.getTechnique().getResilienceCharacteristic().getDescription() + "<br/>";
             } catch (Exception e) {
             }
-        }    
-    return sResilience ;
+        }
+        return sResilience;
     }
 
-    
-     public List<QuepQuestionTechnique> getLstTechniques(int idQQ){                  
+    public List<QuepQuestionTechnique> getLstTechniques(int idQQ) {
         return qdi.getQuepQuestionTechnique(idQQ);
     }
 
-    
     public class CustomAjaxListener implements AjaxBehaviorListener {
 
         @Override
@@ -696,79 +760,79 @@ public class QuestionnaireDynamicBean implements Serializable {
     /*
       Procedimiento que guarda las respuestas de las preguntas
      */
-    public void saveResponse(int band) {       
-            List<Response> lstRsp = new ArrayList<Response>();
-            Map<String, String[]> requestParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterValuesMap();
+    public void saveResponse(int band) {
+        List<Response> lstRsp = new ArrayList<Response>();
+        Map<String, String[]> requestParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterValuesMap();
 
-            lstAuxQuestionnaireResponse = new ArrayList<QuestionnaireResponse>();
-            for (QuestionnaireResponse qr : lstQuestionnaireResponse) {
-                lstAuxQuestionnaireResponse.add(qr);
-            }
-            //lstAuxQuestionnaireResponse=lstQuestionnaireResponse;
+        lstAuxQuestionnaireResponse = new ArrayList<QuestionnaireResponse>();
+        for (QuestionnaireResponse qr : lstQuestionnaireResponse) {
+            lstAuxQuestionnaireResponse.add(qr);
+        }
+        //lstAuxQuestionnaireResponse=lstQuestionnaireResponse;
 
-            for (Iterator<QuestionnaireQuepQuestion> it = lstQuestionnaireQQ.iterator(); it.hasNext();) {
-                QuestionnaireQuepQuestion qqq = it.next();
+        for (Iterator<QuestionnaireQuepQuestion> it = lstQuestionnaireQQ.iterator(); it.hasNext();) {
+            QuestionnaireQuepQuestion qqq = it.next();
 
-                //QUestionnaire Response            
-                setObjectQuestionnaireResponse(qqq, band);
+            //QUestionnaire Response            
+            setObjectQuestionnaireResponse(qqq, band);
 
-                //Response           
-                String sQId = String.valueOf(qqq.getQuepQuestion().getId());
-                String[] lstRO = (String[]) requestParams.get(prefixQ + prefixIdRO + sQId);
-                if (lstRO != null) {
-                    for (String sRO : lstRO) {
-                        Response oResponse = new Response();
-                        ResponseId rId = new ResponseId(oRoleStakeholder.getStakeholder().getId(),
-                                qqq.getQuepQuestion().getId(),
-                                qqq.getQuepQuestion().getPractice().getId(),
-                                qqq.getQuestionnaire().getId().getId(),
-                                oRoleStakeholder.getRole().getId(),
-                                oRoleStakeholder.getOrganization().getId(),
-                                Integer.parseInt(sRO));
-                        oResponse.setId(rId);
+            //Response           
+            String sQId = String.valueOf(qqq.getQuepQuestion().getId());
+            String[] lstRO = (String[]) requestParams.get(prefixQ + prefixIdRO + sQId);
+            if (lstRO != null) {
+                for (String sRO : lstRO) {
+                    Response oResponse = new Response();
+                    ResponseId rId = new ResponseId(oRoleStakeholder.getStakeholder().getId(),
+                            qqq.getQuepQuestion().getId(),
+                            qqq.getQuepQuestion().getPractice().getId(),
+                            qqq.getQuestionnaire().getId().getId(),
+                            oRoleStakeholder.getRole().getId(),
+                            oRoleStakeholder.getOrganization().getId(),
+                            Integer.parseInt(sRO));
+                    oResponse.setId(rId);
 
-                        ResponseOption ro = new ResponseOption();
-                        ro = qdi.getResponseOption(qqq.getQuepQuestion().getId(), Integer.parseInt(sRO));
-                        oResponse.setResponseOption(ro);
-                        oResponse.setResponseOption_1(ro.getName());
+                    ResponseOption ro = new ResponseOption();
+                    ro = qdi.getResponseOption(qqq.getQuepQuestion().getId(), Integer.parseInt(sRO));
+                    oResponse.setResponseOption(ro);
+                    oResponse.setResponseOption_1(ro.getName());
 
-                        oResponse.setQuestionnaireQuepQuestion(qqq);
-                        oResponse.setStakeholder(oRoleStakeholder.getStakeholder());
-                        oResponse.setIdPrinciple(qqq.getIdPrinciple());
+                    oResponse.setQuestionnaireQuepQuestion(qqq);
+                    oResponse.setStakeholder(oRoleStakeholder.getStakeholder());
+                    oResponse.setIdPrinciple(qqq.getIdPrinciple());
 
-                        if (qqq.getQuepQuestion().getHasComment() == 1) {
-                            oResponse.setComment(requestParams.get(prefixQ + prefixTxtComments + sQId)[0]);
-                        }
-
-                        if (qqq.getQuepQuestion().getHasPageNumber() == 1) {
-                            oResponse.setPagenumber(requestParams.get(prefixQ + prefixTxtPageNumber + sQId)[0]);
-                        }
-
-                        oResponse.setComputedValue(0);
-                        oResponse.setCreationUser(oRoleStakeholder.getStakeholder().getEmail());
-                        oResponse.setCreationDate(new Date());
-                        oResponse.setActive(1);
-                        oResponse.setAudit("I");
-
-                        oResponse.setQuestionnaireResponse(oQuestionnaireResponse);
-
-                        if (searchPreviousResponse(oResponse)) {
-                            oResponse.setModificationUser(oRoleStakeholder.getStakeholder().getEmail());
-                            oResponse.setModificationDate(new Date());
-                        }
-
-                        lstRsp.add(oResponse);
+                    if (qqq.getQuepQuestion().getHasComment() == 1) {
+                        oResponse.setComment(requestParams.get(prefixQ + prefixTxtComments + sQId)[0]);
                     }
+
+                    if (qqq.getQuepQuestion().getHasPageNumber() == 1) {
+                        oResponse.setPagenumber(requestParams.get(prefixQ + prefixTxtPageNumber + sQId)[0]);
+                    }
+
+                    oResponse.setComputedValue(0);
+                    oResponse.setCreationUser(oRoleStakeholder.getStakeholder().getEmail());
+                    oResponse.setCreationDate(new Date());
+                    oResponse.setActive(1);
+                    oResponse.setAudit("I");
+
+                    oResponse.setQuestionnaireResponse(oQuestionnaireResponse);
+
+                    if (searchPreviousResponse(oResponse)) {
+                        oResponse.setModificationUser(oRoleStakeholder.getStakeholder().getEmail());
+                        oResponse.setModificationDate(new Date());
+                    }
+
+                    lstRsp.add(oResponse);
                 }
             }
+        }
 
-            Map<Integer, String> mSave = qdi.insertResponse(setMapResponses(lstRsp, lstAuxQuestionnaireResponse), setMapResponses(lstResponse, lstQuestionnaireResponse));
-            if (mSave.containsKey(1)) {
-                addMessage("Save", "Response have been saving.", 1);
-                buildQuestionnaire();
-            } else {
-                addMessage("Error", "Please try again later.", 0);
-            }      
+        Map<Integer, String> mSave = qdi.insertResponse(setMapResponses(lstRsp, lstAuxQuestionnaireResponse), setMapResponses(lstResponse, lstQuestionnaireResponse));
+        if (mSave.containsKey(1)) {
+            addMessage("Save", "Response have been saving.", 1);
+            //buildQuestionnaire();
+        } else {
+            addMessage("Error", "Please try again later.", 0);
+        }
     }
 
     public void addMessage(String summary, String detail, int band) {
@@ -787,7 +851,7 @@ public class QuestionnaireDynamicBean implements Serializable {
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_FATAL, summary, detail);
                 FacesContext.getCurrentInstance().addMessage(null, message);
                 break;
-            }            
+            }
             default:
                 break;
         }

@@ -7,6 +7,7 @@ package es.upv.dsic.quep.beans;
 
 import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
 /**
@@ -15,6 +16,7 @@ import javax.inject.Named;
  */
 @Named
 @ApplicationScoped
+//@SessionScoped
 
 public class NavigationBean implements Serializable {
 
@@ -32,6 +34,10 @@ public class NavigationBean implements Serializable {
 
     public static String redirectToUser() {
         return "/all/frmMainPage.xhtml?faces-redirect=true";
+    }
+    
+     public static String redirectPage(String page) {
+        return page+"?faces-redirect=true";
     }
 
 }
