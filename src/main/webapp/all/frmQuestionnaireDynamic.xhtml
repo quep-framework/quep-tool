@@ -72,8 +72,11 @@
                   }                  
               }     
               
-              function refreshPage() {
-                 window.location.reload();
+              function refreshPage(bPageRefresh) {
+                  alert(bPageRefresh);
+                 if (bPageRefresh === '1'){
+                    window.location.reload();
+                 }
               }                           
         </script>
 
@@ -135,7 +138,7 @@
                                                 </c:choose>
                                             </h:form>                                                                                                
 
-                                            <!--p:selectOneMenu id="advanced" value="{selectOneMenuView.theme}" converter="themeConverter" panelStyle="width:180px"
+                                            <!--p:selectOneMenu  id="advanced" value="{selectOneMenuView.theme}" converter="themeConverter" panelStyle="width:180px"
                                                              effect="fade" var="t" style="width:160px" filter="true" filterMatchMode="startsWith">
                                                 <f:selectItems value="{selectOneMenuView.themes}" var="theme" itemLabel="{theme.displayName}" itemValue="{theme}" />
 

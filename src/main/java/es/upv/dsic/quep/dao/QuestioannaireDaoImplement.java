@@ -319,7 +319,12 @@ public class QuestioannaireDaoImplement implements QuestionnaireQQDao {
             System.out.println(e.getMessage());
             session.getTransaction().rollback();
             mMessage.put(0, e.getMessage());
-        } finally {
+       /* }catch (Exception e) {
+            System.out.println(e.getMessage());
+            session.getTransaction().rollback();
+            mMessage.put(0, e.getMessage());*/
+        }
+        finally {
             if (session != null) {
                 session.close();
             }
