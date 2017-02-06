@@ -125,7 +125,5 @@ public class RoleStakeholderDaoImplement implements RoleStakeholderDao {
         }
     }
     
-    
-    
 
 }

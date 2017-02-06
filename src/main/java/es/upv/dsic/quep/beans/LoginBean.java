@@ -38,6 +38,9 @@ public class LoginBean implements Serializable {
 
     @Inject
     private AccessBean accessBean;
+    
+   /* @Inject
+    private RoleStakeholder roleStakeholder;*/
 
     private boolean loggedIn = false;
     private boolean admin = false;
@@ -78,26 +81,28 @@ public class LoginBean implements Serializable {
         ///////*******************
         //REVISAR MAPEO Y CAMBIARLO lazy="false"
         //////
-        stakeholder = new Stakeholder();
+        //stakeholder = new Stakeholder();
         //StakeholderDaoImplement linkDao = new StakeholderDaoImplement();
         //stakeholder = linkDao.login(pUsername, pPassword);
         RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
         RoleStakeholder roleStk= roleStkImpl.getRoleStakeholder(pUsername, pPassword);
+        //roleStakeholder = roleStkImpl.getRoleStakeholder(pUsername, pPassword);
         stakeholder = roleStk.getStakeholder();
         
                
-        //AccessBean.setSessionObj("stakeholder", stakeholder);
+        AccessBean.setSessionObj("stakeholder", stakeholder);
         if (stakeholder != null) {
             //RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
             role = new Role();
-            //role = roleStkImpl.getRole(stakeholder);
-            role = roleStk.getRole();
-            //AccessBean.setSessionObj("role", role);            
+            role = roleStkImpl.getRole(stakeholder);
+            //role = roleStk.getRole();
+            AccessBean.setSessionObj("role", role);            
             AccessBean.setSessionObj("roleStakeholder", roleStk); 
             return true;
         } else {
             return false;
         }
+        //TODO: Check bean
     }
     
          

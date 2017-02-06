@@ -13,6 +13,7 @@ import es.upv.dsic.quep.model.Response;
 import es.upv.dsic.quep.model.ResponseId;
 import es.upv.dsic.quep.model.ResponseOption;
 import es.upv.dsic.quep.model.RoleStakeholder;
+import java.io.IOException;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
@@ -35,6 +36,7 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ActionListener;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.AjaxBehaviorListener;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
@@ -73,7 +75,7 @@ import org.primefaces.context.RequestContext;
 @Named
 @SessionScoped
 
-public class QuestionnaireDynamicBean implements Serializable {
+public  class QuestionnaireDynamicBean implements Serializable {
 
     private QuestioannaireDaoImplement qdi = new QuestioannaireDaoImplement();
 
@@ -85,6 +87,7 @@ public class QuestionnaireDynamicBean implements Serializable {
     private Map<Principle, List<QuestionnaireQuepQuestion>> lstMapQuestionnaireQQ;
 
     private RoleStakeholder oRoleStakeholder = null;
+    private Organization oOrganization=null;
     private QuestionnaireResponse oQuestionnaireResponse;
 
     private PanelGrid panel = new PanelGrid();
@@ -102,6 +105,7 @@ public class QuestionnaireDynamicBean implements Serializable {
     public QuestionnaireDynamicBean() {
         try {
             oRoleStakeholder = (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
+            oOrganization = (Organization) AccessBean.getSessionObj("organization");
             try {
                 buildQuestionnaire();
             } catch (Exception e) {
@@ -130,9 +134,9 @@ public class QuestionnaireDynamicBean implements Serializable {
         lstResponse = qdi.getListResponse(
                 oRoleStakeholder.getRole().getId(),
                 oRoleStakeholder.getStakeholder().getId(),
-                oRoleStakeholder.getOrganization().getId());
+                oOrganization.getId());
 
-        lstQuestionnaireQQ = qdi.getQuestionnairesQQRole(oRoleStakeholder.getRole().getId(), oRoleStakeholder.getOrganization().getId());
+        lstQuestionnaireQQ = qdi.getQuestionnairesQQRole(oRoleStakeholder.getRole().getId(), oOrganization.getId());
         lstMapQuestionnaireQQ = setMapQuestionnaireQQ(lstQuestionnaireQQ);
     }
 
@@ -141,7 +145,7 @@ public class QuestionnaireDynamicBean implements Serializable {
     Se crean todos los componentes (botones, tabs, paneles, ...) dinámicamente según los datos recuperados en las listas
     Se llama al proceso que crea un panel por cada uno de los principios 
     ---*/
-    public void buildQuestionnaire() {
+    public  void buildQuestionnaire() {
         initList();
         if (lstMapQuestionnaireQQ != null) {
             panel = new PanelGrid();
@@ -183,7 +187,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             btnDlg.setIcon("ui-icon-mail-open");
 
             ConfirmDialog dlgCD = new ConfirmDialog();
-            dlgCD.setHeader("Confirm send final reponse");
+            dlgCD.setHeader("Confirm send final reponse");           
             dlgCD.setWidgetVar("dlg");
             dlgCD.setMessage("Are you Sure?");
             dlgCD.setShowEffect("fade");
@@ -259,7 +263,13 @@ public class QuestionnaireDynamicBean implements Serializable {
     public void save(ActionEvent ae) {
         try {
             saveResponse(2);
-            buildQuestionnaire();
+            //RequestContext.getCurrentInstance().update("@this");
+            
+            //ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+             //ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
+                
+            //buildQuestionnaire();
+            //initList();
         } catch (Exception e) {
             addMessage("Error", "Please contact Administrator", 0);
         }
@@ -273,15 +283,8 @@ public class QuestionnaireDynamicBean implements Serializable {
         try {
             if (validateComplete() == 1) {
                 saveResponse(1);
-                //bandRefreshPage=1;
-                buildQuestionnaire();
-                RequestContext.getCurrentInstance().update("@this");
-
                /* RequestContext context = RequestContext.getCurrentInstance();
-                context.update("@all");*/
-               ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
-                
+                context.update("@all");*/                            
                 //sPage= NavigationBean.redirectPage("");                
             } else {
                 addMessage("Error", "Please fill all requiered fields, which is marked with *.", 2);
@@ -586,6 +589,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             InputText txtPageNumber = new InputText();
             txtPageNumber.setId(prefixTxtPageNumber + String.valueOf(qqq.getQuepQuestion().getId()));
             txtPageNumber.setStyle("width: 50px;");
+            txtPageNumber.setAccesskey("validateQuestion(this.id,'" + prefixQ + "','" + prefixIdRO + "');");   
                    
             if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
                 txtPageNumber.setValue(lstCurrentResponses.get(0).getPagenumber());
@@ -726,7 +730,7 @@ public class QuestionnaireDynamicBean implements Serializable {
     }
 
     public Map<Principle, List<QuestionnaireQuepQuestion>> setMapQuestionnaireQQ(List<QuestionnaireQuepQuestion> lstQQQ) {
-        List<Principle> lstPri = qdi.getPrinciples(oRoleStakeholder.getRole().getId(), oRoleStakeholder.getOrganization().getId());
+        List<Principle> lstPri = qdi.getPrinciples(oRoleStakeholder.getRole().getId(), oOrganization.getId());
         // Map<Principle, List<QuestionnaireQuepQuestion>> MapQQQ = new HashMap<Principle, List<QuestionnaireQuepQuestion>>();
         Map<Principle, List<QuestionnaireQuepQuestion>> MapQQQ = new HashMap<Principle, List<QuestionnaireQuepQuestion>>();
 
@@ -808,7 +812,7 @@ public class QuestionnaireDynamicBean implements Serializable {
     /*
       Procedimiento que guarda las respuestas de las preguntas
      */
-    public void saveResponse(int band) {
+    public void saveResponse(int band) throws IOException {
         List<Response> lstRsp = new ArrayList<Response>();
         Map<String, String[]> requestParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterValuesMap();
 
@@ -845,7 +849,7 @@ public class QuestionnaireDynamicBean implements Serializable {
                                 qqq.getQuepQuestion().getPractice().getId(),
                                 qqq.getQuestionnaire().getId().getId(),
                                 oRoleStakeholder.getRole().getId(),
-                                oRoleStakeholder.getOrganization().getId(),
+                                oOrganization.getId(),
                                 Integer.parseInt(sRO));
                         ro = qdi.getResponseOption(qqq.getQuepQuestion().getId(), Integer.parseInt(sRO));
                     } else {
@@ -855,7 +859,7 @@ public class QuestionnaireDynamicBean implements Serializable {
                                 qqq.getQuepQuestion().getPractice().getId(),
                                 qqq.getQuestionnaire().getId().getId(),
                                 oRoleStakeholder.getRole().getId(),
-                                oRoleStakeholder.getOrganization().getId(),
+                                oOrganization.getId(),
                                 lstIdsRO.get(0).getId());
                         ro = qdi.getResponseOption(qqq.getQuepQuestion().getId(), lstIdsRO.get(0).getId());
                     }
@@ -898,7 +902,14 @@ public class QuestionnaireDynamicBean implements Serializable {
         Map<Integer, String> mSave = qdi.insertResponse(setMapResponses(lstRsp, lstAuxQuestionnaireResponse), setMapResponses(lstResponse, lstQuestionnaireResponse));
         if (mSave.containsKey(1)) {
             addMessage("Save", "Response have been saving.", 1);
-            //buildQuestionnaire();
+            
+            if (band==1){ //is complete button final send
+                buildQuestionnaire();                
+                //RequestContext.getCurrentInstance().update("@this");                
+                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
+            }
+            //new QuestionnaireDynamicBean();
         } else {
             addMessage("Error", "Please try again later.", 0);
         }
@@ -951,7 +962,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             for (QuestionnaireResponse qr : lstQuestionnaireResponse) {
                 if (oRoleStakeholder.getStakeholder().getId() == qr.getId().getIdStakeholder()
                         && oRoleStakeholder.getRole().getId() == qr.getId().getIdRole()
-                        && oRoleStakeholder.getOrganization().getId() == qr.getId().getIdOrganization()
+                        && oOrganization.getId() == qr.getId().getIdOrganization()
                         && qqq.getQuestionnaire().getPractice().getId() == qr.getId().getIdPractice()
                         && qqq.getQuestionnaire().getId().getId() == qr.getId().getIdQuestionnaire()) {
                     lstAuxQuestionnaireResponse.remove(qr);
@@ -971,7 +982,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             for (QuestionnaireResponse qr : lstAuxQuestionnaireResponse) {
                 if (oRoleStakeholder.getStakeholder().getId() == qr.getId().getIdStakeholder()
                         && oRoleStakeholder.getRole().getId() == qr.getId().getIdRole()
-                        && oRoleStakeholder.getOrganization().getId() == qr.getId().getIdOrganization()
+                        && oOrganization.getId() == qr.getId().getIdOrganization()
                         && qqq.getQuestionnaire().getPractice().getId() == qr.getId().getIdPractice()
                         && qqq.getQuestionnaire().getId().getId() == qr.getId().getIdQuestionnaire()) {
                     lstAuxQuestionnaireResponse.remove(qr);
@@ -997,10 +1008,10 @@ public class QuestionnaireDynamicBean implements Serializable {
                     qqq.getQuestionnaire().getId().getId(),
                     qqq.getQuepQuestion().getPractice().getId(),
                     oRoleStakeholder.getStakeholder().getId(), oRoleStakeholder.getRole().getId(),
-                    oRoleStakeholder.getOrganization().getId());
+                    oOrganization.getId());
 
             oQuestionnaireResponse.setId(qrId);
-            oQuestionnaireResponse.setOrganization(oRoleStakeholder.getOrganization());
+            oQuestionnaireResponse.setOrganization(oOrganization);
             oQuestionnaireResponse.setQuestionnaire(lstQuestionnaireQQ.get(0).getQuestionnaire());
             oQuestionnaireResponse.setCreationUser(oRoleStakeholder.getStakeholder().getEmail());
             oQuestionnaireResponse.setCreationDate(new Date());
@@ -1013,6 +1024,7 @@ public class QuestionnaireDynamicBean implements Serializable {
         lstAuxQuestionnaireResponse.add(oQuestionnaireResponse);
     }
 
+    
     public List<QuestionnaireResponse> getLstAuxQuestionnaireResponse() {
         return lstAuxQuestionnaireResponse;
     }
@@ -1082,6 +1094,7 @@ public class QuestionnaireDynamicBean implements Serializable {
     }
 
     public void setPanel(PanelGrid panel) {
+        buildQuestionnaire();
         this.panel = panel;
     }
 
@@ -1092,14 +1105,15 @@ public class QuestionnaireDynamicBean implements Serializable {
     public void setLstQuestionnaireResponse(List<QuestionnaireResponse> lstQuestionnaireResponse) {
         this.lstQuestionnaireResponse = lstQuestionnaireResponse;
     }
-/*
-    public int isBandRefreshPage() {
-        return bandRefreshPage;
+
+    public Organization getoOrganization() {
+        return oOrganization;
     }
 
-    public void setBandRefreshPage(int bandRefreshPage) {
-        this.bandRefreshPage = bandRefreshPage;
+    public void setoOrganization(Organization oOrganization) {
+        this.oOrganization = oOrganization;
     }
-*/
+ 
+    
     
 }

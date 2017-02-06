@@ -62,7 +62,7 @@ public class MaturityLevelBean implements Serializable {
     /**
      * @return the maturityLevels
      */
-    public List<MaturityLevel> getMaturityLevels() {
+    public List<MaturityLevel> getMaturityLevels() {      
         return maturityLevels;
     }
 

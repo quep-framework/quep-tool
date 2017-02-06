@@ -28,8 +28,8 @@ public class OrganizationConverter implements Converter {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if(value != null && value.trim().length() > 0) {
             try {
-                OrganizationBean org = (OrganizationBean) fc.getExternalContext().getApplicationMap().get("organizationBean");
-                return org.getLstOrganization().get(Integer.parseInt(value));
+                OrganizationBean orgB = (OrganizationBean) fc.getExternalContext().getSessionMap().get("organizationBean");
+                return orgB.getOrganization(Integer.parseInt(value));
             } catch(NumberFormatException e) {
                 throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid theme."));
             }

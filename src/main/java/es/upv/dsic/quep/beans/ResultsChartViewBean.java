@@ -12,6 +12,7 @@ import es.upv.dsic.quep.dao.PrincipleDaoImplement;
 import es.upv.dsic.quep.dao.ResultsDaoImplement;
 import es.upv.dsic.quep.model.MaturityLevel;
 import es.upv.dsic.quep.model.MaturityLevelPractice;
+import es.upv.dsic.quep.model.Organization;
 import es.upv.dsic.quep.model.Practice;
 import es.upv.dsic.quep.model.Principle;
 import es.upv.dsic.quep.model.QuepQuestion;
@@ -62,6 +63,7 @@ public class ResultsChartViewBean implements Serializable {
     @Inject
     private AccessBean accessBean;
     private RoleStakeholder oRoleStakeholder = null;
+    private Organization oOrganization=null;
 
     private HorizontalBarChartModel horizontalBarModel;
     private Map<MaturityLevel, Result> mapMaturityLevelResults;
@@ -76,6 +78,7 @@ public class ResultsChartViewBean implements Serializable {
 
     public ResultsChartViewBean() {
         oRoleStakeholder = (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
+        oOrganization = (Organization) AccessBean.getSessionObj("organization");
         createHorizontalBarMaturityLevel();
     }
     
@@ -137,7 +140,7 @@ public class ResultsChartViewBean implements Serializable {
         //getHorizontalBarModel().setDatatipFormat(getHorizontalBarModel().getDatatipFormat());
         //getHorizontalBarModel().setMouseoverHighlight(true);
 
-        getHorizontalBarModel().setTitle(oRoleStakeholder.getOrganization().getName());
+        getHorizontalBarModel().setTitle(oOrganization.getName());
         getHorizontalBarModel().setAnimate(true);
         getHorizontalBarModel().setLegendPosition("e");
         getHorizontalBarModel().setStacked(true);
@@ -249,8 +252,9 @@ public class ResultsChartViewBean implements Serializable {
 
     public Map<MaturityLevel, Result> getResultsMaturityLevels() {
         try {
-            mapSumPractices = new HashMap<Practice, ResponseEstimate>();
+            mapSumPractices = new HashMap<Practice, ResponseEstimate>();            
             mapSumPractices = calculatePractices(calculateQuestions());
+            //if (mapSumPractices==0) mapSumPractices=1;
 
             Map<MaturityLevel, ResponseEstimate> mapMaturityLevel = new HashMap<MaturityLevel, ResponseEstimate>();
             mapMaturityLevel = calculateMaturityLevel(mapSumPractices);
@@ -306,11 +310,11 @@ public class ResultsChartViewBean implements Serializable {
         //1.Evaluation Responses
         //SUM REQ Weight
         List<QuepQuestionResponseOption> lstQQuestionResponseOption = new ArrayList<QuepQuestionResponseOption>();
-        lstQQuestionResponseOption = rdi.getQuepQuestionResponseOption(oRoleStakeholder.getId().getIdOrganization());
+        lstQQuestionResponseOption = rdi.getQuepQuestionResponseOption(oOrganization.getId());
 
         //2.Calculate Responses
         List<Response> lstResult = new ArrayList<Response>();
-        lstResult = rdi.getListResponse(oRoleStakeholder.getId().getIdOrganization());
+        lstResult = rdi.getListResponse(oOrganization.getId());
 
         Map<QuepQuestion, ResponseEstimate> mapSumResponseOp = new HashMap<QuepQuestion, ResponseEstimate>();
         for (QuepQuestionResponseOption oQQRO : lstQQuestionResponseOption) {
@@ -338,7 +342,7 @@ public class ResultsChartViewBean implements Serializable {
                 }
             }
             //average Responses SUMs / Requiered SUM of Questions Configurated in QuEP
-            if (sumReqQQuestion==BigDecimal.valueOf(0.0)) {
+            if (sumReqQQuestion==BigDecimal.valueOf(0.0) || sumReqQQuestion.equals(BigDecimal.valueOf(0))) {
                 sumReqQQuestion = BigDecimal.valueOf(1.0);
             }
             avg = sumRsp.divide(sumReqQQuestion,2, RoundingMode.HALF_EVEN);
@@ -671,4 +675,13 @@ public class ResultsChartViewBean implements Serializable {
         this.mapSumPrinciple = mapSumPrinciple;
     }
 
+    public Organization getoOrganization() {
+        return oOrganization;
+    }
+
+    public void setoOrganization(Organization oOrganization) {
+        this.oOrganization = oOrganization;
+    }
+
+    
 }
