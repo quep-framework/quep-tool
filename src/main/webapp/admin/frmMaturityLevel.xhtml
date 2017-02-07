@@ -39,7 +39,6 @@
         <script type="text/javascript" src="/QuEP-Tool/build/primeelements.js"></script-->                                                             
     </h:head>
     <h:body>
-        <!--h:form-->   
         <div class="PC">
             <!--start menu izq-->
             <div id="MENUSIDE">
@@ -160,12 +159,15 @@
                             
                             
                             <p:panelGrid columns="2" id="pnlformShowMaturityLevels">  
-                                <p:dataTable var="ml" value="#{maturityLevelBean.maturityLevels}"
-                                             emptyMessage="There are not data"
-                                             paginator="true" rows="5" paginatorPosition="top"
-                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
-                                             {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5 10">
+                                <p:dataTable  var="ml" value="#{maturityLevelBean.maturityLevels}"
+                                              emptyMessage="There are not data"
+                                              paginator="true" rows="5" paginatorPosition="top"
+                                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
+                                              {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                              rowsPerPageTemplate="5 10">
+                                    <f:facet name="header">
+                                        Maturity Levels List
+                                    </f:facet>
                                     <p:column headerText="Id" sortBy="#{ml.id}" filterBy="#{ml.id}" filterMatchMode="contains">
                                         <h:outputText value="#{ml.id}"/>
                                     </p:column>
