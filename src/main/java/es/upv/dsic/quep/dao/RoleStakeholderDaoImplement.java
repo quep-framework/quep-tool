@@ -51,6 +51,28 @@ public class RoleStakeholderDaoImplement implements RoleStakeholderDao {
             return null;
         }
     }
+    
+     @Override
+    public RoleStakeholder getRoleByOrganization(int role, int organization) {
+        Session session = null;
+        List<RoleStakeholder> listR = null; 
+        //List<RoleStakeholderId> listRS = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+             Query queryR = session.createQuery("from RoleStakeholder where active=1 and  role.id = " + role + " and organization.id="+organization);
+     
+            listR = (List<RoleStakeholder>) queryR.list();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return  listR.get(0);             
+    }
+
 
     
     @Override

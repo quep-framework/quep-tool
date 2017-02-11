@@ -131,7 +131,7 @@ public  class QuestionnaireDynamicBean implements Serializable {
         lstResponse = new ArrayList<Response>();
         lstQuestionnaireResponse = new ArrayList<QuestionnaireResponse>();
 
-        lstQuestionnaireResponse = qdi.getQuestionnaireResponse(oRoleStakeholder.getRole().getId(), oRoleStakeholder.getStakeholder().getId());
+        lstQuestionnaireResponse = qdi.getQuestionnaireResponse(oRoleStakeholder.getRole().getId(), oRoleStakeholder.getStakeholder().getId(),oOrganization.getId());
 
         lstResponse = qdi.getListResponse(
                 oRoleStakeholder.getRole().getId(),
@@ -233,10 +233,12 @@ public  class QuestionnaireDynamicBean implements Serializable {
             panelfrm.getChildren().add(growl);//message 
 
             //** desabilitar en caso que el cuestionario se haya enviado o este completo
-            if (lstQuestionnaireResponse.get(0).getStatus() == 1){
-                btnDlg.setDisabled(true);
-                btnSave.setDisabled(true);
-            }     
+            if (lstQuestionnaireResponse.size() > 0) {
+                if (lstQuestionnaireResponse.get(0).getStatus() == 1) {
+                    btnDlg.setDisabled(true);
+                    btnSave.setDisabled(true);
+                }
+            }
             
             form.getChildren().add(panelfrm);
 
@@ -453,7 +455,9 @@ public  class QuestionnaireDynamicBean implements Serializable {
             rB.setStyle("display: block; width: 400px;");
             
             //** desabilitar en caso que el cuestionario se haya enviado o este completo
-            if (lstQuestionnaireResponse.get(0).getStatus() == 1) rB.setDisabled(true);  
+            if (lstQuestionnaireResponse.size()>0){
+                if (lstQuestionnaireResponse.get(0).getStatus() == 1) rB.setDisabled(true);  
+            }
             
             rB.setOnchange("validateQuestion(this.id,'" + prefixQ + "','" + prefixIdRO + "');");            
             pnlResponseOption.getChildren().add(rB);
@@ -509,7 +513,9 @@ public  class QuestionnaireDynamicBean implements Serializable {
             }
 
             //** desabilitar en caso que el cuestionario se haya enviado o este completo
-            if (lstQuestionnaireResponse.get(0).getStatus() == 1) txt.setDisabled(true); 
+            if (lstQuestionnaireResponse.size()>0){
+                if (lstQuestionnaireResponse.get(0).getStatus() == 1) txt.setDisabled(true); 
+            }
             
             pnlResponseOption.getChildren().add(txt);
         } else if (qt.getName().toLowerCase().trim().contains("combo")) {
@@ -591,8 +597,9 @@ public  class QuestionnaireDynamicBean implements Serializable {
             pnlResponseOption.getChildren().add(lblCmmAux);
              
             //** desabilitar en caso que el cuestionario se haya enviado o este completo
-            if (lstQuestionnaireResponse.get(0).getStatus() == 1) txtComments.setDisabled(true);                
-            
+            if (lstQuestionnaireResponse.size()>0){
+                if (lstQuestionnaireResponse.get(0).getStatus() == 1) txtComments.setDisabled(true);                
+            }
         }
         if (qqq.getQuepQuestion().getHasPageNumber() == 1) {
             OutputLabel lblTxtPageNumber = new OutputLabel();
@@ -615,7 +622,9 @@ public  class QuestionnaireDynamicBean implements Serializable {
             pnlResponseOption.getChildren().add(lblNmPAux);
             
             //** desabilitar en caso que el cuestionario se haya enviado o este completo
-            if (lstQuestionnaireResponse.get(0).getStatus() == 1) txtPageNumber.setDisabled(true);                
+            if (lstQuestionnaireResponse.size()>0){
+                if (lstQuestionnaireResponse.get(0).getStatus() == 1) txtPageNumber.setDisabled(true);                
+            }
         }        
         return pnlResponseOption;
     }

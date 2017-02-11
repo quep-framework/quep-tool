@@ -77,27 +77,18 @@ public class LoginBean implements Serializable {
         return navigationBean.redirectToLogin();
     }
 
-    private boolean checkUser(String pUsername, String pPassword) {
-        ///////*******************
-        //REVISAR MAPEO Y CAMBIARLO lazy="false"
-        //////
-        //stakeholder = new Stakeholder();
-        //StakeholderDaoImplement linkDao = new StakeholderDaoImplement();
-        //stakeholder = linkDao.login(pUsername, pPassword);
+    public boolean checkUser(String pUsername, String pPassword) {
+        ///////*******************                
         RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
         RoleStakeholder roleStk= roleStkImpl.getRoleStakeholder(pUsername, pPassword);
-        //roleStakeholder = roleStkImpl.getRoleStakeholder(pUsername, pPassword);
-        stakeholder = roleStk.getStakeholder();
-        
+        stakeholder = roleStk.getStakeholder();        
                
         AccessBean.setSessionObj("stakeholder", stakeholder);
-        if (stakeholder != null) {
-            //RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
+        if (stakeholder != null) {            
             role = new Role();
-            role = roleStkImpl.getRole(stakeholder);
-            //role = roleStk.getRole();
-            AccessBean.setSessionObj("role", role);            
-            AccessBean.setSessionObj("roleStakeholder", roleStk); 
+            role = roleStkImpl.getRole(stakeholder);            
+            AccessBean.setSessionObj("role", role);               
+            AccessBean.setSessionObj("roleStakeholder", roleStk);             
             return true;
         } else {
             return false;
@@ -105,6 +96,24 @@ public class LoginBean implements Serializable {
         //TODO: Check bean
     }
     
+    public boolean checkUserByOrganization(int iRole, int organization) {
+        ///////*******************                
+        RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
+        RoleStakeholder roleStk= roleStkImpl.getRoleByOrganization(iRole, organization);
+        stakeholder = roleStk.getStakeholder();        
+               
+        AccessBean.setSessionObj("stakeholder", stakeholder);
+        if (stakeholder != null) {            
+            role = new Role();
+            role = roleStkImpl.getRole(stakeholder);            
+            AccessBean.setSessionObj("role", role);               
+            AccessBean.setSessionObj("roleStakeholder", roleStk);             
+            return true;
+        } else {
+            return false;
+        }
+        //TODO: Check bean
+    }
          
     /**
      * @return the loggedIn

@@ -76,14 +76,14 @@ public class QuestioannaireDaoImplement implements QuestionnaireQQDao {
     }
     
     @Override
-    public List<QuestionnaireResponse> getQuestionnaireResponse(int idRole,int idStk){
+    public List<QuestionnaireResponse> getQuestionnaireResponse(int idRole,int idStk, int idOrg){
         Session session = null;
         List<QuestionnaireResponse> list = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             Query query = session.createQuery("select qr\n"
                     + "from QuestionnaireResponse  qr \n"
-                    + "where qr.active=1 and qr.id.idRole='" + idRole + "'" + "and qr.id.idStakeholder='" + idStk + "'" );
+                    + "where qr.active=1 and qr.id.idRole='" + idRole + "'" + "and qr.id.idStakeholder='" + idStk + "'" + "and qr.organization.id='" + idOrg + "'"  );
             list = (List<QuestionnaireResponse>) query.list();
         } catch (Exception e) {
             System.out.println(e.getMessage());

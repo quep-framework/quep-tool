@@ -35,26 +35,26 @@ public class OrganizationBean implements Serializable {
     private Organization organization;
     private List<Organization> lstOrganization;
     private boolean bandOrganization = false;
-    private String nameOrganization="";
-    
-    
-    
+    private String nameOrganization = "";
+
+    @Inject
+    private LoginBean loginBean;
+
     @Inject
     private AccessBean accessBean;
 
     @Inject
     private QuestionnaireDynamicBean questionnaireDynamicBean;
-    
+
     //@Inject
     //private RoleStakeholder roleStakeholder;
-
     public OrganizationBean() {
         RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
-        RoleStakeholder rs= (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
-        
+        RoleStakeholder rs = (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
+
         Role role = new Role();
         role = (Role) AccessBean.getSessionObj("role");
-        role =rs.getRole();
+        role = rs.getRole();
 
         Stakeholder stk = new Stakeholder();
         stk = (Stakeholder) AccessBean.getSessionObj("stakeholder");
@@ -63,60 +63,60 @@ public class OrganizationBean implements Serializable {
         //lstOrganization = new ArrayList<>(0);
         lstOrganization = roleStkImpl.getListOrganization(rs.getStakeholder().getId(), rs.getRole().getId());
         //lstOrganization = roleStkImpl.getListOrganization(roleStakeholder.getStakeholder().getId(), roleStakeholder.getRole().getId());
-        
+
         bandOrganization = lstOrganization.size() > 1;
-        
-        if (!bandOrganization){
+
+        if (!bandOrganization) {
             nameOrganization = lstOrganization.get(0).getName();
-            
+
         }
-        if(AccessBean.getSessionObj("organization")==null) {
-            AccessBean.setSessionObj("organization", lstOrganization.get(0)); 
+        if (AccessBean.getSessionObj("organization") == null) {
+            AccessBean.setSessionObj("organization", lstOrganization.get(0));
             this.organization = lstOrganization.get(0);
+        } else {
+            this.organization = (Organization) AccessBean.getSessionObj("organization");
         }
-        else this.organization= (Organization) AccessBean.getSessionObj("organization");
-        
-        
-        AccessBean.setSessionObj("organizationBean", this); 
+
+        AccessBean.setSessionObj("organizationBean", this);
         // AccessBean.setSessionObj("organization", organization);                
     }
 
-  //***
+    //***
     public void changeListener(ValueChangeEvent event) throws IOException {
         //Organization oldValue = (Organization) event.getOldValue();
-        Object newValue =  event.getNewValue();   
+        Object newValue = event.getNewValue();
         //AccessBean.setSessionObj("organization", newValue); 
         //FacesContext context = FacesContext.getCurrentInstance();
         Object oldValue = AccessBean.getSessionObj("organization");
         //context.getExternalContext().getSessionMap().put("organization", newValue);
-        
+
         AccessBean.setSessionObj("organization", newValue);
-        setOrganization((Organization)newValue);
-        
+        setOrganization((Organization) newValue);
+
         //questionnaireDynamicBean.getForm().setPrependId(true);
-        
         //return NavigationBean.redirectToUser();
         //AccessBean.setSessionObj("organization", newValue); 
-        
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
-        
-        questionnaireDynamicBean = new QuestionnaireDynamicBean();
-        
+
+        Role oRole = (Role) AccessBean.getSessionObj("role");
+        if (loginBean.checkUserByOrganization(oRole.getId(), organization.getId())) {
+            questionnaireDynamicBean = new QuestionnaireDynamicBean();
+        }
+
     }
-    
-    
-     public Organization getOrganization(int id) {
-         Organization oOrganization=null;
-         for (Organization org : lstOrganization) {
-             if (id==org.getId()){
-                 oOrganization = org;
-                 break;
-             }
-         }
-      return oOrganization;
+
+    public Organization getOrganization(int id) {
+        Organization oOrganization = null;
+        for (Organization org : lstOrganization) {
+            if (id == org.getId()) {
+                oOrganization = org;
+                break;
+            }
+        }
+        return oOrganization;
     }
-    
+
     public Organization getOrganization() {
         return organization;
     }
@@ -157,6 +157,4 @@ public class OrganizationBean implements Serializable {
         this.nameOrganization = nameOrganization;
     }
 
-    
-    
 }

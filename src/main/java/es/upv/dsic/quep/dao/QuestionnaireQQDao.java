@@ -26,7 +26,7 @@ public interface QuestionnaireQQDao {
 
     public List<QuestionnaireQuepQuestion> getQuestionnairesQQRole(int idRole,int idOrg);
     
-    public List<QuestionnaireResponse> getQuestionnaireResponse(int idRole,int idStk);
+    public List<QuestionnaireResponse> getQuestionnaireResponse(int idRole,int idStk,int idOrg);
 
     public List<ResponseOption> getResponseOptions(int idqq);
 
