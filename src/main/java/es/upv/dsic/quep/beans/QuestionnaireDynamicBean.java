@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIForm;
 import javax.faces.component.UISelectItems;
@@ -73,7 +74,8 @@ import org.primefaces.context.RequestContext;
  * @author agna8685
  */
 @Named
-@SessionScoped
+@RequestScoped
+//@SessionScoped
 
 public  class QuestionnaireDynamicBean implements Serializable {
 
@@ -145,14 +147,26 @@ public  class QuestionnaireDynamicBean implements Serializable {
     Se crean todos los componentes (botones, tabs, paneles, ...) dinámicamente según los datos recuperados en las listas
     Se llama al proceso que crea un panel por cada uno de los principios 
     ---*/
+    UIForm form;
+
+    public UIForm getForm() {
+        return form;
+    }
+
+    public void setForm(UIForm form) {
+        this.form = form;
+    }
+    
+    
     public  void buildQuestionnaire() {
         initList();
         if (lstMapQuestionnaireQQ != null) {
             panel = new PanelGrid();
-            panel.setId("pnlMain");
+            //panel.setId("panel");
 
-            UIForm form = new UIForm();
+            form = new UIForm();
             form.setId("frmQ");
+            //form.setPrependId(true);
 
             PanelGrid panelfrm = new PanelGrid();
             panelfrm.setId("pnlMain");

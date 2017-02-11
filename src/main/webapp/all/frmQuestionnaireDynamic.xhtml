@@ -106,24 +106,26 @@
                                     </td><td>
                                         <span class="dispBlock logoDarkText" style="margin-left: 18px; font-size: 20px; width: 500px; ">A Total Quality Framework 
                                             for the assessment and improvement of Emergency Plans Management 
-                                            <h:form id="frmOrg">
+                                            <h:form >
                                                 <c:choose id="chooseOrg">
                                                     <c:when test="#{organizationBean.bandOrganization}" id="bOrgTrue">
                                                          <h:panelGrid columns="2" cellpadding="2" id="pnlOrgBean">                                        
                                                             <p:outputLabel  value="Organization:"  id="lblOrgTrue"/>
                                                             <p:selectOneMenu  value="#{organizationBean.organization}" var="o"  effect="fade" 
                                                                               filter="true" filterMatchMode="contains"
-                                                                              valueChangeListener="#{organizationBean.changeListener}" onchange="submit()"
-                                                                             
+                                                                              valueChangeListener="#{organizationBean.changeListener}" onchange="submit()"                                                                               
                                                                               converter="organizationConverter"
+                                                                              
                                                                               >
+                                                                <!--p:ajax  update="panel" /-->
+                                                                 
                                                                 <f:selectItems value="#{organizationBean.lstOrganization}" var="lstO"  itemLabel="#{lstO.name}" itemValue="#{lstO}" />
                                                                 <p:column>
                                                                     <h:outputText value="#{o.name}" />
                                                                 </p:column>
-                                                               
+
                                                             </p:selectOneMenu>                                                                                                                
-                                                        </h:panelGrid>
+                                                         </h:panelGrid>
                                                     </c:when>
                                                     <c:otherwise id="bOrgFalse">
                                                         Organization: #{organizationBean.nameOrganization}
@@ -193,7 +195,7 @@
                           
                         </h:form-->
  
-                        <h:panelGrid  binding="#{questionnaireDynamicBean.panel}" rendered="TRUE"/>                                                              
+                        <h:panelGrid  binding="#{questionnaireDynamicBean.panel}" id="panel" rendered="true" />                                                              
                     </div>
                     <!-- content body end-->
 

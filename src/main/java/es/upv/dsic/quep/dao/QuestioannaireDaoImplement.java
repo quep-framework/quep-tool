@@ -286,7 +286,7 @@ public class QuestioannaireDaoImplement implements QuestionnaireQQDao {
 
                         if (lstR_prev != null && lstR_prev.size() > 0) {
                             for (Response oResponsePrev : lstR_prev) {
-                                session.delete(oResponsePrev);
+                                session.delete(oResponsePrev); //--> cambiar por update
                             }
                         }
                     }

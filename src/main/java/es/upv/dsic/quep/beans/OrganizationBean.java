@@ -15,10 +15,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -71,12 +74,15 @@ public class OrganizationBean implements Serializable {
             AccessBean.setSessionObj("organization", lstOrganization.get(0)); 
             this.organization = lstOrganization.get(0);
         }
+        else this.organization= (Organization) AccessBean.getSessionObj("organization");
+        
+        
         AccessBean.setSessionObj("organizationBean", this); 
         // AccessBean.setSessionObj("organization", organization);                
     }
 
   //***
-    public String changeListener(ValueChangeEvent event) throws IOException {
+    public void changeListener(ValueChangeEvent event) throws IOException {
         //Organization oldValue = (Organization) event.getOldValue();
         Object newValue =  event.getNewValue();   
         //AccessBean.setSessionObj("organization", newValue); 
@@ -86,12 +92,17 @@ public class OrganizationBean implements Serializable {
         
         AccessBean.setSessionObj("organization", newValue);
         setOrganization((Organization)newValue);
-        questionnaireDynamicBean = new QuestionnaireDynamicBean();
-        return NavigationBean.toUser();
+        
+        //questionnaireDynamicBean.getForm().setPrependId(true);
+        
+        //return NavigationBean.redirectToUser();
         //AccessBean.setSessionObj("organization", newValue); 
         
-        //ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        //ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
+        
+        questionnaireDynamicBean = new QuestionnaireDynamicBean();
+        
     }
     
     
