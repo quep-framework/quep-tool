@@ -114,16 +114,11 @@
                                                             <p:selectOneMenu  value="#{organizationBean.organization}" var="o"  effect="fade" 
                                                                               filter="true" filterMatchMode="contains"
                                                                               valueChangeListener="#{organizationBean.changeListener}" onchange="submit()"                                                                               
-                                                                              converter="organizationConverter"
-                                                                              
-                                                                              >
-                                                                <!--p:ajax  update="panel" /-->
-                                                                 
+                                                                              converter="organizationConverter">
                                                                 <f:selectItems value="#{organizationBean.lstOrganization}" var="lstO"  itemLabel="#{lstO.name}" itemValue="#{lstO}" />
                                                                 <p:column>
                                                                     <h:outputText value="#{o.name}" />
                                                                 </p:column>
-
                                                             </p:selectOneMenu>                                                                                                                
                                                          </h:panelGrid>
                                                     </c:when>

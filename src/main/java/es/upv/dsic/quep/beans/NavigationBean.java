@@ -8,7 +8,9 @@ package es.upv.dsic.quep.beans;
 import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -40,4 +42,10 @@ public class NavigationBean implements Serializable {
         return page+"?faces-redirect=true";
     }
 
+     public String getCurrentPage() {
+        String str = ((HttpServletRequest) FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest()).getRequestURI();
+        System.out.println(str);
+        return str;
+    }
 }

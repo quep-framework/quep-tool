@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"          
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
-       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -14,7 +14,20 @@
         <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/themes/aristo/theme.css" />
         <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/site.css" />
         <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/quep-css.css" />
-                                                                
+
+        <script type="text/javascript">
+            function handleMessage(data) {
+                var series = [],
+                        chart = PF('browserChart').plot;
+
+                for (var key in data) {
+                    series.push([key, data[key]]);
+                }
+
+                chart.series[0].data = series;
+                chart.replot();
+            }
+        </script>
     </h:head>
     <h:body>
         <div class="PC">
@@ -44,20 +57,19 @@
                                     </td><td>
                                         <span class="dispBlock logoDarkText" style="margin-left: 18px; font-size: 20px; width: 500px; ">A Total Quality Framework 
                                             for the assessment and improvement of Emergency Plans Management 
-                                            <h:form>
+                                            <h:form >
                                                 <c:choose id="chooseOrg">
                                                     <c:when test="#{organizationBean.bandOrganization}" id="bOrgTrue">
                                                         <h:panelGrid columns="2" cellpadding="2" id="pnlOrgBean">                                        
                                                             <p:outputLabel  value="Organization:"  id="lblOrgTrue"/>
                                                             <p:selectOneMenu  value="#{organizationBean.organization}" var="o"  effect="fade" 
-                                                                              filter="true" filterMatchMode="contains" 
-                                                                              valueChangeListener="#{organizationBean.changeListener}">
+                                                                              filter="true" filterMatchMode="contains"
+                                                                              valueChangeListener="#{organizationBean.changeListener}" onchange="submit()"                                                                               
+                                                                              converter="organizationConverter">
                                                                 <f:selectItems value="#{organizationBean.lstOrganization}" var="lstO"  itemLabel="#{lstO.name}" itemValue="#{lstO}" />
-
                                                                 <p:column>
                                                                     <h:outputText value="#{o.name}" />
                                                                 </p:column>
-                                                               
                                                             </p:selectOneMenu>                                                                                                                
                                                         </h:panelGrid>
                                                     </c:when>
@@ -65,7 +77,7 @@
                                                         Organization: #{organizationBean.nameOrganization}
                                                     </c:otherwise>
                                                 </c:choose>
-                                            </h:form>                                                                                                
+                                            </h:form>                                                                                             
 
                                         </span> 
                                     </td>
@@ -98,33 +110,36 @@
                                                            styleClass="ui-icon-extlink"                                                          
                                                            />
                                         </h:form>
-                                       </td></tr>
+                                    </td></tr>
                             </table>
                         </a>    
                     </div>
                     <div >
-                     
-                         
-                        
-                       
+
+
+
+
                     </div>     
                     <!-- header bar end-->
 
                     <!-- content body start-->  
-                    
-                    <div>
-                         <!--h:panelGrid id="pnl" binding="{resultsChartViewBean.panel}"/-->  
-                         <h:form>
-                             <p:breadCrumb id="pnlbc" model="#{resultsChartViewBean.model}"/>     
-                         </h:form>
-                        
-                    </div>
-                    <p:panel>
-                        <p:chart id="idchart" type="bar" model="#{resultsChartViewBean.horizontalBarModel}"  style="height:550px;">
+
+                    <h:form id="frmChart">                        
+                        <div>                                                  
+                            <p:breadCrumb id="pnlbc" model="#{resultsChartViewBean.model}"/>                                                      
+                        </div>                        
+                    </h:form>
+
+                    <p:panel>                                            
+                        <p:chart id="idchart"  widgetVar="browserChart" type="bar" model="#{resultsChartViewBean.horizontalBarModel}"  style="height:550px;" >
                             <p:ajax event="itemSelect" listener="#{resultsChartViewBean.listener}" update="idchart" process="@this"></p:ajax>
-                        </p:chart>
+                        </p:chart>    
+                         
+                        <!--<p:socket onMessage="handleMessage" channel="/browser" />-->
+                        <p:inputText value="#{resultsChartViewBean.OOrganizationName}"/>
                     </p:panel>
-                    
+
+
                     <!-- content body end-->
 
                     <!-- footer start-->
@@ -146,8 +161,8 @@ function onClickMenuItem() {
         </script-->
 
         <!--/h:form-->   
-        
-                   
+
+
     </h:body>
 
 </html>

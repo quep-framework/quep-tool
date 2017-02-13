@@ -31,14 +31,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import javax.enterprise.context.SessionScoped;
-import javax.faces.component.UIForm;
-import javax.faces.event.AbortProcessingException;
-import javax.faces.event.ActionEvent;
-import javax.faces.event.ActionListener;
-import org.primefaces.component.breadcrumb.BreadCrumb;
-import org.primefaces.component.menuitem.UIMenuItem;
 import org.primefaces.component.panelgrid.PanelGrid;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
@@ -46,9 +39,7 @@ import org.primefaces.model.chart.HorizontalBarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
-import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
-import org.primefaces.model.menu.MenuItem;
 
 //import org.primefaces.component.menuitem.MenuItem;
 
@@ -58,10 +49,16 @@ import org.primefaces.model.menu.MenuItem;
  */
 @Named
 @SessionScoped
+//@RequestScoped
 public class ResultsChartViewBean implements Serializable {
 
     @Inject
     private AccessBean accessBean;
+    
+    @Inject
+    private OrganizationBean organizationBean;
+    
+    
     private RoleStakeholder oRoleStakeholder = null;
     private Organization oOrganization=null;
 
@@ -77,22 +74,21 @@ public class ResultsChartViewBean implements Serializable {
     private PanelGrid panel = new PanelGrid();
 
     public ResultsChartViewBean() {
-        oRoleStakeholder = (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
-        oOrganization = (Organization) AccessBean.getSessionObj("organization");
+        oRoleStakeholder = (RoleStakeholder) accessBean.getSessionObj("roleStakeholder");
+        //oOrganization = (Organization) accessBean.getSessionObj("organization");
+        oOrganization = organizationBean.getOrganization();
         createHorizontalBarMaturityLevel();
     }
     
-
-//    @PostConstruct
-//      public void init() {
-//        oRoleStakeholder = (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
-//        //model = null;
-//        //createBarModels();
-//        createHorizontalBarMaturityLevel();
-//    }
     public HorizontalBarChartModel getHorizontalBarModel() {
         return horizontalBarModel;
     }
+
+    public void setModel(MenuModel model) {
+        this.model = model;
+    }
+    
+    
 
     public void createHorizontalBarMaturityLevel() {
         //setMenuModel(1);
@@ -130,35 +126,32 @@ public class ResultsChartViewBean implements Serializable {
             }
 
         }
-
-        getHorizontalBarModel().addSeries(chartComplete);        
-        //getHorizontalBarModel().addSeries(chartTolerable);
-        getHorizontalBarModel().addSeries(chartPerComplete);
-        getHorizontalBarModel().setShowDatatip(true);
-        getHorizontalBarModel().setShowPointLabels(true);
         
-        //getHorizontalBarModel().setDatatipFormat(getHorizontalBarModel().getDatatipFormat());
-        //getHorizontalBarModel().setMouseoverHighlight(true);
+        horizontalBarModel.clear();
 
-        getHorizontalBarModel().setTitle(oOrganization.getName());
-        getHorizontalBarModel().setAnimate(true);
-        getHorizontalBarModel().setLegendPosition("e");
-        getHorizontalBarModel().setStacked(true);
-        getHorizontalBarModel().setZoom(true);
-        //getHorizontalBarModel().setBarWidth(10);
+        horizontalBarModel.addSeries(chartComplete);        
+        horizontalBarModel.addSeries(chartPerComplete);
+        horizontalBarModel.setShowDatatip(true);
+        horizontalBarModel.setShowPointLabels(true);
 
-        Axis xAxis = getHorizontalBarModel().getAxis(AxisType.X);
-        xAxis.setLabel("Values");
-        xAxis.setMin(0);
-        xAxis.setMax(100);
-        xAxis.setTickAngle(25); 
-        xAxis.setTickFormat("%.4s%%");    
-
-        Axis yAxis = getHorizontalBarModel().getAxis(AxisType.Y);
-        yAxis.setLabel("Maturity Levels");
-       
-        //yAxis.setTickFormat("%s"+"NT");
+        horizontalBarModel.setTitle(oOrganization.getName());
+        horizontalBarModel.setAnimate(true);
+        horizontalBarModel.setLegendPosition("e");
+        horizontalBarModel.setStacked(true);
+        horizontalBarModel.setZoom(true);
         
+        //getHorizontalBarModel().setZoom(true);
+      
+
+        //Axis xAxis = horizontalBarModel.getAxis(AxisType.X);
+        horizontalBarModel.getAxis(AxisType.X).setLabel("Values");
+        horizontalBarModel.getAxis(AxisType.X).setMin(0);
+        horizontalBarModel.getAxis(AxisType.X).setMax(100);
+        horizontalBarModel.getAxis(AxisType.X).setTickAngle(25); 
+        horizontalBarModel.getAxis(AxisType.X).setTickFormat("%.4s%%");    
+
+        //Axis yAxis = horizontalBarModel.getAxis(AxisType.Y);
+        horizontalBarModel.getAxis(AxisType.Y).setLabel("Maturity Levels");               
         
     }
 
@@ -310,7 +303,7 @@ public class ResultsChartViewBean implements Serializable {
         //1.Evaluation Responses
         //SUM REQ Weight
         List<QuepQuestionResponseOption> lstQQuestionResponseOption = new ArrayList<QuepQuestionResponseOption>();
-        lstQQuestionResponseOption = rdi.getQuepQuestionResponseOption(oOrganization.getId());
+       lstQQuestionResponseOption = rdi.getQuepQuestionResponseOption(oOrganization.getId());
 
         //2.Calculate Responses
         List<Response> lstResult = new ArrayList<Response>();
@@ -611,14 +604,6 @@ public class ResultsChartViewBean implements Serializable {
 
     }
 
-    public AccessBean getAccessBean() {
-        return accessBean;
-    }
-
-    public void setAccessBean(AccessBean accessBean) {
-        this.accessBean = accessBean;
-    }
-
     public RoleStakeholder getoRoleStakeholder() {
         return oRoleStakeholder;
     }
@@ -677,6 +662,10 @@ public class ResultsChartViewBean implements Serializable {
 
     public Organization getoOrganization() {
         return oOrganization;
+    }
+    
+    public String getOOrganizationName() {
+        return oOrganization.getName();
     }
 
     public void setoOrganization(Organization oOrganization) {

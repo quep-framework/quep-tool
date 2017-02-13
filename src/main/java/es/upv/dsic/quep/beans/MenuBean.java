@@ -56,7 +56,7 @@ public class MenuBean implements Serializable {
      */
     public void getListMenuRol() {
         MenuDao linkDao = new MenuDaoImplement();        
-        RoleStakeholder rs= (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
+        RoleStakeholder rs= (RoleStakeholder) accessBean.getSessionObj("roleStakeholder");
         Role r = rs.getRole();
         int idRol = r.getId();
         this.lstMenu = linkDao.getMenuRol(idRol);
@@ -110,13 +110,13 @@ public class MenuBean implements Serializable {
         this.model = model;
     }
 
-    public AccessBean getAccessBean() {
+    /*public AccessBean getAccessBean() {
         return accessBean;
     }
 
     public void setAccessBean(AccessBean accessBean) {
         this.accessBean = accessBean;
     }
-
+*/
     
 }

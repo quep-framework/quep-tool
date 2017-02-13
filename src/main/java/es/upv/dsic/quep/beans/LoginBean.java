@@ -83,12 +83,12 @@ public class LoginBean implements Serializable {
         RoleStakeholder roleStk= roleStkImpl.getRoleStakeholder(pUsername, pPassword);
         stakeholder = roleStk.getStakeholder();        
                
-        AccessBean.setSessionObj("stakeholder", stakeholder);
+        accessBean.setSessionObj("stakeholder", stakeholder);
         if (stakeholder != null) {            
             role = new Role();
             role = roleStkImpl.getRole(stakeholder);            
-            AccessBean.setSessionObj("role", role);               
-            AccessBean.setSessionObj("roleStakeholder", roleStk);             
+            accessBean.setSessionObj("role", role);               
+            accessBean.setSessionObj("roleStakeholder", roleStk);             
             return true;
         } else {
             return false;
@@ -102,12 +102,12 @@ public class LoginBean implements Serializable {
         RoleStakeholder roleStk= roleStkImpl.getRoleByOrganization(iRole, organization);
         stakeholder = roleStk.getStakeholder();        
                
-        AccessBean.setSessionObj("stakeholder", stakeholder);
+        accessBean.setSessionObj("stakeholder", stakeholder);
         if (stakeholder != null) {            
             role = new Role();
             role = roleStkImpl.getRole(stakeholder);            
-            AccessBean.setSessionObj("role", role);               
-            AccessBean.setSessionObj("roleStakeholder", roleStk);             
+            accessBean.setSessionObj("role", role);               
+            accessBean.setSessionObj("roleStakeholder", roleStk);             
             return true;
         } else {
             return false;
@@ -175,13 +175,13 @@ public class LoginBean implements Serializable {
         this.role = role;
     }
 
-    public AccessBean getAccessBean() {
+   /* public AccessBean getAccessBean() {
         return accessBean;
     }
 
     public void setAccessBean(AccessBean accessBean) {
         this.accessBean = accessBean;
-    }
+    }*/
 
 
     /*

@@ -106,8 +106,8 @@ public  class QuestionnaireDynamicBean implements Serializable {
 
     public QuestionnaireDynamicBean() {
         try {
-            oRoleStakeholder = (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
-            oOrganization = (Organization) AccessBean.getSessionObj("organization");
+            oRoleStakeholder = (RoleStakeholder) accessBean.getSessionObj("roleStakeholder");
+            oOrganization = (Organization) accessBean.getSessionObj("organization");
             try {
                 buildQuestionnaire();
             } catch (Exception e) {
@@ -1072,13 +1072,13 @@ public  class QuestionnaireDynamicBean implements Serializable {
         this.lstQuestionnaireQQ = lstQuestionnaireQQ;
     }
 
-    public AccessBean getAccessBean() {
+   /* public accessBean getAccessBean() {
         return accessBean;
     }
 
     public void setAccessBean(AccessBean accessBean) {
         this.accessBean = accessBean;
-    }
+    }*/
 
     public RoleStakeholder getoRoleStakeholder() {
         return oRoleStakeholder;

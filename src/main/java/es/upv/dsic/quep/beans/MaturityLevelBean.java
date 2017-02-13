@@ -88,7 +88,7 @@ public class MaturityLevelBean implements Serializable {
     }
     
     public void setIMaturityLevel(){
-        RoleStakeholder rs= (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
+        RoleStakeholder rs= (RoleStakeholder) accessBean.getSessionObj("roleStakeholder");
         Stakeholder stk = new Stakeholder();
         //stk = (Stakeholder) AccessBean.getSessionObj("stakeholder");
         stk = rs.getStakeholder();
@@ -99,7 +99,7 @@ public class MaturityLevelBean implements Serializable {
     }
     
     public void setUMaturityLevel(){
-        RoleStakeholder rs= (RoleStakeholder) AccessBean.getSessionObj("roleStakeholder");
+        RoleStakeholder rs= (RoleStakeholder) accessBean.getSessionObj("roleStakeholder");
         Stakeholder stk = new Stakeholder();
         //stk = (Stakeholder) AccessBean.getSessionObj("stakeholder");
         stk = rs.getStakeholder();
