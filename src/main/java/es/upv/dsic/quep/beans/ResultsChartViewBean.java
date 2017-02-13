@@ -27,10 +27,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
-
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.inject.spi.BeanManager;
 import org.primefaces.component.panelgrid.PanelGrid;
 import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.model.chart.Axis;
@@ -42,7 +43,6 @@ import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.MenuModel;
 
 //import org.primefaces.component.menuitem.MenuItem;
-
 /**
  *
  * @author agna8685
@@ -53,14 +53,16 @@ import org.primefaces.model.menu.MenuModel;
 public class ResultsChartViewBean implements Serializable {
 
     @Inject
-    private AccessBean accessBean;
-    
+    private LoginBean loginBean;
+
     @Inject
     private OrganizationBean organizationBean;
-    
-    
+
+    @Inject
+    BeanManager manager;
+
     private RoleStakeholder oRoleStakeholder = null;
-    private Organization oOrganization=null;
+    private Organization oOrganization = null;
 
     private HorizontalBarChartModel horizontalBarModel;
     private Map<MaturityLevel, Result> mapMaturityLevelResults;
@@ -68,18 +70,20 @@ public class ResultsChartViewBean implements Serializable {
 
     private Map<Practice, ResponseEstimate> mapSumPractices;
     private Map<Principle, ResponseEstimate> mapSumPrinciple;
-    private final BigDecimal umbral=BigDecimal.valueOf(50.00);
-
+    private final BigDecimal umbral = BigDecimal.valueOf(50.00);
 
     private PanelGrid panel = new PanelGrid();
 
     public ResultsChartViewBean() {
-        oRoleStakeholder = (RoleStakeholder) accessBean.getSessionObj("roleStakeholder");
-        //oOrganization = (Organization) accessBean.getSessionObj("organization");
+
+    }
+
+    @PostConstruct
+    public void init() {
         oOrganization = organizationBean.getOrganization();
         createHorizontalBarMaturityLevel();
     }
-    
+
     public HorizontalBarChartModel getHorizontalBarModel() {
         return horizontalBarModel;
     }
@@ -87,8 +91,6 @@ public class ResultsChartViewBean implements Serializable {
     public void setModel(MenuModel model) {
         this.model = model;
     }
-    
-    
 
     public void createHorizontalBarMaturityLevel() {
         //setMenuModel(1);
@@ -97,7 +99,7 @@ public class ResultsChartViewBean implements Serializable {
 
         ChartSeries chartTolerable = new ChartSeries();
         chartTolerable.setLabel("% tolerable");
-        
+
         ChartSeries chartComplete = new ChartSeries();
         chartComplete.setLabel("% complete");
 
@@ -121,15 +123,15 @@ public class ResultsChartViewBean implements Serializable {
                 if (oMaturityLevel.getId() == oML.getId()) {
                     chartComplete.set(oML.getLevelAbbreviation() + ". " + oML.getName(), result.getComplete());
                     chartPerComplete.set(oML.getLevelAbbreviation() + ". " + oML.getName(), result.getPerComplete());
-                    chartTolerable.set(oML.getLevelAbbreviation() + ". " + oML.getName(),  this.umbral);
+                    chartTolerable.set(oML.getLevelAbbreviation() + ". " + oML.getName(), this.umbral);
                 }
             }
 
         }
-        
+
         horizontalBarModel.clear();
 
-        horizontalBarModel.addSeries(chartComplete);        
+        horizontalBarModel.addSeries(chartComplete);
         horizontalBarModel.addSeries(chartPerComplete);
         horizontalBarModel.setShowDatatip(true);
         horizontalBarModel.setShowPointLabels(true);
@@ -139,20 +141,18 @@ public class ResultsChartViewBean implements Serializable {
         horizontalBarModel.setLegendPosition("e");
         horizontalBarModel.setStacked(true);
         horizontalBarModel.setZoom(true);
-        
-        //getHorizontalBarModel().setZoom(true);
-      
 
+        //getHorizontalBarModel().setZoom(true);
         //Axis xAxis = horizontalBarModel.getAxis(AxisType.X);
         horizontalBarModel.getAxis(AxisType.X).setLabel("Values");
         horizontalBarModel.getAxis(AxisType.X).setMin(0);
         horizontalBarModel.getAxis(AxisType.X).setMax(100);
-        horizontalBarModel.getAxis(AxisType.X).setTickAngle(25); 
-        horizontalBarModel.getAxis(AxisType.X).setTickFormat("%.4s%%");    
+        horizontalBarModel.getAxis(AxisType.X).setTickAngle(25);
+        horizontalBarModel.getAxis(AxisType.X).setTickFormat("%.4s%%");
 
         //Axis yAxis = horizontalBarModel.getAxis(AxisType.Y);
-        horizontalBarModel.getAxis(AxisType.Y).setLabel("Maturity Levels");               
-        
+        horizontalBarModel.getAxis(AxisType.Y).setLabel("Maturity Levels");
+
     }
 
     public void createHorizontalBarPrinciplesByLevel(String sMaturityLevelId) {
@@ -192,7 +192,7 @@ public class ResultsChartViewBean implements Serializable {
         getHorizontalBarModel().setShowPointLabels(true);
 
         //getHorizontalBarModel().setTitle(oRoleStakeholder.getOrganization().getName());
-        getHorizontalBarModel().setTitle("Level "+sMaturityLevelId);
+        getHorizontalBarModel().setTitle("Level " + sMaturityLevelId);
         getHorizontalBarModel().setAnimate(true);
         getHorizontalBarModel().setLegendPosition("e");
         getHorizontalBarModel().setStacked(true);
@@ -202,7 +202,7 @@ public class ResultsChartViewBean implements Serializable {
         xAxis.setLabel("Values");
         xAxis.setMin(0);
         xAxis.setMax(100);
-        xAxis.setTickFormat("%.4s%%");   
+        xAxis.setTickFormat("%.4s%%");
 
         Axis yAxis = getHorizontalBarModel().getAxis(AxisType.Y);
         yAxis.setLabel("Principles");
@@ -245,7 +245,7 @@ public class ResultsChartViewBean implements Serializable {
 
     public Map<MaturityLevel, Result> getResultsMaturityLevels() {
         try {
-            mapSumPractices = new HashMap<Practice, ResponseEstimate>();            
+            mapSumPractices = new HashMap<Practice, ResponseEstimate>();
             mapSumPractices = calculatePractices(calculateQuestions());
             //if (mapSumPractices==0) mapSumPractices=1;
 
@@ -303,7 +303,7 @@ public class ResultsChartViewBean implements Serializable {
         //1.Evaluation Responses
         //SUM REQ Weight
         List<QuepQuestionResponseOption> lstQQuestionResponseOption = new ArrayList<QuepQuestionResponseOption>();
-       lstQQuestionResponseOption = rdi.getQuepQuestionResponseOption(oOrganization.getId());
+        lstQQuestionResponseOption = rdi.getQuepQuestionResponseOption(oOrganization.getId());
 
         //2.Calculate Responses
         List<Response> lstResult = new ArrayList<Response>();
@@ -312,15 +312,14 @@ public class ResultsChartViewBean implements Serializable {
         Map<QuepQuestion, ResponseEstimate> mapSumResponseOp = new HashMap<QuepQuestion, ResponseEstimate>();
         for (QuepQuestionResponseOption oQQRO : lstQQuestionResponseOption) {
             ResponseEstimate oREstimate = new ResponseEstimate();
-            BigDecimal sumReqQQuestion = BigDecimal.ZERO ;        //cambiar mapeo de int a double      
-            BigDecimal sumQQuestion =  BigDecimal.ZERO ; 
-            BigDecimal avg =  BigDecimal.ZERO ;  
-            
+            BigDecimal sumReqQQuestion = BigDecimal.ZERO;        //cambiar mapeo de int a double      
+            BigDecimal sumQQuestion = BigDecimal.ZERO;
+            BigDecimal avg = BigDecimal.ZERO;
 
             //Get weight SUMs (included requiered SUM)
             for (QuepQuestionResponseOption oQQRO_aux : lstQQuestionResponseOption) {
                 if (oQQRO_aux.getId().getIdQuepQuestion() == oQQRO.getId().getIdQuepQuestion()) {
-                    sumQQuestion = sumQQuestion.add(oQQRO_aux.getResponseOption().getWeight()) ;
+                    sumQQuestion = sumQQuestion.add(oQQRO_aux.getResponseOption().getWeight());
                     if (oQQRO_aux.getResponseOption().getIsRequiered() == 1) {
                         sumReqQQuestion = sumReqQQuestion.add(oQQRO_aux.getResponseOption().getWeight());
                     }
@@ -335,11 +334,10 @@ public class ResultsChartViewBean implements Serializable {
                 }
             }
             //average Responses SUMs / Requiered SUM of Questions Configurated in QuEP
-            if (sumReqQQuestion==BigDecimal.valueOf(0.0) || sumReqQQuestion.equals(BigDecimal.valueOf(0))) {
+            if (sumReqQQuestion == BigDecimal.valueOf(0.0) || sumReqQQuestion.equals(BigDecimal.valueOf(0))) {
                 sumReqQQuestion = BigDecimal.valueOf(1.0);
             }
-            avg = sumRsp.divide(sumReqQQuestion,2, RoundingMode.HALF_EVEN);
-            
+            avg = sumRsp.divide(sumReqQQuestion, 2, RoundingMode.HALF_EVEN);
 
             //setting map Reponses SUMs of Quep Questions
             oREstimate.setSumRequiered(sumReqQQuestion);
@@ -373,7 +371,7 @@ public class ResultsChartViewBean implements Serializable {
             if (size == 0) {
                 size = 1;
             }
-            oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size),2, RoundingMode.HALF_EVEN));
+            oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_EVEN));
             mapPracticeEstimate.put(oPr, oREstimate);
         }
         return mapPracticeEstimate;
@@ -401,7 +399,7 @@ public class ResultsChartViewBean implements Serializable {
             if (size == 0) {
                 size = 1;
             }
-            oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size),2, RoundingMode.HALF_EVEN));
+            oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_EVEN));
             mapPrincipleEstimate.put(p, oREstimate);
         }
         return mapPrincipleEstimate;
@@ -439,7 +437,7 @@ public class ResultsChartViewBean implements Serializable {
             if (size == 0) {
                 size = 1;
             }
-            oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size),2, RoundingMode.HALF_EVEN));
+            oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_EVEN));
             mapPrincipleEstimate.put(pri, oREstimate);
         }
         return mapPrincipleEstimate;
@@ -456,11 +454,11 @@ public class ResultsChartViewBean implements Serializable {
 
         List<MaturityLevel> lstMaturityLevel = new ArrayList<MaturityLevel>();
         lstMaturityLevel = mldao.getMaturityLevels();
-        
+
         ResponseEstimate oREstimate = new ResponseEstimate();
-        
+
         BigDecimal sumLastLevel = BigDecimal.ZERO;
-        int sizeLevels=0;
+        int sizeLevels = 0;
         MaturityLevel oLastMaturityLevel = new MaturityLevel();
         for (MaturityLevel ml : lstMaturityLevel) {
             if (ml.getId() != 10) { //add un campo mas que indique que es el último nivel en la BD
@@ -483,20 +481,19 @@ public class ResultsChartViewBean implements Serializable {
                 if (size == 0) {
                     size = 1;
                 }
-                oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size),2, RoundingMode.HALF_EVEN));
+                oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_EVEN));
                 mapMaturityLevelEstimate.put(ml, oREstimate);
-                
-                sumLastLevel=sumLastLevel.add(avg);
+
+                sumLastLevel = sumLastLevel.add(avg);
                 sizeLevels++;
-            }
-            else{
-                oLastMaturityLevel=ml;
+            } else {
+                oLastMaturityLevel = ml;
             }
         }
-        
+
         //setting last level
         oREstimate = new ResponseEstimate();
-        oREstimate.setAvg(sumLastLevel.divide(BigDecimal.valueOf(sizeLevels),2, RoundingMode.HALF_EVEN));        
+        oREstimate.setAvg(sumLastLevel.divide(BigDecimal.valueOf(sizeLevels), 2, RoundingMode.HALF_EVEN));
         mapMaturityLevelEstimate.put(oLastMaturityLevel, oREstimate);
 
         return mapMaturityLevelEstimate;
@@ -513,36 +510,35 @@ public class ResultsChartViewBean implements Serializable {
     }
 
     public void listener(ItemSelectEvent e) {
-            createHorizontalBarPrinciplesByLevel(String.valueOf(e.getSeriesIndex()));
+        createHorizontalBarPrinciplesByLevel(String.valueOf(e.getSeriesIndex()));
     }
- 
+
     private MenuModel model;
+
     public MenuModel getModel() {
         return model;
     }
-    
+
     public void setMenuBreadCrumb(int band) {
-        
+
         model = new DefaultMenuModel();
         DefaultMenuItem item = new DefaultMenuItem("");
         item.setCommand("#{resultsChartViewBean.createHorizontalBarMaturityLevel}");
         item.setUpdate("idchart");
         model.addElement(item);
-        
+
         item = new DefaultMenuItem("Maturity Levels");
         item.setCommand("#{resultsChartViewBean.createHorizontalBarMaturityLevel}");
         item.setUpdate("idchart");
         item.setId("mMl");
         model.addElement(item);
-       
 
-             item = new DefaultMenuItem("Principles");
-             item.setId("mPri");
-            //itemP.setCommand("#");
-            //item.setUpdate("idchart");
-            model.addElement(item);
+        item = new DefaultMenuItem("Principles");
+        item.setId("mPri");
+        //itemP.setCommand("#");
+        //item.setUpdate("idchart");
+        model.addElement(item);
     }
-    
 
     private class Result {
 
@@ -635,7 +631,6 @@ public class ResultsChartViewBean implements Serializable {
         this.lstMaturityLevel = lstMaturityLevel;
     }
 
-   
     public PanelGrid getPanel() {
         return panel;
     }
@@ -663,7 +658,7 @@ public class ResultsChartViewBean implements Serializable {
     public Organization getoOrganization() {
         return oOrganization;
     }
-    
+
     public String getOOrganizationName() {
         return oOrganization.getName();
     }
@@ -672,5 +667,4 @@ public class ResultsChartViewBean implements Serializable {
         this.oOrganization = oOrganization;
     }
 
-    
 }

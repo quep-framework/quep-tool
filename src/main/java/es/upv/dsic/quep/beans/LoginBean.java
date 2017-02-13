@@ -5,8 +5,6 @@
  */
 package es.upv.dsic.quep.beans;
 
-import es.upv.dsic.quep.dao.StakeholderDaoImplement;
-import es.upv.dsic.quep.model.Organization;
 import es.upv.dsic.quep.model.Role;
 import es.upv.dsic.quep.model.Stakeholder;
 import java.io.Serializable;
@@ -18,8 +16,6 @@ import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import es.upv.dsic.quep.dao.RoleStakeholderDaoImplement;
 import es.upv.dsic.quep.model.RoleStakeholder;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -36,8 +32,6 @@ public class LoginBean implements Serializable {
     @Inject
     private NavigationBean navigationBean;
 
-    @Inject
-    private AccessBean accessBean;
     
    /* @Inject
     private RoleStakeholder roleStakeholder;*/
@@ -83,12 +77,9 @@ public class LoginBean implements Serializable {
         RoleStakeholder roleStk= roleStkImpl.getRoleStakeholder(pUsername, pPassword);
         stakeholder = roleStk.getStakeholder();        
                
-        accessBean.setSessionObj("stakeholder", stakeholder);
         if (stakeholder != null) {            
             role = new Role();
             role = roleStkImpl.getRole(stakeholder);            
-            accessBean.setSessionObj("role", role);               
-            accessBean.setSessionObj("roleStakeholder", roleStk);             
             return true;
         } else {
             return false;
@@ -102,12 +93,9 @@ public class LoginBean implements Serializable {
         RoleStakeholder roleStk= roleStkImpl.getRoleByOrganization(iRole, organization);
         stakeholder = roleStk.getStakeholder();        
                
-        accessBean.setSessionObj("stakeholder", stakeholder);
         if (stakeholder != null) {            
             role = new Role();
             role = roleStkImpl.getRole(stakeholder);            
-            accessBean.setSessionObj("role", role);               
-            accessBean.setSessionObj("roleStakeholder", roleStk);             
             return true;
         } else {
             return false;

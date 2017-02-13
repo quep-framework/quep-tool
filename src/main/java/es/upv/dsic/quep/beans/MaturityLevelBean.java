@@ -8,14 +8,11 @@ package es.upv.dsic.quep.beans;
 import es.upv.dsic.quep.dao.MaturityLevelDao;
 import es.upv.dsic.quep.dao.MaturityLevelDaoImplement;
 import es.upv.dsic.quep.model.MaturityLevel;
-import es.upv.dsic.quep.model.RoleStakeholder;
-import es.upv.dsic.quep.model.Stakeholder;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ManagedBean;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
@@ -25,15 +22,15 @@ import org.primefaces.context.RequestContext;
  * @author agna8685
  */
 @Named
-        //(value = "maturityLevelBean")
+//(value = "maturityLevelBean")
 //@ViewScoped
 //@ManagedBean
 @SessionScoped
 public class MaturityLevelBean implements Serializable {
 
-     @Inject
-    private AccessBean accessBean;
-     
+    @Inject
+    private LoginBean loginBean;
+
     private MaturityLevel maturityLevel = new MaturityLevel();
     private List<MaturityLevel> maturityLevels;
 
@@ -41,6 +38,11 @@ public class MaturityLevelBean implements Serializable {
      * Creates a new instance of MaturityLevelBean
      */
     public MaturityLevelBean() {
+
+    }
+
+    @PostConstruct
+    private void init() {
         maturityLevel = new MaturityLevel();
         setMaturityLevelsList();
     }
@@ -62,14 +64,14 @@ public class MaturityLevelBean implements Serializable {
     /**
      * @return the maturityLevels
      */
-    public List<MaturityLevel> getMaturityLevels() {      
+    public List<MaturityLevel> getMaturityLevels() {
         return maturityLevels;
     }
 
     /**
      * @param maturityLevels the maturityLevels to set
      */
-    public void setMaturityLevels(List<MaturityLevel> maturityLevels) {     
+    public void setMaturityLevels(List<MaturityLevel> maturityLevels) {
         this.maturityLevels = maturityLevels;
     }
 
@@ -77,33 +79,25 @@ public class MaturityLevelBean implements Serializable {
         MaturityLevelDao linkDao = new MaturityLevelDaoImplement();
         setIMaturityLevel();
         linkDao.insertMaturityLevel(maturityLevel);
-        maturityLevel = new MaturityLevel();  
+        maturityLevel = new MaturityLevel();
         //request();
         setMaturityLevelsList();
     }
-    
-    public void setMaturityLevelsList(){
+
+    public void setMaturityLevelsList() {
         MaturityLevelDao linkDao = new MaturityLevelDaoImplement();
-        maturityLevels=linkDao.getMaturityLevels();
+        maturityLevels = linkDao.getMaturityLevels();
     }
-    
-    public void setIMaturityLevel(){
-        RoleStakeholder rs= (RoleStakeholder) accessBean.getSessionObj("roleStakeholder");
-        Stakeholder stk = new Stakeholder();
-        //stk = (Stakeholder) AccessBean.getSessionObj("stakeholder");
-        stk = rs.getStakeholder();
-        maturityLevel.setCreationUser(stk.getEmail());
+
+    public void setIMaturityLevel() {
+        maturityLevel.setCreationUser(loginBean.getStakeholder().getEmail());
         maturityLevel.setFechaCreado(new Date());
         maturityLevel.setAudit("I");
         maturityLevel.setActive(1);
     }
-    
-    public void setUMaturityLevel(){
-        RoleStakeholder rs= (RoleStakeholder) accessBean.getSessionObj("roleStakeholder");
-        Stakeholder stk = new Stakeholder();
-        //stk = (Stakeholder) AccessBean.getSessionObj("stakeholder");
-        stk = rs.getStakeholder();
-        maturityLevel.setActualizado(stk.getEmail());
+
+    public void setUMaturityLevel() {
+        maturityLevel.setActualizado(loginBean.getStakeholder().getEmail());
         maturityLevel.setModificationDate(new Date());
         maturityLevel.setAudit("U");
     }
@@ -113,28 +107,26 @@ public class MaturityLevelBean implements Serializable {
         MaturityLevelDao linkDao = new MaturityLevelDaoImplement();
         linkDao.updateMaturityLevel(maturityLevel);
         maturityLevel = new MaturityLevel();
-     
+
     }
 
     public void delete() {
         MaturityLevelDao linkDao = new MaturityLevelDaoImplement();
         linkDao.deleteMaturityLevel(maturityLevel);
         maturityLevel = new MaturityLevel();
-       setMaturityLevelsList();
+        setMaturityLevelsList();
     }
-    
-    
+
     public void request() {
         RequestContext context = RequestContext.getCurrentInstance();
         //context.addCallbackParam("add", true);    //basic parameter
         //context.addCallbackParam("user", user);     //pojo as json
-        
+
         //update panel
         context.update("form:formInsert");
-         
+
         //scroll to panel
         //context.scrollTo("form:formShowMaturityLevels");
-         
         //add facesmessage
         //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Success", "Success"));
     }

@@ -14,7 +14,6 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 
@@ -38,13 +37,13 @@ public class MenuBean implements Serializable {
     private MenuModel model;
     
     @Inject 
-    private AccessBean accessBean;
+    private LoginBean loginBean;
 
     public MenuBean() {
-        init();
+        //init();
     }
 
-    
+    @PostConstruct
     public void init() {
         this.getListMenuRol();
         model = new DefaultMenuModel();
@@ -56,9 +55,7 @@ public class MenuBean implements Serializable {
      */
     public void getListMenuRol() {
         MenuDao linkDao = new MenuDaoImplement();        
-        RoleStakeholder rs= (RoleStakeholder) accessBean.getSessionObj("roleStakeholder");
-        Role r = rs.getRole();
-        int idRol = r.getId();
+        int idRol = loginBean.getRole().getId();
         this.lstMenu = linkDao.getMenuRol(idRol);
     }
 

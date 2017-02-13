@@ -15,19 +15,6 @@
         <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/site.css" />
         <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/quep-css.css" />
 
-        <script type="text/javascript">
-            function handleMessage(data) {
-                var series = [],
-                        chart = PF('browserChart').plot;
-
-                for (var key in data) {
-                    series.push([key, data[key]]);
-                }
-
-                chart.series[0].data = series;
-                chart.replot();
-            }
-        </script>
     </h:head>
     <h:body>
         <div class="PC">
@@ -65,7 +52,7 @@
                                                             <p:selectOneMenu  value="#{organizationBean.organization}" var="o"  effect="fade" 
                                                                               filter="true" filterMatchMode="contains"
                                                                               valueChangeListener="#{organizationBean.changeListener}" onchange="submit()"                                                                               
-                                                                              converter="organizationConverter">
+                                                                              converter="#{organizationConverter}">
                                                                 <f:selectItems value="#{organizationBean.lstOrganization}" var="lstO"  itemLabel="#{lstO.name}" itemValue="#{lstO}" />
                                                                 <p:column>
                                                                     <h:outputText value="#{o.name}" />
