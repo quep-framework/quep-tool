@@ -58,7 +58,6 @@
                 <div id="CONTENTSIDEindent">
 
                     <!-- header bar start-->
-                    <!--div class="ContentSideSections" id="PFTopLinksCover" style="height:60px;"-->
                     <div class="ContentSideSections" id="PFTopLinksCover" style="height:60px;">
                         <a id="LOGOTEXTSIDE" href="/QuEP-Tool/all/frmMainPage.xhtml" >
                             <table><tr><td>
@@ -87,27 +86,10 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </h:form>                                                                                                
-
-                                            <!--p:selectOneMenu id="advanced" value="{selectOneMenuView.theme}" converter="themeConverter" panelStyle="width:180px"
-                                                             effect="fade" var="t" style="width:160px" filter="true" filterMatchMode="startsWith">
-                                                <f:selectItems value="{selectOneMenuView.themes}" var="theme" itemLabel="{theme.displayName}" itemValue="{theme}" />
-
-                                                <p:column style="width:10%">
-                                                    <h:outputText styleClass="ui-theme ui-theme-{t.name}" />
-                                                </p:column>
-
-                                                <p:column>
-                                                    <h:outputText value="{t.displayName}" />
-                                                </p:column>
-                                            </p:selectOneMenu-->
-
                                         </span> 
                                     </td>
                                 </tr></table>
                         </a>
-
-
-
 
                         <a class="PFTopLinks floatRight boldFont marginRight10 hashed" style="width:auto;"  >
                             <table><tr><td>
@@ -123,7 +105,7 @@
                                         </table>                                
 
                                     </td></tr>
-                                <tr><td> <!--oncomplete="logout(xhr, status, args)"-->
+                                <tr><td> 
                                         <h:form>
                                             <p:commandLink id="close"
                                                            action="#{loginBean.logout()}"
@@ -131,9 +113,7 @@
                                                            style="margin-right:20px;" 
                                                            styleClass="ui-icon-extlink"                                                          
                                                            />
-                                        </h:form>
-                                        <!--p:commandButton  action="{loginBean.logout}" id="cmdLogout" alt="Logout"  value="logout" image="logout-img" /-->
-                                        <!--p:commandButton value="Logout" type="button"  action="{loginBean.logout}" icon="ui-icon-extlink" /-->
+                                        </h:form>                                       
                                     </td></tr>
                             </table>
                         </a>                                                                                        
@@ -142,9 +122,6 @@
 
                     <!-- content body start-->         
                     <div>
-                        <!--h:form id="formInsert">
-                           
-                        </h:form-->
                         <h:form id="formShowMaturityLevels">
                              <p:panelGrid columns="2" id="pnlInsertML">                
                                 <p:outputLabel value="Name"/>
@@ -227,7 +204,7 @@
 
                     <!-- footer start-->
                     <div class="ContentSideSections">
-                        <span class="floatLeft fontSize14 gray"><a href="http://www.quep.dsic.upv.es">QuEP-T</a>, Copyright 2016</span>
+                        <span class="floatLeft fontSize14 gray"><a href="http://quep.webs.upv.es/">QuEP-T</a>, Copyright 2016</span>
                         <span class="floatRight fontSize14 gray">All rights reserved</span>
                         <div style="clear:both"></div>
                     </div>
@@ -238,11 +215,6 @@
         </div>
 
         <!--script type="text/javascript" src="/QuEP-Tool/resource/js/sh.js"></script-->
-
-
-        <!--/h:form-->   
-
-
 
     </h:body>
 

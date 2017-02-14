@@ -32,20 +32,12 @@ public class LoginBean implements Serializable {
     @Inject
     private NavigationBean navigationBean;
 
-    
-   /* @Inject
-    private RoleStakeholder roleStakeholder;*/
-
     private boolean loggedIn = false;
     private boolean admin = false;
 
     private Stakeholder stakeholder = new Stakeholder();
     private Role role = new Role();
-    
-
-  
-    //private boolean bandOrganization = false;
-
+   
     public String login() {
         setLoggedIn(checkUser(credentialBean.getUsername(), credentialBean.getPassword()));
         FacesMessage msg = new FacesMessage("Login error!", "ERROR MSG");
@@ -72,7 +64,6 @@ public class LoginBean implements Serializable {
     }
 
     public boolean checkUser(String pUsername, String pPassword) {
-        ///////*******************                
         RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
         RoleStakeholder roleStk= roleStkImpl.getRoleStakeholder(pUsername, pPassword);
         stakeholder = roleStk.getStakeholder();        
@@ -162,32 +153,5 @@ public class LoginBean implements Serializable {
     public void setRole(Role role) {
         this.role = role;
     }
-
-   /* public AccessBean getAccessBean() {
-        return accessBean;
-    }
-
-    public void setAccessBean(AccessBean accessBean) {
-        this.accessBean = accessBean;
-    }*/
-
-
-    /*
-    public boolean isBandOrganization() {
-        return bandOrganization;
-    }
-
-    public void setBandOrganization(boolean bandOrganization) {
-        this.bandOrganization = bandOrganization;
-    }*/
-    
-   /* public String getUserName() {
-        if (stakeholder != null)
-        return  "usr";//stakeholder.getEmail().substring(0,stakeholder.getEmail().indexOf("@"));
-        else return "";
-    }
-*/
-    
-
     
 }

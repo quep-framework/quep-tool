@@ -35,34 +35,12 @@
 
                     <f:facet name="footer">
                         <p:commandButton value="Login" update="growl"   action ="#{loginBean.login}" 
-                                         oncomplete ="handleLoginRequest(xhr, status, args)" />
-                        
-                        <!--p:commandButton value="Login" 
-                                            action ="{loginBean.login()}"
-                                         onclick="PF('dlg1').show();" title="login"                        
-                                         oncomplete="handleLoginRequest(xhr, status, args)" >
-                            <c:if test="{loginBean.bandOrganization}" var="dlg1"/>                                                            
-                        </p:commandButton-->
+                                         oncomplete ="handleLoginRequest(xhr, status, args)" />                        
                     </f:facet>  
                 </h:panelGrid>
             </p:dialog>
             <!-- end dialog -->
             
-             <!-- start dialog-->       
-             <!--p:growl id="growl1" sticky="true" showDetail="true" life="3000" />
-             <p:dialog header="Organization" widgetVar="dlg1" resizable="false">
-                <h:panelGrid columns="2" cellpadding="5">
-                    <h:outputLabel for="org" value="Organization:" />
-                    <p:inputText id="org" value="hola mudo" required="true" label="organization111" />                    
-                   
-                </h:panelGrid>
-            </p:dialog-->
-            <!-- end dialog -->
-
-            <!--       <ui:fragment rendered="#not empty userBean.stakeholder}">
-                       Welcome #userBean.stakeholder.name} 
-                   </ui:fragment>
-            -->
             <div class="PC">
                 <div id="MENUSIDE">
                     <div id="MENUSIDEindent">
@@ -114,17 +92,12 @@
                                             <img src="resource/images/logo_levels.png" alt="portal" class="floatLeft overHidden" style="height:30px; margin-right:20px;"/>                                    
                                         </a>                                                                        
                                         <span class="floatLeft PFGrayText fontSize18 mediumFont overHidden">More Information<br /><span class="green fontSize24">QuEP Portal</span></span>
-                                        <h:panelGrid columns="1" cellpadding="5">
-                                            <!--p:graphicImage name="resource/images/login.png" /-->
-                                            <!--a href="http://quep.webs.upv.es/">
-                                                <img src="resource/images/home/ws-construction-en.png" alt="portal" />                                    
-                                            </a-->                                             
+                                        <h:panelGrid columns="1" cellpadding="5">      
                                             <p:imageSwitch effect="shuffle" > 
                                                 <p:graphicImage url="resource/init/Figure7.png" width="296px" height="282px" title="QuEP Tool in progress" />  
                                                 <p:graphicImage url="resource/init/Figure1.png" width="296px" height="282px" title="life cicly Emergency Plans Management"  />
                                                 <p:graphicImage url="resource/init/Figure2.png" width="296px" height="282px" title="View 3V" />
                                                 <p:graphicImage url="resource/init/Figure3.png" width="296px" height="282px" title="Maturity levels" />
-                                                <!--p:graphicImage url="resource/init/Figure4.png" width="360px" height="282px" title="Including Resilience Characteristics" /-->                                                
                                                 <p:graphicImage url="resource/init/Figure5.png" width="360px" height="282px" title="Mockup Questionnaires" />
                                                 <p:graphicImage url="resource/init/Figure6.png" width="360px" height="282px" title="Mockup Results" />                                                                                                 
                                             </p:imageSwitch>
@@ -134,18 +107,7 @@
                                             <a href="" class="pink boldItalicFont underline fontSize14">Contact us: </a> quep.framework@gmail.com, for more information.
                                         </div>
                                     </div>
-                                </div>   
-
-                                <!--div class="Content33 floatLeft overHidden" style="min-height:200px">
-                                    <div class="BoxesIndent">
-                                        <img src="resource/images/home/news.png" class="floatLeft overHidden" style="height:60px; margin-right:20px;"/>
-                                        <span class="floatLeft PFGrayText fontSize18 mediumFont overHidden">Blog<br /><span class="green fontSize24">NEWS</span></span>
-                                        <div id="latestNews" class="dispTable overHidden Content100 logoBlueText boldFont fontSize18" style=" padding-top:20px;">
-                                            <span class="gray dispBlock regularFont fontSize14"></span><br />
-                                            <a href="http://blog.primefaces.org" class="pink boldItalicFont underline fontSize14">View All</a>
-                                        </div>
-                                    </div>
-                                </div-->
+                                </div>                                
                             </div>
                         </div>
 
@@ -168,20 +130,7 @@
 
         </h:form>
 
-        <script type="text/javascript">
-               /* function handleLoginRequest(xhr, status, args) {                
-                    if (args.bandOrganization){                                    
-                             PF('dlg1').show();
-                         }
-                         else{
-                     if (args.validationFailed || !args.loggedIn ) {
-                         PF('dlg').jq.effect("shake", {times: 5}, 100);                                                  
-                     } else {
-                             PF('dlg').hide();
-                             $('#loginLink').fadeOut();    
-                 }}
-                 }*/
-                 
+        <script type="text/javascript">              
                  
                 function handleLoginRequest(xhr, status, args) {
                      if (args.validationFailed || !args.loggedIn ) {
@@ -192,15 +141,6 @@
                      }
                  }
                  
-                 /*function handleOrganizationRequest(xhr, status, args) {
-                     if (args.validationFailed || !args.bandOrganization) {
-                         PF('dlg1').jq.effect("shake", {times: 5}, 100);     
-                     } else {
-                            PF('dlg1').hide();
-                            $('#organizationLink').fadeOut();                                                                                                            
-                     }
-                 }*/
-
         </script>
     </h:body>
 </html>

@@ -39,13 +39,6 @@
         <script type="text/javascript" src="/QuEP-Tool/build/primeelements.js"></script-->                                
     </h:head>
     <h:body>
-
-        <!--h:form-->   
-
-
-
-
-
         <div class="PC">
             <!--start menu izq-->
             <div id="MENUSIDE">
@@ -65,7 +58,6 @@
                 <div id="CONTENTSIDEindent">
 
                     <!-- header bar start-->
-                    <!--div class="ContentSideSections" id="PFTopLinksCover" style="height:60px;"-->
                     <div class="ContentSideSections" id="PFTopLinksCover" style="height:60px;">
                         <a id="LOGOTEXTSIDE" href="/QuEP-Tool/all/frmMainPage.xhtml" >
                             <table><tr><td>
@@ -95,19 +87,6 @@
                                                 </c:choose>
                                             </h:form>                                                                                                
 
-                                            <!--p:selectOneMenu id="advanced" value="{selectOneMenuView.theme}" converter="themeConverter" panelStyle="width:180px"
-                                                             effect="fade" var="t" style="width:160px" filter="true" filterMatchMode="startsWith">
-                                                <f:selectItems value="{selectOneMenuView.themes}" var="theme" itemLabel="{theme.displayName}" itemValue="{theme}" />
-
-                                                <p:column style="width:10%">
-                                                    <h:outputText styleClass="ui-theme ui-theme-{t.name}" />
-                                                </p:column>
-
-                                                <p:column>
-                                                    <h:outputText value="{t.displayName}" />
-                                                </p:column>
-                                            </p:selectOneMenu-->
-
                                         </span> 
                                     </td>
                                 </tr></table>
@@ -130,7 +109,7 @@
                                         </table>                                
 
                                     </td></tr>
-                                <tr><td> <!--oncomplete="logout(xhr, status, args)"-->
+                                <tr><td> 
                                         <h:form>
                                             <p:commandLink id="close"
                                                            action="#{loginBean.logout()}"
@@ -139,9 +118,7 @@
                                                            styleClass="ui-icon-extlink"                                                          
                                                            />
                                         </h:form>
-                                        <!--p:commandButton  action="{loginBean.logout}" id="cmdLogout" alt="Logout"  value="logout" image="logout-img" /-->
-                                        <!--p:commandButton value="Logout" type="button"  action="{loginBean.logout}" icon="ui-icon-extlink" /-->
-                                    </td></tr>
+                               </td></tr>
                             </table>
                         </a>                                                                                        
                     </div>
@@ -167,7 +144,6 @@
                                     </a>                                                                        
                                     <span class="floatLeft PFGrayText fontSize18 mediumFont overHidden">More Information<br /><span class="green fontSize24">QuEP Portal</span></span>
                                     <h:panelGrid columns="1" cellpadding="5">
-                                        <!--p:graphicImage name="/QuEP-Tool/resource/images/login.png" /-->
                                         <a href="http://quep.webs.upv.es/">
                                             <img src="/QuEP-Tool/resource/images/home/ws-construction-en.png" alt="portal" />                                    
                                         </a>                                
@@ -185,7 +161,7 @@
 
                     <!-- footer start-->
                     <div class="ContentSideSections">
-                        <span class="floatLeft fontSize14 gray"><a href="http://www.quep.dsic.upv.es">QuEP-T</a>, Copyright 2016</span>
+                        <span class="floatLeft fontSize14 gray"><a href="http://quep.webs.upv.es/">QuEP-T</a>, Copyright 2016</span>
                         <span class="floatRight fontSize14 gray">All rights reserved</span>
                         <div style="clear:both"></div>
                     </div>
@@ -194,11 +170,7 @@
                 </div>
             </div>
         </div>
-
-        <!--script type="text/javascript" src="/QuEP-Tool/resource/js/sh.js"></script-->
-
-
-        <!--/h:form-->                   
+       
     </h:body>
 
 </html>

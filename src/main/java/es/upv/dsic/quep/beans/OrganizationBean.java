@@ -48,8 +48,6 @@ public class OrganizationBean implements Serializable {
     @Inject
     private ResultsChartViewBean resultsChartViewBean;
 
-    //@Inject
-    //private RoleStakeholder roleStakeholder;
     public OrganizationBean() {
       
     }
@@ -57,22 +55,16 @@ public class OrganizationBean implements Serializable {
     @PostConstruct
     private void init() {
         RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
-
-        //lstOrganization = new ArrayList<>(0);
         lstOrganization = roleStkImpl.getListOrganization(loginBean.getStakeholder().getId(), loginBean.getRole().getId());
-        //lstOrganization = roleStkImpl.getListOrganization(roleStakeholder.getStakeholder().getId(), roleStakeholder.getRole().getId());
-
         bandOrganization = lstOrganization.size() > 1;
 
         if (!bandOrganization) {
             nameOrganization = lstOrganization.get(0).getName();
 
         }
-        //if (accessBean.getSessionObj("organization") == null) {
         if (this.organization == null) {
             this.organization = lstOrganization.get(0);
         }
-        //accessBean.setSessionObj("organizationBean", this);
     }
 
     //***
@@ -86,28 +78,12 @@ public class OrganizationBean implements Serializable {
             String str = navigationBean.getCurrentPage();
             if (str.contains("/QuEP-Tool/admin/frmMaturityLevelsResults.xhtml")) {
                 resultsChartViewBean.init();
-                //resultsChartViewBean.
-                /*AjaxBehavior ajaxBehavior = (AjaxBehavior) FacesContext.getCurrentInstance().getApplication().createBehavior(AjaxBehavior.BEHAVIOR_ID);
-                ajaxBehavior.addAjaxBehaviorListener(new CustomAjaxListener());
-                ajaxBehavior.setTransient(true);*/
-
-                //txtComments.addClientBehavior("change", ajaxBehavior);
             } else if (str.contains("/QuEP-Tool/all/frmQuestionnaireDynamic.xhtml")) {
-                //questionnaireDynamicBean = new QuestionnaireDynamicBean();
                 questionnaireDynamicBean.init();
             }
         }
     }
 
-    /* public class CustomAjaxListener implements AjaxBehaviorListener {
-
-        @Override
-        public void processAjaxBehavior(AjaxBehaviorEvent event) throws AbortProcessingException {
-            //SelectOneRadio rb = (SelectOneRadio) event.getComponent();
-            //Map<String, String[]> requestParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterValuesMap();
-            questionnaireDynamicBean = new QuestionnaireDynamicBean();
-        }
-    }*/
     public Organization getOrganization(int id) {
         Organization oOrganization = null;
         for (Organization org : lstOrganization) {

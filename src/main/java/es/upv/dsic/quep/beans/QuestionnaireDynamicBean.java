@@ -89,7 +89,7 @@ public class QuestionnaireDynamicBean implements Serializable {
     public static final String prefixTxtPageNumber = "txtPageNumber_";
     public static final String prefixTxtComments = "txtComments_";
 
-    // private int bandRefreshPage = 0;
+    
     @Inject
     private LoginBean loginBean;
 
@@ -271,35 +271,23 @@ public class QuestionnaireDynamicBean implements Serializable {
     public void save(ActionEvent ae) {
         try {
             saveResponse(2);
-            //RequestContext.getCurrentInstance().update("@this");
-
             //ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
             //ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI());
-            //buildQuestionnaire();
-            //initList();
         } catch (Exception e) {
             addMessage("Error", "Please contact Administrator", 0);
         }
     }
 
     public void completed(ActionEvent ae) {
-        //String sPage="/all/frmQuestionnaireDynamic.xhtml?faces-redirect=true";
-        //String sPage="frmQuestionnaireDynamic.xhtml";
-        //bandRefreshPage=0; 
         try {
             if (validateComplete() == 1) {
-                saveResponse(1);
-                /* RequestContext context = RequestContext.getCurrentInstance();
-                context.update("@all");*/
-                //sPage= NavigationBean.redirectPage("");                
+                saveResponse(1);                
             } else {
                 addMessage("Error", "Please fill all requiered fields, which is marked with *.", 2);
             }
         } catch (Exception e) {
             addMessage("Error", "Please contact Administrator", 0);
         }
-        //return sPage;
-        //Test Agna
     }
 
     /* ------- 
@@ -355,7 +343,6 @@ public class QuestionnaireDynamicBean implements Serializable {
         if (!sTechnique.equals("")) {
             CommandButton btnTech = new CommandButton();
             btnTech.setId("btnTech_" + String.valueOf(qq.getId()));
-            //btnTech.setValue("Tech");
             btnTech.setIcon("ui-icon-info");
             btnTech.setType("button");
             btnTech.setTitle("Best Practices");
@@ -369,7 +356,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             pnlBP.setColumns(1);
             OutputLabel oTech = new OutputLabel();
             oTech.setId("oTech_" + String.valueOf(qq.getId()));
-            oTech.setValue("Techniques: <br/>" + sTechnique); // value="#{movies.genres}" 
+            oTech.setValue("Techniques: <br/>" + sTechnique); 
             oTech.setEscape(false);
             oTech.setStyle("white-space:pre;");
 
@@ -381,7 +368,6 @@ public class QuestionnaireDynamicBean implements Serializable {
 
             pnlBP.getChildren().add(oTech);
             pnlBP.getChildren().add(oTech2);
-            //btnTech.setStyle("width: 50px");
 
             pnlTech.getChildren().add(pnlBP);
 
@@ -439,7 +425,6 @@ public class QuestionnaireDynamicBean implements Serializable {
             }
 
             rB.getChildren().add(selectItems);
-            //rB.setColumns(qt.getItemNumber());
             rB.setColumns(5);
             rB.setStyle("display: block; width: 400px;");
 
@@ -683,7 +668,6 @@ public class QuestionnaireDynamicBean implements Serializable {
         @Override
         public void processAjaxBehavior(AjaxBehaviorEvent event) throws AbortProcessingException {
             SelectOneRadio rb = (SelectOneRadio) event.getComponent();
-            //Map<String, String[]> requestParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterValuesMap();
             String srbId = rb.getId().trim().split(prefixIdRO)[1];
             if (rb.getValue().toString().equals("2")) {
                 Map<String, Object> requestParamsCookie = FacesContext.getCurrentInstance().getExternalContext().getRequestCookieMap();
@@ -749,7 +733,6 @@ public class QuestionnaireDynamicBean implements Serializable {
 
     public Map<Principle, List<QuestionnaireQuepQuestion>> setMapQuestionnaireQQ(List<QuestionnaireQuepQuestion> lstQQQ) {
         List<Principle> lstPri = qdi.getPrinciples(loginBean.getRole().getId(), oOrganization.getId());
-        // Map<Principle, List<QuestionnaireQuepQuestion>> MapQQQ = new HashMap<Principle, List<QuestionnaireQuepQuestion>>();
         Map<Principle, List<QuestionnaireQuepQuestion>> MapQQQ = new HashMap<Principle, List<QuestionnaireQuepQuestion>>();
 
         for (Principle opri : lstPri) {
@@ -805,9 +788,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             } else {
                 lstRO = (String[]) requestParams.get(prefixQ + prefixIdRO + sQId);
             }
-
-            //String sQId = String.valueOf(qqq.getQuepQuestion().getId());
-            //String[] lstRO = (String[]) requestParams.get(prefixQ + prefixIdRO + sQId);
+            
             if (lstRO != null) {
                 for (String sRO : lstRO) {
                     if (qqq.getQuepQuestion().getIsMandatory() == 0) {
@@ -837,7 +818,6 @@ public class QuestionnaireDynamicBean implements Serializable {
         for (QuestionnaireResponse qr : lstQuestionnaireResponse) {
             lstAuxQuestionnaireResponse.add(qr);
         }
-        //lstAuxQuestionnaireResponse=lstQuestionnaireResponse;
 
         for (Iterator<QuestionnaireQuepQuestion> it = lstQuestionnaireQQ.iterator(); it.hasNext();) {
             QuestionnaireQuepQuestion qqq = it.next();
@@ -1068,14 +1048,6 @@ public class QuestionnaireDynamicBean implements Serializable {
     public void setLstQuestionnaireQQ(List<QuestionnaireQuepQuestion> lstQuestionnaireQQ) {
         this.lstQuestionnaireQQ = lstQuestionnaireQQ;
     }
-
-    /* public accessBean getAccessBean() {
-        return accessBean;
-    }
-
-    public void setAccessBean(AccessBean accessBean) {
-        this.accessBean = accessBean;
-    }*/
  
     public QuestioannaireDaoImplement getQdi() {
         return qdi;

@@ -40,7 +40,6 @@ public class MenuBean implements Serializable {
     private LoginBean loginBean;
 
     public MenuBean() {
-        //init();
     }
 
     @PostConstruct
@@ -107,13 +106,4 @@ public class MenuBean implements Serializable {
         this.model = model;
     }
 
-    /*public AccessBean getAccessBean() {
-        return accessBean;
-    }
-
-    public void setAccessBean(AccessBean accessBean) {
-        this.accessBean = accessBean;
-    }
-*/
-    
 }

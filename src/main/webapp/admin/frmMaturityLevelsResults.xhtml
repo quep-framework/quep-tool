@@ -36,7 +36,6 @@
                 <div id="CONTENTSIDEindent">
 
                     <!-- header bar start-->
-                    <!--div class="ContentSideSections" id="PFTopLinksCover" style="height:60px;"-->
                     <div class="ContentSideSections" id="PFTopLinksCover" style="height:60px;">
                         <a id="LOGOTEXTSIDE" href="/QuEP-Tool/all/frmMainPage.xhtml" >
                             <table><tr><td>
@@ -71,9 +70,6 @@
                                 </tr></table>
                         </a>
 
-
-
-
                         <a class="PFTopLinks floatRight boldFont marginRight10 hashed" style="width:auto;"  >
                             <table><tr><td>
                                         <table><tr><td>
@@ -88,7 +84,7 @@
                                         </table>                                
 
                                     </td></tr>
-                                <tr><td> <!--oncomplete="logout(xhr, status, args)"-->
+                                <tr><td> 
                                         <h:form>
                                             <p:commandLink id="close"
                                                            action="#{loginBean.logout()}"
@@ -122,7 +118,6 @@
                             <p:ajax event="itemSelect" listener="#{resultsChartViewBean.listener}" update="idchart" process="@this"></p:ajax>
                         </p:chart>    
                          
-                        <!--<p:socket onMessage="handleMessage" channel="/browser" />-->
                         <p:inputText value="#{resultsChartViewBean.OOrganizationName}"/>
                     </p:panel>
 
@@ -131,7 +126,7 @@
 
                     <!-- footer start-->
                     <div class="ContentSideSections">
-                        <span class="floatLeft fontSize14 gray"><a href="http://www.quep.dsic.upv.es">QuEP-T</a>, Copyright 2016</span>
+                        <span class="floatLeft fontSize14 gray"><a href="http://quep.webs.upv.es/">QuEP-T</a>, Copyright 2016</span>
                         <span class="floatRight fontSize14 gray">All rights reserved</span>
                         <div style="clear:both"></div>
                     </div>
@@ -139,17 +134,6 @@
                 </div>
             </div>
         </div>
-
-        <!--script type="text/javascript" src="/QuEP-Tool/resource/js/sh.js"></script-->
-        <!--script>
-function onClickMenuItem() {
-    document.getElementById("frmMenu:mml").action;
-}
-        </script-->
-
-        <!--/h:form-->   
-
-
     </h:body>
 
 </html>

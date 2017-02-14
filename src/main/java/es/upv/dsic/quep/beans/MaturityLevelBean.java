@@ -119,16 +119,7 @@ public class MaturityLevelBean implements Serializable {
 
     public void request() {
         RequestContext context = RequestContext.getCurrentInstance();
-        //context.addCallbackParam("add", true);    //basic parameter
-        //context.addCallbackParam("user", user);     //pojo as json
-
-        //update panel
         context.update("form:formInsert");
-
-        //scroll to panel
-        //context.scrollTo("form:formShowMaturityLevels");
-        //add facesmessage
-        //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Success", "Success"));
     }
 
 }

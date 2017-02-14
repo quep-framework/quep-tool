@@ -93,7 +93,6 @@ public class ResultsChartViewBean implements Serializable {
     }
 
     public void createHorizontalBarMaturityLevel() {
-        //setMenuModel(1);
         setMenuBreadCrumb(1);
         setHorizontalBarModel(new HorizontalBarChartModel());
 
@@ -111,7 +110,6 @@ public class ResultsChartViewBean implements Serializable {
         lstMaturityLevel = mldi.getMaturityLevels();
 
         mapMaturityLevelResults = new HashMap<MaturityLevel, Result>();
-        //mapMaturityLevelResults = getResults(lstMaturityLevel);
         mapMaturityLevelResults = getResultsMaturityLevels();
 
         Collections.sort(lstMaturityLevel, MaturityLevelComparable.Comparators.ID);
@@ -141,16 +139,13 @@ public class ResultsChartViewBean implements Serializable {
         horizontalBarModel.setLegendPosition("e");
         horizontalBarModel.setStacked(true);
         horizontalBarModel.setZoom(true);
-
-        //getHorizontalBarModel().setZoom(true);
-        //Axis xAxis = horizontalBarModel.getAxis(AxisType.X);
+ 
         horizontalBarModel.getAxis(AxisType.X).setLabel("Values");
         horizontalBarModel.getAxis(AxisType.X).setMin(0);
         horizontalBarModel.getAxis(AxisType.X).setMax(100);
         horizontalBarModel.getAxis(AxisType.X).setTickAngle(25);
         horizontalBarModel.getAxis(AxisType.X).setTickFormat("%.4s%%");
 
-        //Axis yAxis = horizontalBarModel.getAxis(AxisType.Y);
         horizontalBarModel.getAxis(AxisType.Y).setLabel("Maturity Levels");
 
     }
@@ -270,9 +265,7 @@ public class ResultsChartViewBean implements Serializable {
     }
 
     public Map<Principle, Result> getResultsPrincipleByLevel(String sMaturityLevelId) {
-        try {
-            // mapSumPractices=new HashMap<Practice, ResponseEstimate>();
-            // mapSumPractices=calculatePractices(calculateQuestions());     
+        try {   
             Map<Principle, Result> mapPriResults = new HashMap<Principle, Result>();
 
             if (mapSumPractices.size() > 0 && mapSumPractices != null) {
