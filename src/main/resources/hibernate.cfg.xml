@@ -4,7 +4,11 @@
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
     <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-    <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/quepDB</property>
+    <!--property name="hibernate.connection.url">jdbc:postgresql://horton.elephantsql.com:5432/tlanthtk</property>
+    <property name="hibernate.connection.username">tlanthtk</property>
+    <property name="hibernate.connection.password">tQnZqCF8NpxquSfbz0hIXrggsB5EbwJJ</property-->
+    
+     <property name="hibernate.connection.url">jdbc:postgresql://127.0.0.1:5432/quepDB</property>
     <property name="hibernate.connection.username">postgres</property>
     <property name="hibernate.connection.password">quep</property>
     <property name="hibernate.show_sql">true</property>
