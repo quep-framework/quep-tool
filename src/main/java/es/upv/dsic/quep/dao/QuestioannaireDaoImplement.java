@@ -53,11 +53,11 @@ public class QuestioannaireDaoImplement implements QuestionnaireQQDao {
         List<QuestionnaireQuepQuestion> list = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
-            Query query1 = session.createQuery("select qqq\n"
+            /*Query query1 = session.createQuery("select qqq\n"
                     + "from QuestionnaireQuepQuestion qqq, RoleStakeholder rs \n"
                     + "where qqq.id.idRole='" + idRole + "'" + " and qqq.active=1 \n"
                      + " and rs.id.idOrganization='" + idOrg + "'\n"
-                    + " and rs.id.idRole=qqq.id.idRole ");
+                    + " and rs.id.idRole=qqq.id.idRole ");*/
             
             Query query = session.createQuery("select qqq\n"
                     + "from QuestionnaireQuepQuestion qqq\n"

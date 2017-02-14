@@ -100,7 +100,7 @@ public class QuestionnaireDynamicBean implements Serializable {
     @PostConstruct
     public void init() {
         try {
-            oOrganization = organizationBean.getOrganization();
+             oOrganization = organizationBean.getOrganization();
             try {
                 buildQuestionnaire();
             } catch (Exception e) {
@@ -131,7 +131,9 @@ public class QuestionnaireDynamicBean implements Serializable {
                 loginBean.getStakeholder().getId(),
                 oOrganization.getId());
 
-        lstQuestionnaireQQ = qdi.getQuestionnairesQQRole(loginBean.getRole().getId(), oOrganization.getId());
+        //Currently: Questionnaire is set up to all organization. 
+        //Todos los cuestionarios se encuentra configurados para evaluar a cualquier organizacion
+        lstQuestionnaireQQ = qdi. getQuestionnairesQQbyRole(loginBean.getRole().getId());
         lstMapQuestionnaireQQ = setMapQuestionnaireQQ(lstQuestionnaireQQ);
     }
 
