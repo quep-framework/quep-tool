@@ -66,13 +66,21 @@ public class ResultsChartViewBean implements Serializable {
 
     private HorizontalBarChartModel horizontalBarModel;
     private Map<MaturityLevel, Result> mapMaturityLevelResults;
+    private Map<Principle, Result> mapPrinciplesResults = new HashMap<Principle, Result>();
     private List<MaturityLevel> lstMaturityLevel;
+    private List<Principle> lstPrinciple = new ArrayList<Principle>();
 
     private Map<Practice, ResponseEstimate> mapSumPractices;
     private Map<Principle, ResponseEstimate> mapSumPrinciple;
     private final BigDecimal umbral = BigDecimal.valueOf(50.00);
 
     private PanelGrid panel = new PanelGrid();
+
+    private ChartSeries chartTolerable;
+    private ChartSeries chartComplete;
+    private ChartSeries chartPerComplete;
+    
+    private MenuModel model;
 
     public ResultsChartViewBean() {
 
@@ -84,33 +92,56 @@ public class ResultsChartViewBean implements Serializable {
         createHorizontalBarMaturityLevel();
     }
 
-    public HorizontalBarChartModel getHorizontalBarModel() {
-        return horizontalBarModel;
+    public void initValues(int imenu, String sMaturityLevelId) {
+        setMenuBreadCrumb(imenu);
+
+        setHorizontalBarModel(new HorizontalBarChartModel());
+        chartTolerable = new ChartSeries();
+        chartTolerable.setLabel("% tolerable");
+
+        chartComplete = new ChartSeries();
+        chartComplete.setLabel("% complete");
+
+        chartPerComplete = new ChartSeries();
+        chartPerComplete.setLabel("% per complete");
+
+        if (imenu == 1) {
+            MaturityLevelDaoImplement mldi = new MaturityLevelDaoImplement();
+            lstMaturityLevel = new ArrayList<MaturityLevel>();
+            lstMaturityLevel = mldi.getMaturityLevels();
+
+            mapMaturityLevelResults = new HashMap<MaturityLevel, Result>();
+            mapMaturityLevelResults = getResultsMaturityLevels();
+        } else if (imenu == 2) {
+            PrincipleDaoImplement pdi = new PrincipleDaoImplement();            
+            lstPrinciple = pdi.getPrinciple();
+
+            mapPrinciplesResults = new HashMap<Principle, Result>();
+            mapPrinciplesResults = getResultsPrincipleByLevel(sMaturityLevelId);
+        }
     }
 
-    public void setModel(MenuModel model) {
-        this.model = model;
+    public void drawHorizontalBarModel(String sXAxis, String sYAxis, String title) {
+        horizontalBarModel.clear();
+        horizontalBarModel.addSeries(chartComplete);
+        horizontalBarModel.addSeries(chartPerComplete);
+        horizontalBarModel.setShowDatatip(true);
+        horizontalBarModel.setShowPointLabels(true);
+        horizontalBarModel.setTitle(title);
+        horizontalBarModel.setAnimate(true);
+        horizontalBarModel.setLegendPosition("e");
+        horizontalBarModel.setStacked(true);
+        horizontalBarModel.setZoom(true);
+        horizontalBarModel.getAxis(AxisType.X).setLabel(sXAxis);
+        horizontalBarModel.getAxis(AxisType.X).setMin(0);
+        horizontalBarModel.getAxis(AxisType.X).setMax(100);
+        horizontalBarModel.getAxis(AxisType.X).setTickAngle(25);
+        horizontalBarModel.getAxis(AxisType.X).setTickFormat("%.4s%%");
+        horizontalBarModel.getAxis(AxisType.Y).setLabel(sYAxis);
     }
 
     public void createHorizontalBarMaturityLevel() {
-        setMenuBreadCrumb(1);
-        setHorizontalBarModel(new HorizontalBarChartModel());
-
-        ChartSeries chartTolerable = new ChartSeries();
-        chartTolerable.setLabel("% tolerable");
-
-        ChartSeries chartComplete = new ChartSeries();
-        chartComplete.setLabel("% complete");
-
-        ChartSeries chartPerComplete = new ChartSeries();
-        chartPerComplete.setLabel("% per complete");
-
-        MaturityLevelDaoImplement mldi = new MaturityLevelDaoImplement();
-        lstMaturityLevel = new ArrayList<MaturityLevel>();
-        lstMaturityLevel = mldi.getMaturityLevels();
-
-        mapMaturityLevelResults = new HashMap<MaturityLevel, Result>();
-        mapMaturityLevelResults = getResultsMaturityLevels();
+        initValues(1,"");
 
         Collections.sort(lstMaturityLevel, MaturityLevelComparable.Comparators.ID);
 
@@ -124,52 +155,15 @@ public class ResultsChartViewBean implements Serializable {
                     chartTolerable.set(oML.getLevelAbbreviation() + ". " + oML.getName(), this.umbral);
                 }
             }
-
         }
-
-        horizontalBarModel.clear();
-
-        horizontalBarModel.addSeries(chartComplete);
-        horizontalBarModel.addSeries(chartPerComplete);
-        horizontalBarModel.setShowDatatip(true);
-        horizontalBarModel.setShowPointLabels(true);
-
-        horizontalBarModel.setTitle(oOrganization.getName());
-        horizontalBarModel.setAnimate(true);
-        horizontalBarModel.setLegendPosition("e");
-        horizontalBarModel.setStacked(true);
-        horizontalBarModel.setZoom(true);
- 
-        horizontalBarModel.getAxis(AxisType.X).setLabel("Values");
-        horizontalBarModel.getAxis(AxisType.X).setMin(0);
-        horizontalBarModel.getAxis(AxisType.X).setMax(100);
-        horizontalBarModel.getAxis(AxisType.X).setTickAngle(25);
-        horizontalBarModel.getAxis(AxisType.X).setTickFormat("%.4s%%");
-
-        horizontalBarModel.getAxis(AxisType.Y).setLabel("Maturity Levels");
-
+        drawHorizontalBarModel("Values", "Maturity Levels",oOrganization.getName());
     }
 
     public void createHorizontalBarPrinciplesByLevel(String sMaturityLevelId) {
-        //setMenuModel(2);
-        setMenuBreadCrumb(2);
-
-        setHorizontalBarModel(new HorizontalBarChartModel());
-
-        ChartSeries chartComplete = new ChartSeries();
-        chartComplete.setLabel("% complete");
-
-        ChartSeries chartPerComplete = new ChartSeries();
-        chartPerComplete.setLabel("% per complete");
-
-        PrincipleDaoImplement pdi = new PrincipleDaoImplement();
-        List<Principle> lstPrinciple = new ArrayList<Principle>();
-        lstPrinciple = pdi.getPrinciple();
-
-        Map<Principle, Result> mapPrinciplesResults = new HashMap<Principle, Result>();
-        mapPrinciplesResults = getResultsPrincipleByLevel(sMaturityLevelId);
+        initValues(2,sMaturityLevelId);
 
         //Collections.sort(lstPrinciple, MaturityLevelComparable.Comparators.ID);         
+        
         for (Principle oPri : lstPrinciple) {
             for (Map.Entry<Principle, Result> entry : mapPrinciplesResults.entrySet()) {
                 Principle oPrinciple = entry.getKey();
@@ -181,62 +175,8 @@ public class ResultsChartViewBean implements Serializable {
             }
         }
 
-        getHorizontalBarModel().addSeries(chartComplete);
-        getHorizontalBarModel().addSeries(chartPerComplete);
-        getHorizontalBarModel().setShowDatatip(true);
-        getHorizontalBarModel().setShowPointLabels(true);
-
-        //getHorizontalBarModel().setTitle(oRoleStakeholder.getOrganization().getName());
-        getHorizontalBarModel().setTitle("Level " + sMaturityLevelId);
-        getHorizontalBarModel().setAnimate(true);
-        getHorizontalBarModel().setLegendPosition("e");
-        getHorizontalBarModel().setStacked(true);
-        getHorizontalBarModel().setZoom(true);
-
-        Axis xAxis = getHorizontalBarModel().getAxis(AxisType.X);
-        xAxis.setLabel("Values");
-        xAxis.setMin(0);
-        xAxis.setMax(100);
-        xAxis.setTickFormat("%.4s%%");
-
-        Axis yAxis = getHorizontalBarModel().getAxis(AxisType.Y);
-        yAxis.setLabel("Principles");
-    }
-
-    public void createHorizontalBarPrinciple(String sPrinciple) {
-        //setHorizontalBarModel(new HorizontalBarChartModel());
-        //setMenuModel(2);
-        //menu2(2);
-        horizontalBarModel = new HorizontalBarChartModel();
-
-        ChartSeries chartComplete = new ChartSeries();
-        chartComplete.setLabel("% complete");
-
-        ChartSeries chartPerComplete = new ChartSeries();
-        chartPerComplete.setLabel("% per complete");
-
-        Principle oPrinciple = new Principle();
-
-        chartComplete.set("Principle", 5.0);
-        chartPerComplete.set("Principle", getResultsPerComplete(BigDecimal.valueOf(5.0)));
-
-        horizontalBarModel.addSeries(chartComplete);
-        horizontalBarModel.addSeries(chartPerComplete);
-
-        horizontalBarModel.setTitle(sPrinciple);
-        horizontalBarModel.setAnimate(true);
-        horizontalBarModel.setLegendPosition("e");
-        horizontalBarModel.setStacked(true);
-
-        Axis xAxis = horizontalBarModel.getAxis(AxisType.X);
-        xAxis.setLabel("Values");
-        xAxis.setMin(0);
-        xAxis.setMax(100);
-
-        Axis yAxis = horizontalBarModel.getAxis(AxisType.Y);
-        yAxis.setLabel("Principle");
-
-    }
+        drawHorizontalBarModel("Values", "Principles","Level " + sMaturityLevelId);                
+    }    
 
     public Map<MaturityLevel, Result> getResultsMaturityLevels() {
         try {
@@ -265,7 +205,7 @@ public class ResultsChartViewBean implements Serializable {
     }
 
     public Map<Principle, Result> getResultsPrincipleByLevel(String sMaturityLevelId) {
-        try {   
+        try {
             Map<Principle, Result> mapPriResults = new HashMap<Principle, Result>();
 
             if (mapSumPractices.size() > 0 && mapSumPractices != null) {
@@ -373,9 +313,9 @@ public class ResultsChartViewBean implements Serializable {
     public Map<Principle, ResponseEstimate> calculatePrinciple(Map<Practice, ResultsChartViewBean.ResponseEstimate> mapSumPractices) {
         Map<Principle, ResultsChartViewBean.ResponseEstimate> mapPrincipleEstimate = new HashMap<Principle, ResultsChartViewBean.ResponseEstimate>();
 
-        PrincipleDaoImplement pdi = new PrincipleDaoImplement();
-        List<Principle> lstPrinciple = new ArrayList<Principle>();
-        lstPrinciple = pdi.getPrinciple();
+       // PrincipleDaoImplement pdi = new PrincipleDaoImplement();
+       // List<Principle> lstPrinciple = new ArrayList<Principle>();
+       // lstPrinciple = pdi.getPrinciple();
 
         for (Principle p : lstPrinciple) {
             int size = 0;
@@ -402,13 +342,13 @@ public class ResultsChartViewBean implements Serializable {
         Map<Principle, ResultsChartViewBean.ResponseEstimate> mapPrincipleEstimate = new HashMap<Principle, ResultsChartViewBean.ResponseEstimate>();
 
         MaturityLevelDaoImplement mldao = new MaturityLevelDaoImplement();
-        PrincipleDaoImplement pdi = new PrincipleDaoImplement();
+        //PrincipleDaoImplement pdi = new PrincipleDaoImplement();
 
         List<MaturityLevelPractice> lstMaturityLevelPractice = new ArrayList<MaturityLevelPractice>();
         lstMaturityLevelPractice = mldao.getMaturityLevelsPractice();
 
-        List<Principle> lstPrinciple = new ArrayList<Principle>();
-        lstPrinciple = pdi.getPrinciple();
+       // List<Principle> lstPrinciple = new ArrayList<Principle>();
+       // lstPrinciple = pdi.getPrinciple();
 
         for (Principle pri : lstPrinciple) {
             ResultsChartViewBean.ResponseEstimate oREstimate = new ResultsChartViewBean.ResponseEstimate();
@@ -440,13 +380,13 @@ public class ResultsChartViewBean implements Serializable {
         Map<MaturityLevel, ResponseEstimate> mapMaturityLevelEstimate = new HashMap<MaturityLevel, ResponseEstimate>();
 
         MaturityLevelDaoImplement mldao = new MaturityLevelDaoImplement();
-        PrincipleDaoImplement pdi = new PrincipleDaoImplement();
+        //PrincipleDaoImplement pdi = new PrincipleDaoImplement();
 
         List<MaturityLevelPractice> lstMaturityLevelPractice = new ArrayList<MaturityLevelPractice>();
         lstMaturityLevelPractice = mldao.getMaturityLevelsPractice();
 
-        List<MaturityLevel> lstMaturityLevel = new ArrayList<MaturityLevel>();
-        lstMaturityLevel = mldao.getMaturityLevels();
+        //List<MaturityLevel> lstMaturityLevel = new ArrayList<MaturityLevel>();
+        //lstMaturityLevel = mldao.getMaturityLevels();
 
         ResponseEstimate oREstimate = new ResponseEstimate();
 
@@ -469,7 +409,6 @@ public class ResultsChartViewBean implements Serializable {
                             size++;
                         }
                     }
-                    // }
                 }
                 if (size == 0) {
                     size = 1;
@@ -504,13 +443,7 @@ public class ResultsChartViewBean implements Serializable {
 
     public void listener(ItemSelectEvent e) {
         createHorizontalBarPrinciplesByLevel(String.valueOf(e.getSeriesIndex()));
-    }
-
-    private MenuModel model;
-
-    public MenuModel getModel() {
-        return model;
-    }
+    }   
 
     public void setMenuBreadCrumb(int band) {
 
@@ -593,6 +526,10 @@ public class ResultsChartViewBean implements Serializable {
 
     }
 
+    public MenuModel getModel() {
+        return model;
+    }
+    
     public RoleStakeholder getoRoleStakeholder() {
         return oRoleStakeholder;
     }
@@ -660,4 +597,81 @@ public class ResultsChartViewBean implements Serializable {
         this.oOrganization = oOrganization;
     }
 
+    public LoginBean getLoginBean() {
+        return loginBean;
+    }
+
+    public void setLoginBean(LoginBean loginBean) {
+        this.loginBean = loginBean;
+    }
+
+    public OrganizationBean getOrganizationBean() {
+        return organizationBean;
+    }
+
+    public void setOrganizationBean(OrganizationBean organizationBean) {
+        this.organizationBean = organizationBean;
+    }
+
+    public BeanManager getManager() {
+        return manager;
+    }
+
+    public void setManager(BeanManager manager) {
+        this.manager = manager;
+    }
+
+    public HorizontalBarChartModel getHorizontalBarModel() {
+        return horizontalBarModel;
+    }
+
+    public BigDecimal getUmbral() {
+        return umbral;
+    }
+
+    public void setModel(MenuModel model) {
+        this.model = model;
+    }
+
+    public ChartSeries getChartTolerable() {
+        return chartTolerable;
+    }
+
+    public void setChartTolerable(ChartSeries chartTolerable) {
+        this.chartTolerable = chartTolerable;
+    }
+
+    public ChartSeries getChartComplete() {
+        return chartComplete;
+    }
+
+    public void setChartComplete(ChartSeries chartComplete) {
+        this.chartComplete = chartComplete;
+    }
+
+    public ChartSeries getChartPerComplete() {
+        return chartPerComplete;
+    }
+
+    public void setChartPerComplete(ChartSeries chartPerComplete) {
+        this.chartPerComplete = chartPerComplete;
+    }
+
+    public List<Principle> getLstPrinciple() {
+        return lstPrinciple;
+    }
+
+    public void setLstPrinciple(List<Principle> lstPrinciple) {
+        this.lstPrinciple = lstPrinciple;
+    }
+
+    public Map<Principle, Result> getMapPrinciplesResults() {
+        return mapPrinciplesResults;
+    }
+
+    public void setMapPrinciplesResults(Map<Principle, Result> mapPrinciplesResults) {
+        this.mapPrinciplesResults = mapPrinciplesResults;
+    }
+
+    
 }
