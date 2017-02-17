@@ -38,6 +38,7 @@ public class MaturityLevel implements java.io.Serializable {
     private BigDecimal umbral;
     private BigDecimal weight;
     private Set<MaturityLevelPractice> maturityLevelPractices = new HashSet<MaturityLevelPractice>(0);
+    private Set<QuepQuestion> quepQuestions = new HashSet<QuepQuestion>(0);
 
     public MaturityLevel() {
     }
@@ -52,21 +53,22 @@ public class MaturityLevel implements java.io.Serializable {
         this.audit = audit;
     }
 
-    public MaturityLevel(int id, String levelAbbreviation, String name, String description, String type, String creationUser, Date fechaCreado, String actualizado, Date modificationDate, int active, String audit, BigDecimal umbral, BigDecimal weight, Set<MaturityLevelPractice> maturityLevelPractices) {
-        this.id = id;
-        this.levelAbbreviation = levelAbbreviation;
-        this.name = name;
-        this.description = description;
-        this.type = type;
-        this.creationUser = creationUser;
-        this.fechaCreado = fechaCreado;
-        this.actualizado = actualizado;
-        this.modificationDate = modificationDate;
-        this.active = active;
-        this.audit = audit;
-        this.umbral = umbral;
-        this.weight = weight;
-        this.maturityLevelPractices = maturityLevelPractices;
+    public MaturityLevel(int id, String levelAbbreviation, String name, String description, String type, String creationUser, Date fechaCreado, String actualizado, Date modificationDate, int active, String audit, BigDecimal umbral, BigDecimal weight, Set<QuepQuestion> quepQuestions, Set<MaturityLevelPractice> maturityLevelPractices) {
+       this.id = id;
+       this.levelAbbreviation = levelAbbreviation;
+       this.name = name;
+       this.description = description;
+       this.type = type;
+       this.creationUser = creationUser;
+       this.fechaCreado = fechaCreado;
+       this.actualizado = actualizado;
+       this.modificationDate = modificationDate;
+       this.active = active;
+       this.audit = audit;
+       this.umbral = umbral;
+       this.weight = weight;
+       this.quepQuestions = quepQuestions;
+       this.maturityLevelPractices = maturityLevelPractices;
     }
 
     @Id
@@ -199,5 +201,15 @@ public class MaturityLevel implements java.io.Serializable {
     public void setMaturityLevelPractices(Set<MaturityLevelPractice> maturityLevelPractices) {
         this.maturityLevelPractices = maturityLevelPractices;
     }
+    
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="maturityLevel")
+    public Set<QuepQuestion> getQuepQuestions() {
+        return this.quepQuestions;
+    }
+    
+    public void setQuepQuestions(Set<QuepQuestion> quepQuestions) {
+        this.quepQuestions = quepQuestions;
+    }
+
 
 }

@@ -47,6 +47,12 @@
         <property name="weight" type="big_decimal">
             <column name="weight" precision="5"  />
         </property>
+        <set name="quepQuestions" table="quep_question" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_maturity_level" not-null="true" />
+            </key>
+            <one-to-many class="es.upv.dsic.quep.model.QuepQuestion" />
+        </set>
         <set name="maturityLevelPractices" table="maturity_level_practice" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="id_maturity_level" not-null="true" />

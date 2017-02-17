@@ -30,6 +30,7 @@ public class QuepQuestion  implements java.io.Serializable {
 
 
      private int id;
+     private MaturityLevel maturityLevel;
      private Practice practice;
      private QuestionType questionType;
      private int idPrinciple;
@@ -56,8 +57,9 @@ public class QuepQuestion  implements java.io.Serializable {
     }
 
 	
-    public QuepQuestion(int id, Practice practice, QuestionType questionType, int idPrinciple, String description, int hasComment, int hasPageNumber, int isMandatory, String creationUser, Date creationDate, int active, String audit, int order) {
+    public QuepQuestion(int id, MaturityLevel maturityLevel, Practice practice, QuestionType questionType, int idPrinciple, String description, int hasComment, int hasPageNumber, int isMandatory, String creationUser, Date creationDate, int active, String audit, int order) {
         this.id = id;
+        this.maturityLevel = maturityLevel;
         this.practice = practice;
         this.questionType = questionType;
         this.idPrinciple = idPrinciple;
@@ -71,31 +73,9 @@ public class QuepQuestion  implements java.io.Serializable {
         this.audit = audit;
         this.order = order;
     }
-    /*public QuepQuestion(int id, Practice practice, QuestionType questionType, int idPrinciple, String description, String tip, int hasComment, int hasPageNumber, int isMandatory, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, BigDecimal umbral, BigDecimal weight, Set<QuepQuestionResilience> quepQuestionResiliences, Set<QuepQuestionTechnique> quepQuestionTechniques, Set<QuepQuestionResponseOption> quepQuestionResponseOptions, Set<QuestionnaireQuepQuestion> questionnaireQuepQuestions) {
+    public QuepQuestion(int id, MaturityLevel maturityLevel, Practice practice, QuestionType questionType, int idPrinciple, String description, String tip, int hasComment, int hasPageNumber, int isMandatory, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, BigDecimal umbral, BigDecimal weight, int order, Set<QuepQuestionResilience> quepQuestionResiliences, Set<QuepQuestionTechnique> quepQuestionTechniques, Set<QuepQuestionResponseOption> quepQuestionResponseOptions, Set<QuestionnaireQuepQuestion> questionnaireQuepQuestions) {
        this.id = id;
-       this.practice = practice;
-       this.questionType = questionType;
-       this.idPrinciple = idPrinciple;
-       this.description = description;
-       this.tip = tip;
-       this.hasComment = hasComment;
-       this.hasPageNumber = hasPageNumber;
-       this.isMandatory = isMandatory;
-       this.creationUser = creationUser;
-       this.creationDate = creationDate;
-       this.modificationUser = modificationUser;
-       this.modificationDate = modificationDate;
-       this.active = active;
-       this.audit = audit;
-       this.umbral = umbral;
-       this.weight = weight;
-       this.quepQuestionResiliences = quepQuestionResiliences;
-       this.quepQuestionTechniques = quepQuestionTechniques;
-       this.quepQuestionResponseOptions = quepQuestionResponseOptions;
-       this.questionnaireQuepQuestions = questionnaireQuepQuestions;
-    }*/
-       public QuepQuestion(int id, Practice practice, QuestionType questionType, int idPrinciple, String description, String tip, int hasComment, int hasPageNumber, int isMandatory, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, BigDecimal umbral, BigDecimal weight, int order, Set<QuepQuestionResilience> quepQuestionResiliences, Set<QuepQuestionTechnique> quepQuestionTechniques, Set<QuepQuestionResponseOption> quepQuestionResponseOptions, Set<QuestionnaireQuepQuestion> questionnaireQuepQuestions) {
-       this.id = id;
+       this.maturityLevel = maturityLevel;
        this.practice = practice;
        this.questionType = questionType;
        this.idPrinciple = idPrinciple;
@@ -131,7 +111,17 @@ public class QuepQuestion  implements java.io.Serializable {
     public void setId(int id) {
         this.id = id;
     }
-
+    
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="id_maturity_level", nullable=false)
+    public MaturityLevel getMaturityLevel() {
+        return this.maturityLevel;
+    }
+    
+    public void setMaturityLevel(MaturityLevel maturityLevel) {
+        this.maturityLevel = maturityLevel;
+    }
+    
 @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="id_practice", nullable=false)
     public Practice getPractice() {

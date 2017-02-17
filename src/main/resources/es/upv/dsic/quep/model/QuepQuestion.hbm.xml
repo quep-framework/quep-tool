@@ -10,6 +10,10 @@
                 <param name="sequence">quep_question_id_seq</param>
             </generator>
         </id>
+        <many-to-one name="maturityLevel" class="es.upv.dsic.quep.model.MaturityLevel" 
+                     lazy="false" fetch="select">
+            <column name="id_maturity_level" not-null="true" />
+        </many-to-one>
         <many-to-one name="practice" class="es.upv.dsic.quep.model.Practice" 
                      lazy="false" fetch="select">
             <column name="id_practice" not-null="true" />
