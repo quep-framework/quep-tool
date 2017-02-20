@@ -12,7 +12,7 @@
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <title>Main Page</title>
         <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/themes/aristo/theme.css" />
-        <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/site.css" />
+        <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/site.css" />        
         <!--link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/jquery-ui.css" />
         <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/perfect-scrollbar.css" />
         <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/sh.css" />
@@ -47,9 +47,22 @@
                         <img alt="logo" src="/QuEP-Tool/resource/images/logoT.png" style="width: 120px; margin-left: 40px; margin-bottom: 10px;"/>
                         <img id="BlueLogo" alt="logo" src="/QuEP-Tool/resource/images/logo.png"   style="width: 120px; margin-left: 40px; margin-bottom: 10px;" class="hiddenLogo"/>                         
                     </span>   
-                    <h:form>
-                        <p:panelMenu model="#{menuBean.model}" />                                                
-                    </h:form>
+
+                    <!--div class="MenuSideMainLink bordersOfMenuSide"><h:graphicImage url="/resource/main/images/zoom.svg" class="zoomIcon"/>
+                        <input id="menuSearch" type="text" placeholder="Search Menu" class="mediumFont fontSize14 mustClose searchInput"/>
+                    </div-->
+
+                    <span id="SubMenu-Ajax" class="MenuSideMainLink bordersOfMenuSide" >
+                        <h:graphicImage url="/resource/main/images/mono/menu.svg" />                        
+                        <span class="MainLinkText">Menu</span></span>
+                   
+                        <h:form>
+                            <p:panelMenu model="#{menuBean.model}"  
+                                         />                                                          
+                        </h:form>
+                    
+                        
+                    
                 </div>
             </div>                
             <!--end menu izq-->
@@ -118,7 +131,7 @@
                                                            styleClass="ui-icon-extlink"                                                          
                                                            />
                                         </h:form>
-                               </td></tr>
+                                    </td></tr>
                             </table>
                         </a>                                                                                        
                     </div>
@@ -170,7 +183,7 @@
                 </div>
             </div>
         </div>
-       
+
     </h:body>
 
 </html>

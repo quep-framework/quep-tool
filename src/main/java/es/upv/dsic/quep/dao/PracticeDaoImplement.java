@@ -17,7 +17,6 @@ import org.hibernate.Session;
  * @author agna8685
  */
 public class PracticeDaoImplement implements PracticeDao {
-
     @Override
     public List<Practice> getPractice() {
         Session session = null;
@@ -34,6 +33,23 @@ public class PracticeDaoImplement implements PracticeDao {
             }
         }
         return list;
-    }
+    }   
     
+    @Override
+    public Practice getPracticeByID(int id) {
+        Session session = null;
+        Practice pra = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            Query query = session.createQuery("from Practice where active=1 and id="+id);
+            pra = (Practice) query.list().get(0);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return pra;
+    }   
 }

@@ -24,4 +24,6 @@ public interface RoleStakeholderDao {
     
     public RoleStakeholder getRoleStakeholder(String user, String password);
     
+    public List<Role>  getLstRoles();
+    
 }

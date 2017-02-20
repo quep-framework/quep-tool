@@ -15,4 +15,5 @@ import java.util.List;
 public interface PracticeDao {
 
     public List<Practice> getPractice() ;
+    public Practice getPracticeByID(int id);
 }

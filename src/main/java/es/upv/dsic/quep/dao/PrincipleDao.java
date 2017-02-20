@@ -15,4 +15,5 @@ import java.util.List;
 public interface PrincipleDao {
 
     public List<Principle> getPrinciple() ;
+    public Principle getPrinciple(int id) ;
 }

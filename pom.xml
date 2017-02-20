@@ -36,7 +36,7 @@
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
             <version>6.0</version>
-        </dependency>
+        </dependency>   
         <dependency>
             <groupId>org.primefaces.themes</groupId>
             <artifactId>all-themes</artifactId>
@@ -52,6 +52,17 @@
             <artifactId>all-themes</artifactId>
             <version>1.0.8</version>
         </dependency-->
+        <!--dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>5.6.1</version>
+        </dependency-->
+
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-scratchpad</artifactId>
+            <version>3.16-beta1</version>
+        </dependency>
     </dependencies>
 
     <build>

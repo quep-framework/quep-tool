@@ -38,4 +38,22 @@ public class PrincipleDaoImplement implements PrincipleDao {
         return list;
     }
     
+    @Override
+    public Principle getPrinciple(int id) {
+        Session session = null;
+        Principle oPri = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            Query query = session.createQuery("from Principle where active=1 and id="+id);
+            oPri = (Principle) query.list().get(0);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return oPri;
+    }
+    
 }

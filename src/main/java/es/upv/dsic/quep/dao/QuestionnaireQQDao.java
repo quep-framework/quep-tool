@@ -5,6 +5,7 @@
  */
 package es.upv.dsic.quep.dao;
 
+import es.upv.dsic.quep.beans.ResultsByFilterDataTableBean;
 import es.upv.dsic.quep.model.Principle;
 import es.upv.dsic.quep.model.QuepQuestion;
 import es.upv.dsic.quep.model.QuepQuestionResponseOption;
@@ -26,6 +27,8 @@ public interface QuestionnaireQQDao {
 
     public List<QuestionnaireQuepQuestion> getQuestionnairesQQRole(int idRole,int idOrg);
     
+    public List<QuestionnaireQuepQuestion> getQuestionnairesQQbyOrg(int idOrg);
+    
     public List<QuestionnaireResponse> getQuestionnaireResponse(int idRole,int idStk,int idOrg);
 
     public List<ResponseOption> getResponseOptions(int idqq);
@@ -43,6 +46,7 @@ public interface QuestionnaireQQDao {
     public List<Principle> getPrinciples(int idRole,int idOrg);
     
     public List<QuepQuestionTechnique> getQuepQuestionTechnique(int idqq);
+     
     
     
 }

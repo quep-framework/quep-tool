@@ -16,6 +16,7 @@ import java.util.List;
 public interface MaturityLevelDao {
     
     public List<MaturityLevel> getMaturityLevels();
+    public MaturityLevel getMaturityLevel(int id);
     public void insertMaturityLevel(MaturityLevel ml);
     public void updateMaturityLevel(MaturityLevel ml);
     public void deleteMaturityLevel(MaturityLevel ml);

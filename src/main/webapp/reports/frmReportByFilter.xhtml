@@ -1,0 +1,241 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"         
+      xmlns:f="http://xmlns.jcp.org/jsf/core"          
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <title>Results Principles - Practices</title>
+        <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/themes/aristo/theme.css" />
+        <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/site.css" />
+        <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/quep-css.css" />
+
+    </h:head>
+    <h:body>
+        <div class="PC">
+            <!--start menu izq-->
+            <div id="MENUSIDE">
+                <div id="MENUSIDEindent">
+                    <span id="LOGO" class="bordersOfMenuSide" >
+                        <img alt="logo" src="/QuEP-Tool/resource/images/logoT.png" style="width: 120px; margin-left: 40px; margin-bottom: 10px;"/>
+                        <img id="BlueLogo" alt="logo" src="/QuEP-Tool/resource/images/logo.png"   style="width: 120px; margin-left: 40px; margin-bottom: 10px;" class="hiddenLogo"/>                         
+                    </span>   
+                    <h:form>
+                        <p:panelMenu model="#{menuBean.model}" />                                                
+                    </h:form>
+                </div>
+            </div>                
+            <!--end menu izq-->
+
+            <div id="CONTENTSIDE">
+                <div id="CONTENTSIDEindent">
+
+                    <!-- header bar start-->
+                    <div class="ContentSideSections" id="PFTopLinksCover" style="height:60px;">
+                        <a id="LOGOTEXTSIDE" href="/QuEP-Tool/all/frmMainPage.xhtml" >
+                            <table><tr><td>
+                                        <img alt="logo" src="/QuEP-Tool/resource/images/logo.png" style="width:125px;"/>
+                                    </td><td>
+                                        <span class="dispBlock logoDarkText" style="margin-left: 18px; font-size: 20px; width: 500px; ">A Total Quality Framework 
+                                            for the assessment and improvement of Emergency Plans Management 
+                                            <h:form >
+                                                <c:choose id="chooseOrg">
+                                                    <c:when test="#{organizationBean.bandOrganization}" id="bOrgTrue">
+                                                        <h:panelGrid columns="2" cellpadding="2" id="pnlOrgBean">                                        
+                                                            <p:outputLabel  value="Organization:"  id="lblOrgTrue"/>
+                                                            <p:selectOneMenu  value="#{organizationBean.organization}" var="o"  effect="fade" 
+                                                                              filter="true" filterMatchMode="contains"
+                                                                              valueChangeListener="#{organizationBean.changeListener}" onchange="submit()"                                                                               
+                                                                              converter="#{organizationConverter}">
+                                                                <f:selectItems value="#{organizationBean.lstOrganization}" var="lstO"  itemLabel="#{lstO.name}" itemValue="#{lstO}" />
+                                                                <p:column>
+                                                                    <h:outputText value="#{o.name}" />
+                                                                </p:column>
+                                                            </p:selectOneMenu>                                                                                                                
+                                                        </h:panelGrid>
+                                                    </c:when>
+                                                    <c:otherwise id="bOrgFalse">
+                                                        Organization: #{organizationBean.nameOrganization}
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </h:form>                                                                                             
+
+                                        </span> 
+                                    </td>
+                                </tr></table>
+                        </a>
+
+                        <a class="PFTopLinks floatRight boldFont marginRight10 hashed" style="width:auto;"  >
+                            <table><tr><td>
+                                        <table><tr><td>
+                                                    #{loginBean.stakeholder.name} 
+                                                </td><td>
+                                                    <img  src="/QuEP-Tool/resource/images/user.png" style=" height: 20px; width: 20px;"  />
+                                                </td></tr>
+                                            <tr><td colspan="2" align="center">
+                                                    <span class="PFDarkText">Role: </span>  
+                                                    <span class="PFDarkText">#{loginBean.role.name}</span>                                              
+                                                </td></tr>
+                                        </table>                                
+
+                                    </td></tr>
+                                <tr><td> 
+                                        <h:form>
+                                            <p:commandLink id="close"
+                                                           action="#{loginBean.logout()}"
+                                                           value="Logout"
+                                                           style="margin-right:20px;" 
+                                                           styleClass="ui-icon-extlink"                                                          
+                                                           />
+                                        </h:form>
+                                    </td></tr>
+                            </table>
+                        </a>    
+                    </div>
+                    <div >
+
+
+
+
+                    </div>     
+                    <!-- header bar end-->
+
+                    <!-- content body start-->  
+
+                    <h:form>
+                        <p:dataTable id="tbl" var="lstqqq" value="#{resultsByFilterDataTableBean.lstQuestionnaireQQ}"
+                                      emptyMessage="There are not data"
+                                      rowIndexVar="rowIndex" 
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                                     paginator="true" rows="20" style="margin-bottom:20px" >                         
+
+                            <f:facet name="{Exporters}">
+                                
+                                <h:commandLink>
+                                    <p:graphicImage url="/resource/images/export/excel.png" width="24"/>
+                                    <p:dataExporter type="xls" target="tbl" fileName="Report" />
+                                </h:commandLink>                                                                
+
+                                <h:commandLink>
+                                    <p:graphicImage url="/resource/images/export/pdf.png" width="24"/>
+                                    <p:dataExporter type="pdf" target="tbl" fileName="Report"/>
+                                </h:commandLink>
+
+                                <h:commandLink>
+                                    <p:graphicImage url="/resource/images/export/csv.png" width="24"/>
+                                    <p:dataExporter type="csv" target="tbl" fileName="Report" />
+                                </h:commandLink>
+
+                                <h:commandLink>
+                                    <p:graphicImage url="/resource/images/export/xml.png" width="24"/>
+                                    <p:dataExporter type="xml" target="tbl" fileName="Report" />
+                                </h:commandLink>
+                            </f:facet>
+
+                             <p:column headerText="#" style="width:4px; text-align: center;"   >
+                                <f:facet name="header">
+                                    <h:outputText value="#"/>
+                                </f:facet>
+                                #{rowIndex + 1}
+                            </p:column> 
+
+                             <p:column headerText="Maturity Level" sortBy="#{lstqqq.quepQuestion.maturityLevel.name}" filterBy="#{lstqqq.quepQuestion.maturityLevel.name}" filterMatchMode="contains"
+                                       style="width:55px; text-align: justify;"  filterStyle="width:50px;">
+                                <f:facet name="header">
+                                    <h:outputText value="Maturity Level" />
+                                </f:facet>
+                                 <h:outputText value="#{lstqqq.quepQuestion.maturityLevel.name}" />
+                            </p:column>                                                       
+
+                            <p:column headerText="Principle" sortBy="#{lstqqq.quepQuestion.practice.principle.name}" filterBy="#{lstqqq.quepQuestion.practice.principle.name}" filterMatchMode="contains"
+                                     style="width:55px; text-align: justify;"  filterStyle="width:50px;" >
+                                <f:facet name="header">
+                                    <h:outputText value="Principle" />
+                                </f:facet>
+                                <h:outputText value="#{lstqqq.quepQuestion.practice.principle.name}" />
+                            </p:column>
+
+                            <p:column headerText="Practice" sortBy="#{lstqqq.quepQuestion.practice.name}" filterBy="#{lstqqq.quepQuestion.practice.name}" filterMatchMode="contains"
+                                      style="width:55px; text-align: justify;"  filterStyle="width:50px;">
+                                <f:facet name="header">
+                                    <h:outputText value="Practice" />
+                                </f:facet>
+                                <h:outputText value="#{lstqqq.quepQuestion.practice.name}" />
+                            </p:column>
+                            
+                            <p:column headerText="Questionnaire" sortBy="#{lstqqq.questionnaire.name}" filterBy="#{lstqqq.questionnaire.name}" filterMatchMode="contains" 
+                                      style="width:55px; text-align: center;"  filterStyle="width:50px;">
+                                <f:facet name="header">
+                                    <h:outputText value="Questionnaire" />
+                                </f:facet>
+                                <h:outputText value="#{lstqqq.questionnaire.name}" />
+                            </p:column>
+                            
+                            <p:column headerText="ID" sortBy="#{lstqqq.quepQuestion.id}" filterBy="#{lstqqq.quepQuestion.id}" filterMatchMode="contains" 
+                                      style="width:25px; text-align: center;"  filterStyle="width:20px;">
+                                <f:facet name="header">
+                                    <h:outputText value="ID" />
+                                </f:facet>
+                                <h:outputText value="#{lstqqq.quepQuestion.id}" />
+                            </p:column>
+
+                            <p:column headerText="Question" sortBy="#{lstqqq.quepQuestion.description}" filterBy="#{lstqqq.quepQuestion.description}" filterMatchMode="contains"
+                                      style="width:505px; text-align: justify;"  filterStyle="width:500px;">
+                                <f:facet name="header">
+                                    <h:outputText value="Question"/>
+                                </f:facet>
+                                <h:outputText value="#{lstqqq.quepQuestion.description}" />
+                            </p:column>
+                            
+                            <p:column headerText="Role" sortBy="#{lstqqq.questionnaire.rolePractice.role.name}" filterBy="#{lstqqq.questionnaire.rolePractice.role.name}" filterMatchMode="contains"
+                                      style="width:45px; text-align: justify;"  filterStyle="width:45px;">
+                                <f:facet name="header">
+                                    <h:outputText value="Role"/>
+                                </f:facet>
+                                <h:outputText value="#{lstqqq.questionnaire.rolePractice.role.name}" />
+                            </p:column>
+                            
+                        </p:dataTable>
+
+                        <h3>Export Page Data Only</h3>
+                        <h:commandLink>
+                            <p:graphicImage url="/resource/images/export/excel.png" />
+                            <p:dataExporter type="xls" target="tbl" fileName="Report" pageOnly="true"/>
+                        </h:commandLink>
+
+                        <h:commandLink>
+                            <p:graphicImage url="/resource/images/export/pdf.png" />
+                            <p:dataExporter type="pdf" target="tbl" fileName="Report" pageOnly="true" />
+                        </h:commandLink>
+
+                        <h:commandLink>
+                            <p:graphicImage url="/resource/images/export/csv.png" />
+                            <p:dataExporter type="csv" target="tbl" fileName="Report" pageOnly="true" />
+                        </h:commandLink>
+
+                        <h:commandLink>
+                            <p:graphicImage url="/resource/images/export/xml.png" />
+                            <p:dataExporter type="xml" target="tbl" fileName="Report" pageOnly="true" />
+                        </h:commandLink>
+                    </h:form>
+                    <!-- content body end-->
+
+                    <!-- footer start-->
+                    <div class="ContentSideSections">
+                        <span class="floatLeft fontSize14 gray"><a href="http://quep.webs.upv.es/">QuEP-T</a>, Copyright 2016</span>
+                        <span class="floatRight fontSize14 gray">All rights reserved</span>
+                        <div style="clear:both"></div>
+                    </div>
+                    <!-- footer end-->
+                </div>
+            </div>
+        </div>        
+    </h:body>    
+
+</html>
+

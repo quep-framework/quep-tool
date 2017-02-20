@@ -46,7 +46,7 @@ public class OrganizationBean implements Serializable {
     private QuestionnaireDynamicBean questionnaireDynamicBean;
 
     @Inject
-    private ResultsChartViewBean resultsChartViewBean;
+    private MaturityLevelResultsChartViewBean resultsChartViewBean;
 
     public OrganizationBean() {
       
@@ -143,7 +143,7 @@ public class OrganizationBean implements Serializable {
         return questionnaireDynamicBean;
     }
 
-    public ResultsChartViewBean getResultsChartViewBean() {
+    public MaturityLevelResultsChartViewBean getResultsChartViewBean() {
         return resultsChartViewBean;
     }
 
@@ -159,7 +159,7 @@ public class OrganizationBean implements Serializable {
         this.questionnaireDynamicBean = questionnaireDynamicBean;
     }
 
-    public void setResultsChartViewBean(ResultsChartViewBean resultsChartViewBean) {
+    public void setResultsChartViewBean(MaturityLevelResultsChartViewBean resultsChartViewBean) {
         this.resultsChartViewBean = resultsChartViewBean;
     }
 

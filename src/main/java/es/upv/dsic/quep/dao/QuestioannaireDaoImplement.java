@@ -5,6 +5,7 @@
  */
 package es.upv.dsic.quep.dao;
 
+import es.upv.dsic.quep.beans.ResultsByFilterDataTableBean;
 import es.upv.dsic.quep.hibernate.HibernateUtil;
 import es.upv.dsic.quep.model.Principle;
 import es.upv.dsic.quep.model.QuepQuestion;
@@ -99,7 +100,52 @@ public class QuestioannaireDaoImplement implements QuestionnaireQQDao {
         return list;
     }
     
-   
+    
+    @Override
+    public List<QuestionnaireQuepQuestion> getQuestionnairesQQbyOrg(int idOrg) {
+        Session session = null;
+        List<QuestionnaireQuepQuestion> list = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            //Query query = session.createQuery("from QuestionnaireQuepQuestion where active=1 and organization.id=" + idOrg);
+              Query query = session.createQuery("select qqq\n"
+                    + "from  QuestionnaireQuepQuestion qqq, RoleStakeholder rs \n"
+                    + "where rs.id.idOrganization='" + idOrg + "'\n"
+                    + " and rs.id.idRole=qqq.id.idRole ");
+            list = (List<QuestionnaireQuepQuestion>) query.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return list;
+    }
+    
+    /*
+     //@Override
+    public List<ResultsByFilterDataTableBean.QQQuestionRoleStakeholder> getQuestionnairesQQbyOrg(int idOrg) {
+        Session session = null;
+        List<ResultsByFilterDataTableBean.QQQuestionRoleStakeholder> list = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            //Query query = session.createQuery("from QuestionnaireQuepQuestion where active=1 and organization.id=" + idOrg);
+              Query query = session.createQuery("select qqq, rs \n"
+                    + "from  QuestionnaireQuepQuestion qqq, RoleStakeholder rs \n"
+                    + "where rs.id.idOrganization='" + idOrg + "'\n"
+                    + " and rs.id.idRole=qqq.id.idRole ");
+            list = (List<ResultsByFilterDataTableBean.QQQuestionRoleStakeholder>) query.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return list;
+    }
+    */
 
     @Override
     public List<Principle> getPrinciples(int idRole,int idOrg) {
