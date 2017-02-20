@@ -1,0 +1,29 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"      
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">        
+    <!--start menu izq-->
+    <div id="MENUSIDE">
+        <div id="MENUSIDEindent">
+
+            <span id="LOGO" class="bordersOfMenuSide" >
+                <img alt="logo" src="/QuEP-Tool/resource/images/logoT.png" style="width: 120px; margin-left: 40px; margin-bottom: 10px;"/>
+                <img id="BlueLogo" alt="logo" src="/QuEP-Tool/resource/images/logo.png"   style="width: 120px; margin-left: 40px; margin-bottom: 10px;" class="hiddenLogo"/>                         
+            </span> 
+
+            <span id="SubMenu-Ajax" class="MenuSideMainLink bordersOfMenuSide" >
+                <h:graphicImage url="/resource/main/images/mono/menu.svg" />                        
+                <span class="MainLinkText">Menu</span>                        
+            </span>
+
+            <h:form >
+                <p:panelMenu model="#{menuBean.model}"  />              
+            </h:form>
+        </div>
+    </div>  
+    <!--end menu izq-->
+</ui:composition>
+

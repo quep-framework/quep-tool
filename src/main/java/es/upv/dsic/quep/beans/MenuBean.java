@@ -58,6 +58,8 @@ public class MenuBean implements Serializable {
         this.lstMenu = linkDao.getMenuRol(idRol);
     }
 
+    /*Submenu "S" or item "I"
+    */
     public void doMenu() {
         for (Menu m : lstMenu) {
             if (m.getType().equals('S')) {
@@ -72,7 +74,8 @@ public class MenuBean implements Serializable {
                         }
                     }
                 }
-                model.addElement(firstSubmenu);
+                model.addElement(firstSubmenu);                
+                
             } else if (m.getMenu() == null) {
                 DefaultMenuItem item = new DefaultMenuItem(m.getName());
                 item.setUrl(m.getUrl());

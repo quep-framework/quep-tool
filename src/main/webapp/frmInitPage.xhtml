@@ -5,8 +5,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:composite="http://java.sun.com/jsf/composite"  
-      xmlns:ui="http://java.sun.com/jsf/facelets" 
-          
+      xmlns:ui="http://java.sun.com/jsf/facelets"           
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -40,7 +39,7 @@
                 </h:panelGrid>
             </p:dialog>
             <!-- end dialog -->
-            
+
             <div class="PC">
                 <div id="MENUSIDE">
                     <div id="MENUSIDEindent">
@@ -76,15 +75,11 @@
 
                         <div id="widgetdemo">                           
 
-                            <div class="ContentSideSections overHidden PFLayouts">
-                                <span class="dispBlock logoBlueText fontSize30 mediumFont">A Support Tool for QuEP </span>
-                                <span class="defaultText">QuEP is a framework for the assessment and improvement of the management of emergency plans within organizations. 
-                                    It is inspired by the Total Quality Management strategy, and provides a hierarchy of emergency plan management maturity levels. 
-                                    The aim of QuEP is to guide organizations to assess and improve their emergency 
-                                    preparedness by following a set of principles, practices and techniques at the technical, human and strategic levels.</span>                                                              
-                            </div>
-                            
-     
+                            <!-- content quep start -->
+                            <ui:include src="/frames/frmContentQuEP.xhtml" />  
+                            <!-- content quep  end-->          
+
+
                             <div class="ContentSideSections overHidden">                               
                                 <div class="Content33 floatLeft overHidden" style="min-height:200px">
                                     <div class="BoxesIndent">                                      
@@ -113,12 +108,7 @@
 
 
                         <!-- footer start-->
-                        <div class="ContentSideSections">
-                            <span class="floatLeft fontSize14 gray"><!--a href="http://quep.webs.upv.es/"-->
-                                    QuEP-T<!--/a-->, Copyright 2016</span>
-                            <span class="floatRight fontSize14 gray">All rights reserved</span>
-                            <div style="clear:both"></div>
-                        </div>
+                        <ui:include src="/frames/frmMenuSideBottom.xhtml" />  
                         <!-- footer end-->
 
                     </div>
@@ -130,17 +120,17 @@
 
         </h:form>
 
-        <script type="text/javascript">              
-                 
-                function handleLoginRequest(xhr, status, args) {
-                     if (args.validationFailed || !args.loggedIn ) {
-                         PF('dlg').jq.effect("shake", {times: 5}, 100);                                                  
-                     } else {                        
-                             PF('dlg').hide();
-                             $('#loginLink').fadeOut();                                                                                   
-                     }
-                 }
-                 
+        <script type="text/javascript">
+
+                                    function handleLoginRequest(xhr, status, args) {
+                                        if (args.validationFailed || !args.loggedIn) {
+                                            PF('dlg').jq.effect("shake", {times: 5}, 100);
+                                        } else {
+                                            PF('dlg').hide();
+                                            $('#loginLink').fadeOut();
+                                        }
+                                    }
+
         </script>
     </h:body>
 </html>

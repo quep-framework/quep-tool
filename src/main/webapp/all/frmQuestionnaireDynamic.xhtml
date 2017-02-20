@@ -4,9 +4,10 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"      
       xmlns:f="http://xmlns.jcp.org/jsf/core"          
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
-       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -39,128 +40,48 @@
         <script type="text/javascript" src="/QuEP-Tool/build/primeui.js"></script>
         <script type="text/javascript" src="/QuEP-Tool/build/primeelements.js"></script-->    
         <script type="text/javascript">
-            
+
             function cutFromString(oldStrRegex, prefix, prefixIdRO) {
-                var string="";
-                string=oldStrRegex.replace(prefix+prefixIdRO, '');   
-                var delimiter= string.indexOf(':');
-                return string.substring(0,delimiter);
-            }  
-            
-              function validateQuestion(id1,prefix,prefixIdRO) {
-                  var id2txtPageNumber=prefix+'txtPageNumber_'+cutFromString(id1, prefix,prefixIdRO);
-                  var id2lblPageNumber=prefix+'lblPageNumber_'+cutFromString(id1, prefix,prefixIdRO);  
-                  var id2PanelTechnique=prefix+'fs_'+cutFromString(id1, prefix,prefixIdRO);                 
-                  if(document.getElementById(id1).value === '1') {
-                      document.getElementById(id2lblPageNumber).hidden = false;
-                      document.getElementById(id2txtPageNumber).hidden = false;                      
-                      document.getElementById(id2PanelTechnique).style.visibility = "hidden"; 
-                  } else {         
-                      document.getElementById(id2lblPageNumber).hidden = true; 
-                      document.getElementById(id2txtPageNumber).hidden = true;                       
-                      document.getElementById(id2PanelTechnique).style.visibility = "visible";    
-                  }                  
-              }     
-              
-              function refreshPage(bPageRefresh) {
-                  alert(bPageRefresh);
-                 if (bPageRefresh === '1'){
+                var string = "";
+                string = oldStrRegex.replace(prefix + prefixIdRO, '');
+                var delimiter = string.indexOf(':');
+                return string.substring(0, delimiter);
+            }
+
+            function validateQuestion(id1, prefix, prefixIdRO) {
+                var id2txtPageNumber = prefix + 'txtPageNumber_' + cutFromString(id1, prefix, prefixIdRO);
+                var id2lblPageNumber = prefix + 'lblPageNumber_' + cutFromString(id1, prefix, prefixIdRO);
+                var id2PanelTechnique = prefix + 'fs_' + cutFromString(id1, prefix, prefixIdRO);
+                if (document.getElementById(id1).value === '1') {
+                    document.getElementById(id2lblPageNumber).hidden = false;
+                    document.getElementById(id2txtPageNumber).hidden = false;
+                    document.getElementById(id2PanelTechnique).style.visibility = "hidden";
+                } else {
+                    document.getElementById(id2lblPageNumber).hidden = true;
+                    document.getElementById(id2txtPageNumber).hidden = true;
+                    document.getElementById(id2PanelTechnique).style.visibility = "visible";
+                }
+            }
+
+            function refreshPage(bPageRefresh) {
+                alert(bPageRefresh);
+                if (bPageRefresh === '1') {
                     window.location.reload();
-                 }
-              }                           
+                }
+            }
         </script>
-
     </h:head>
-    
-    <h:body>
 
-         <div  class="PC">
+    <h:body>
+        <div  class="PC">
             <!--start menu izq-->
-            <div id="MENUSIDE">
-                <div id="MENUSIDEindent">
-                      <span id="LOGO" class="bordersOfMenuSide"  >
-                        <img alt="logo" src="/QuEP-Tool/resource/images/logoT.png" style="width: 120px; margin-left: 40px; margin-bottom: 10px;"/>
-                        <img id="BlueLogo" alt="logo" src="/QuEP-Tool/resource/images/logo.png"   style="width: 120px; margin-left: 40px; margin-bottom: 10px;" class="hiddenLogo"/>                         
-                    </span> 
-                    <h:form>                        
-                        <p:panelMenu model="#{menuBean.model}" />                                                
-                    </h:form>
-                </div>
-            </div>                
+            <ui:include src="/frames/frmMenuSideLeft.xhtml" />                                 
             <!--end menu izq-->
 
             <div id="CONTENTSIDE">
                 <div id="CONTENTSIDEindent">
-
                     <!-- header bar start-->
-                    <div class="ContentSideSections" id="PFTopLinksCover" style="height:60px;">
-                        <a id="LOGOTEXTSIDE" href="/QuEP-Tool/all/frmMainPage.xhtml" >
-                            <table><tr><td>
-                                        <img alt="logo" src="/QuEP-Tool/resource/images/logo.png" style="width:125px;"/>
-                                    </td><td>
-                                        <span class="dispBlock logoDarkText" style="margin-left: 18px; font-size: 20px; width: 500px; ">A Total Quality Framework 
-                                            for the assessment and improvement of Emergency Plans Management 
-                                            <h:form >
-                                                <c:choose id="chooseOrg">
-                                                    <c:when test="#{organizationBean.bandOrganization}" id="bOrgTrue">
-                                                         <h:panelGrid columns="2" cellpadding="2" id="pnlOrgBean">                                        
-                                                            <p:outputLabel  value="Organization:"  id="lblOrgTrue"/>
-                                                            <p:selectOneMenu  value="#{organizationBean.organization}" var="o"  effect="fade" 
-                                                                              filter="true" filterMatchMode="contains"
-                                                                              valueChangeListener="#{organizationBean.changeListener}" onchange="submit()"                                                                               
-                                                                              converter="#{organizationConverter}">
-                                                                <f:selectItems value="#{organizationBean.lstOrganization}" var="lstO"  itemLabel="#{lstO.name}" itemValue="#{lstO}" />
-                                                                <p:column>
-                                                                    <h:outputText value="#{o.name}" />
-                                                                </p:column>
-                                                            </p:selectOneMenu>                                                                                                                
-                                                         </h:panelGrid>
-                                                    </c:when>
-                                                    <c:otherwise id="bOrgFalse">
-                                                        Organization: #{organizationBean.nameOrganization}
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </h:form>                                                                                                
-                                        </span> 
-                                    </td>
-                                </tr></table>
-                        </a>
-
-                        <a class="PFTopLinks floatRight boldFont marginRight10 hashed" style="width:auto;"  >
-                            <table><tr><td>
-                                        <table><tr><td>
-                                                    #{loginBean.stakeholder.name} 
-                                                </td><td>
-                                                    <img  src="/QuEP-Tool/resource/images/user.png" style=" height: 20px; width: 20px;"  />
-                                                </td></tr>
-                                            <tr><td colspan="2" align="center">
-                                                    <span class="PFDarkText">Role: </span>  
-                                                    <span class="PFDarkText">#{loginBean.role.name}</span>                                              
-                                                </td></tr>
-                                        </table>                                
-
-                                    </td></tr>
-                                <tr><td> 
-                                        <h:form>
-                                            <p:commandLink id="close"
-                                                           action="#{loginBean.logout()}"
-                                                           value="Logout"
-                                                           style="margin-right:20px;" 
-                                                           styleClass="ui-icon-extlink"                                                          
-                                                           />
-                                        </h:form>                                       
-                                    </td></tr>
-                            </table>
-                        </a>    
-                    </div>
-                    <div >
-                        <h:form>
-                            <p:breadCrumb>
-                                <p:menuitem value="" url="/all/frmMainPage.xhtml" />
-                                <p:menuitem value="Questionnaires by Principles" url="#" />
-                            </p:breadCrumb>
-                        </h:form>
-                    </div>     
+                    <ui:include src="/frames/frmMenuSideTop.xhtml" />  
                     <!-- header bar end-->
 
                     <!-- content body start-->       
@@ -170,11 +91,7 @@
                     <!-- content body end-->
 
                     <!-- footer start-->
-                    <div class="ContentSideSections">
-                        <span class="floatLeft fontSize14 gray"><a href="http://quep.webs.upv.es/">QuEP-T</a>, Copyright 2016</span>
-                        <span class="floatRight fontSize14 gray">All rights reserved</span>
-                        <div style="clear:both"></div>
-                    </div>
+                    <ui:include src="/frames/frmMenuSideBottom.xhtml" />  
                     <!-- footer end-->
                 </div>
             </div>

@@ -12,7 +12,6 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
@@ -32,10 +31,7 @@ public class OrganizationBean implements Serializable {
     private List<Organization> lstOrganization;
     private boolean bandOrganization = false;
     private String nameOrganization = "";
-    
-    @Inject
-    BeanManager manager;
-    
+            
     @Inject
     private LoginBean loginBean;
 
@@ -46,7 +42,10 @@ public class OrganizationBean implements Serializable {
     private QuestionnaireDynamicBean questionnaireDynamicBean;
 
     @Inject
-    private MaturityLevelResultsChartViewBean resultsChartViewBean;
+    private MaturityLevelResultsChartViewBean maturityLevelResultsChartViewBean;
+    
+    @Inject
+    private PrincipleResultsChartViewBean PrincipleResultsChartViewBean;
 
     public OrganizationBean() {
       
@@ -76,9 +75,12 @@ public class OrganizationBean implements Serializable {
 
         if (loginBean.checkUserByOrganization(loginBean.getRole().getId(), organization.getId())) {
             String str = navigationBean.getCurrentPage();
-            if (str.contains("/QuEP-Tool/admin/frmMaturityLevelsResults.xhtml")) {
-                resultsChartViewBean.init();
-            } else if (str.contains("/QuEP-Tool/all/frmQuestionnaireDynamic.xhtml")) {
+            if (str.contains("/QuEP-Tool/reports/frmMaturityLevelsResults.xhtml")) {
+                maturityLevelResultsChartViewBean.init();
+            } else if (str.contains("/QuEP-Tool/reports/frmPrinciplesResults.xhtml")) {
+                PrincipleResultsChartViewBean.init();
+            } 
+            else if (str.contains("/QuEP-Tool/all/frmQuestionnaireDynamic.xhtml")) {
                 questionnaireDynamicBean.init();
             }
         }
@@ -143,9 +145,6 @@ public class OrganizationBean implements Serializable {
         return questionnaireDynamicBean;
     }
 
-    public MaturityLevelResultsChartViewBean getResultsChartViewBean() {
-        return resultsChartViewBean;
-    }
 
     public void setLoginBean(LoginBean loginBean) {
         this.loginBean = loginBean;
@@ -157,10 +156,24 @@ public class OrganizationBean implements Serializable {
 
     public void setQuestionnaireDynamicBean(QuestionnaireDynamicBean questionnaireDynamicBean) {
         this.questionnaireDynamicBean = questionnaireDynamicBean;
+    } 
+
+    public MaturityLevelResultsChartViewBean getMaturityLevelResultsChartViewBean() {
+        return maturityLevelResultsChartViewBean;
     }
 
-    public void setResultsChartViewBean(MaturityLevelResultsChartViewBean resultsChartViewBean) {
-        this.resultsChartViewBean = resultsChartViewBean;
+    public void setMaturityLevelResultsChartViewBean(MaturityLevelResultsChartViewBean maturityLevelResultsChartViewBean) {
+        this.maturityLevelResultsChartViewBean = maturityLevelResultsChartViewBean;
     }
 
+    public PrincipleResultsChartViewBean getPrincipleResultsChartViewBean() {
+        return PrincipleResultsChartViewBean;
+    }
+
+    public void setPrincipleResultsChartViewBean(PrincipleResultsChartViewBean PrincipleResultsChartViewBean) {
+        this.PrincipleResultsChartViewBean = PrincipleResultsChartViewBean;
+    }
+
+
+    
 }
