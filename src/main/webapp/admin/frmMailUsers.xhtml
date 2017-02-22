@@ -1,0 +1,227 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:f="http://xmlns.jcp.org/jsf/core"          
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+     <f:view contentType="text/html">
+            <h:head>
+                <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+                <meta name="apple-mobile-web-app-capable" content="yes" />
+                <title>Maturity Levels</title>
+                <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/themes/aristo/theme.css" />
+                <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/site.css" />
+                <!--link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/jquery-ui.css" />
+                <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/perfect-scrollbar.css" />
+                <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/css/sh.css" />
+                <link rel="stylesheet" type="text/css" href="/QuEP-Tool/resource/icons/css/font-awesome.min.css" /--> 
+
+                <!--script type="text/javascript" src="/QuEP-Tool/resource/js/jquery.js"></script-->
+                <!--documentado x bloquear select one menu--> 
+                <!--script type="text/javascript" src="/QuEP-Tool/resource/js/perfect-scrollbar.js"></script>
+                <script type="text/javascript" src="/QuEP-Tool/resource/js/site.js"></script>
+                <script type="text/javascript" src="/QuEP-Tool/resource/js/index.js"></script-->
+
+                <!-- Dependencies of some widgets -->  
+                <!--script type="text/javascript" src="/QuEP-Tool/resource/js/plugins/plugins-all.js"></script-->
+
+                <!-- Mustache for templating support -->
+                <!--script type="text/javascript" src="/QuEP-Tool/resource/js/plugins/mustache.min.js"></script-->
+
+                <!-- X-TAG for PrimeElements -->
+                <!--script type="text/javascript" src="/QuEP-Tool/resource/js/x-tag-core.min.js"></script-->
+
+                <!-- PrimeUI -->
+                <!--link rel="stylesheet" href="/QuEP-Tool/build/primeui.css" />
+                <script type="text/javascript" src="/QuEP-Tool/build/primeui.js"></script>
+                <script type="text/javascript" src="/QuEP-Tool/build/primeelements.js"></script-->                                                                         
+
+            <h:outputStylesheet name="main/css/showcase.css" />
+            <h:outputStylesheet name="main/css/sh.css" />
+            <style type="text/css">
+                body {
+                    background-color: #FFFFFF;
+                }
+            </style>
+            <script type="text/javascript">
+                var _gaq = _gaq || [];
+                _gaq.push(['_setAccount', 'UA-12200033-1']);
+                _gaq.push(['_trackPageview']);
+
+                (function () {
+                    var ga = document.createElement('script');
+                    ga.type = 'text/javascript';
+                    ga.async = true;
+                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                    var s = document.getElementsByTagName('script')[0];
+                    s.parentNode.insertBefore(ga, s);
+                })();
+            </script>
+    </h:head>
+
+    <h:body>
+        <div class="PC">
+            <!--start menu izq-->            
+            <!--end menu izq-->
+
+            <div id="CONTENTSIDE">
+                <div id="CONTENTSIDEindent">
+
+                    <!-- header bar start-->                    
+                    <!-- header bar end-->
+
+                    <!-- content body start-->         
+                    <p:growl id="msg" />
+
+                    <p:layout fullPage="true">
+                        <p:layoutUnit position="north" size="40">
+                            <p:commandButton value="Compose" onclick="PF('composeDlg').show()" type="button" icon="ui-icon-document"/>
+                        </p:layoutUnit>
+
+                        <p:layoutUnit position="west" size="200" resizable="true" collapsible="true" header="MAILBOXES">
+                            <h:form>
+                                <p:tree value="#{mailboxView.mailboxes}" var="box" selectionMode="single" selection="#{mailboxView.mailbox}" style="width:170px">
+                                    <p:treeNode icon="ui-icon-mail-closed">
+                                        <h:outputText value="#{box}"/>
+                                    </p:treeNode>
+
+                                    <p:treeNode type="i" icon="ui-icon-mail-closed">
+                                        <h:outputText value="#{box}"/>
+                                    </p:treeNode>
+
+                                    <p:treeNode type="s" icon="ui-icon-transfer-e-w">
+                                        <h:outputText value="#{box}"/>
+                                    </p:treeNode>
+
+                                    <p:treeNode type="t" icon="ui-icon-trash">
+                                        <h:outputText value="#{box}"/>
+                                    </p:treeNode>
+
+                                    <p:treeNode type="j" icon="ui-icon-alert">
+                                        <h:outputText value="#{box}"/>
+                                    </p:treeNode>
+                                </p:tree>
+                            </h:form>
+                        </p:layoutUnit>
+
+                        <p:layoutUnit position="center">
+
+                            <p:layout>
+
+                                <p:layoutUnit position="north" size="50%" resizable="true" styleClass="nestedUnit">
+
+                                    <p:tabView>
+
+                                        <p:tab title="Gmail">
+
+                                            <h:form>
+
+                                                <p:dataTable var="mail" value="#{mailboxView.mails}">
+
+                                                    <p:column headerText="From" sortBy="from">
+                                                        #{mail.from}
+                                                    </p:column>
+
+                                                    <p:column headerText="Subject" sortBy="subject">
+                                                        #{mail.subject}
+                                                    </p:column>
+
+                                                    <p:column headerText="Date" sortBy="date">
+                                                        #{mail.date}
+                                                    </p:column>
+
+                                                    <p:column>
+                                                        <p:commandButton update=":mailViewer" icon="ui-icon-search" title="View">
+                                                            <f:setPropertyActionListener value="#{mail }" target="#{mailboxView.mail}" />
+                                                        </p:commandButton>
+                                                    </p:column>
+
+                                                </p:dataTable>
+
+                                            </h:form>
+
+                                        </p:tab>
+
+                                    </p:tabView>
+
+                                </p:layoutUnit>
+
+                                <p:layoutUnit position="center" styleClass="nestedUnit">
+
+                                    <p:outputPanel id="mailViewer">
+                                        <h:outputText value="#{mailboxView.mail.body}" rendered="#{not empty mailboxView.mail}" />
+                                    </p:outputPanel>
+
+                                </p:layoutUnit>
+
+                            </p:layout>
+
+                        </p:layoutUnit>
+
+                    </p:layout>
+
+                    <p:ajaxStatus style="width:32px;height:32px;display:block;position:fixed;right:0;top:0;z-index:100">
+                        <f:facet name="start">
+                            <p:graphicImage name="main/images/loader.gif" />
+                        </f:facet>
+
+                        <f:facet name="complete">
+                            <h:outputText value="" />
+                        </f:facet>
+                    </p:ajaxStatus>
+
+                    <p:dialog widgetVar="composeDlg" modal="true" header="New Email" width="530" showEffect="fade" hideEffect="fade">
+
+                        <h:form>
+
+                            <h:panelGrid columns="2" cellspacing="5">
+                                <h:outputLabel for="to" value="To: " />
+                                <p:inputText id="to"/>
+
+                                <h:outputLabel for="cc" value="CC: " />
+                                <p:inputText id="cc"/>
+
+                                <h:outputLabel for="subject" value="Subject: " />
+                                <p:inputText id="subject" size="50"/>
+                            </h:panelGrid>
+
+                            <p:separator />
+
+                            <p:editor widgetVar="editor" />
+
+                            <p:separator />
+
+                            <p:commandButton value="Send" onclick="PF('composeDlg').hide()" actionListener="#{mailboxView.send}" update=":msg" process="@this"/>
+                            <p:commandButton value="Cancel" onclick="PF('composeDlg').hide()" type="button"/>
+
+                        </h:form>
+
+                    </p:dialog>
+
+
+
+                    <script language="javascript" src="#{request.contextPath}/resources/main/js/sh.js"></script>
+                    <script language="javascript">
+                                SyntaxHighlighter.all();
+                    </script>
+                    <!-- content body end-->
+
+
+                    <!-- footer start-->                    
+                    <!-- footer end-->
+
+                </div>
+            </div>
+        </div>
+
+        <!--script type="text/javascript" src="/QuEP-Tool/resource/js/sh.js"></script-->
+
+    </h:body>
+</f:view>
+</html>
+
+

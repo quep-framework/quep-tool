@@ -344,6 +344,9 @@ public class QuestioannaireDaoImplement implements QuestionnaireQQDao {
                     if (band) {                    
                         session.update(oQR_last);
                     }
+                    else {
+                        session.save(oQR_last);
+                    }
 
                     for (Response oResponseLast : lstR_last) {
                         session.save(oResponseLast);

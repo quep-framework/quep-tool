@@ -347,27 +347,36 @@ public class QuestionnaireDynamicBean implements Serializable {
             OverlayPanel pnlTech = new OverlayPanel();
             pnlTech.setId("pnlTech_" + String.valueOf(qq.getId()));
             pnlTech.setFor("btnTech_" + String.valueOf(qq.getId()));
-            pnlTech.setHideEffect("fade");
-
+            pnlTech.setHideEffect("fade");      
+            //pnlTech.setStyle("height:300px;");      
+            
+            
             PanelGrid pnlBP = new PanelGrid();
             pnlBP.setId("pnlBP_" + String.valueOf(qq.getId()));
             pnlBP.setColumns(1);
+            pnlBP.setStyle(" width:600px; float:right;");
+            
             OutputLabel oTech = new OutputLabel();
+           // InputText oTech = new InputText();
             oTech.setId("oTech_" + String.valueOf(qq.getId()));
-            oTech.setValue("Techniques: <br/>" + sTechnique); 
+            oTech.setValue("<p>Techniques: <br/>" + sTechnique+"</p>"); 
             oTech.setEscape(false);
-            oTech.setStyle("white-space:pre;");
+            //oTech.setStyle("white-space:pre; display:block; width:200px; height:50px; text-align:justify;");  
+            oTech.setStyle("width:600px;");  
+            
 
             OutputLabel oTech2 = new OutputLabel();
+            //InputText oTech2 = new InputText();
             oTech2.setId("oTech2_" + String.valueOf(qq.getId()));
-            oTech2.setValue("Resilience: <br/>" + sResilience);
+            oTech2.setValue("<p>Resilience: <br/>" + sResilience + "</p>"); 
             oTech2.setEscape(false);
-            oTech2.setStyle("white-space:pre;");
+            //oTech2.setStyle("white-space:pre; ");
 
             pnlBP.getChildren().add(oTech);
             pnlBP.getChildren().add(oTech2);
 
             pnlTech.getChildren().add(pnlBP);
+            
 
             pnlQuestion.getChildren().add(btnTech);
             pnlQuestion.getChildren().add(pnlTech);
@@ -471,7 +480,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             }
             chk.getChildren().add(selectItems);
             chk.setColumns(5);
-            chk.setStyle("display: block; width: 400px;");
+            chk.setStyle("display: block; width: 400px;"); 
             pnlResponseOption.getChildren().add(chk);
             
         ////////////////////////////////////////
