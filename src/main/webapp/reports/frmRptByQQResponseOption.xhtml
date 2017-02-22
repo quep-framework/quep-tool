@@ -31,7 +31,7 @@
 
                     <!-- content body start-->  
                     <h:form>
-                        <p:dataTable id="tbl" var="lstqqro" value="#{rptQQResponseOptionBean.lstQQResponseOption}"
+                        <p:dataTable id="tbl" var="lstqqq" value="#{resultsByFilterDataTableBean.lstQuestionnaireQQ}"
                                      emptyMessage="There are not data"
                                      rowIndexVar="rowIndex" 
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
@@ -67,63 +67,61 @@
                                 #{rowIndex + 1}
                             </p:column> 
 
-                            <p:column headerText="Maturity Level" sortBy="#{lstqqro.quepQuestion.maturityLevel.name}" filterBy="#{lstqqro.quepQuestion.maturityLevel.name}" filterMatchMode="contains"
+                            <p:column headerText="Maturity Level" sortBy="#{lstqqq.quepQuestion.maturityLevel.name}" filterBy="#{lstqqq.quepQuestion.maturityLevel.name}" filterMatchMode="contains"
                                       style="width:55px; text-align: justify;"  filterStyle="width:50px;">
                                 <f:facet name="header">
                                     <h:outputText value="Maturity Level" />
                                 </f:facet>
-                                <h:outputText value="#{lstqqro.quepQuestion.maturityLevel.name}" />
+                                <h:outputText value="#{lstqqq.quepQuestion.maturityLevel.name}" />
                             </p:column>                                                       
 
-                            <p:column headerText="Principle" sortBy="#{lstqqro.quepQuestion.practice.principle.name}" filterBy="#{lstqqro.quepQuestion.practice.principle.name}" filterMatchMode="contains"
+                            <p:column headerText="Principle" sortBy="#{lstqqq.quepQuestion.practice.principle.name}" filterBy="#{lstqqq.quepQuestion.practice.principle.name}" filterMatchMode="contains"
                                       style="width:55px; text-align: justify;"  filterStyle="width:50px;" >
                                 <f:facet name="header">
                                     <h:outputText value="Principle" />
                                 </f:facet>
-                                <h:outputText value="#{lstqqro.quepQuestion.practice.principle.name}" />
+                                <h:outputText value="#{lstqqq.quepQuestion.practice.principle.name}" />
                             </p:column>
 
-                            <p:column headerText="Practice" sortBy="#{lstqqro.quepQuestion.practice.name}" filterBy="#{lstqqro.quepQuestion.practice.name}" filterMatchMode="contains"
+                            <p:column headerText="Practice" sortBy="#{lstqqq.quepQuestion.practice.name}" filterBy="#{lstqqq.quepQuestion.practice.name}" filterMatchMode="contains"
                                       style="width:55px; text-align: justify;"  filterStyle="width:50px;">
                                 <f:facet name="header">
                                     <h:outputText value="Practice" />
                                 </f:facet>
-                                <h:outputText value="#{lstqqro.quepQuestion.practice.name}" />
-                            </p:column>
-                          
-                             
-                            <p:column headerText="Response Option" sortBy="#{lstqqro.responseOption.name}" filterBy="#{lstqqro.responseOption.name}" filterMatchMode="contains"
-                                      style="width:45px; text-align: justify;"  filterStyle="width:50px;">
-                                <f:facet name="header">
-                                    <h:outputText value="Response Option"/>
-                                </f:facet>
-                                <h:outputText value="#{lstqqro.responseOption.name}" />
+                                <h:outputText value="#{lstqqq.quepQuestion.practice.name}" />
                             </p:column>
 
-                            <p:column headerText="ID" sortBy="#{lstqqro.quepQuestion.id}" filterBy="#{lstqqro.quepQuestion.id}" filterMatchMode="contains" 
+                            <p:column headerText="Questionnaire" sortBy="#{lstqqq.questionnaire.name}" filterBy="#{lstqqq.questionnaire.name}" filterMatchMode="contains" 
+                                      style="width:55px; text-align: center;"  filterStyle="width:50px;">
+                                <f:facet name="header">
+                                    <h:outputText value="Questionnaire" />
+                                </f:facet>
+                                <h:outputText value="#{lstqqq.questionnaire.name}" />
+                            </p:column>
+
+                            <p:column headerText="ID" sortBy="#{lstqqq.quepQuestion.id}" filterBy="#{lstqqq.quepQuestion.id}" filterMatchMode="contains" 
                                       style="width:25px; text-align: center;"  filterStyle="width:20px;">
                                 <f:facet name="header">
                                     <h:outputText value="ID" />
                                 </f:facet>
-                                <h:outputText value="#{lstqqro.quepQuestion.id}" />
+                                <h:outputText value="#{lstqqq.quepQuestion.id}" />
                             </p:column>
 
-                            <p:column headerText="Question" sortBy="#{lstqqro.quepQuestion.description}" filterBy="#{lstqqro.quepQuestion.description}" filterMatchMode="contains"
-                                      style="width:505px; text-align: justify;"  filterStyle="width:400px;">
+                            <p:column headerText="Question" sortBy="#{lstqqq.quepQuestion.description}" filterBy="#{lstqqq.quepQuestion.description}" filterMatchMode="contains"
+                                      style="width:505px; text-align: justify;"  filterStyle="width:500px;">
                                 <f:facet name="header">
                                     <h:outputText value="Question"/>
                                 </f:facet>
-                                <h:outputText value="#{lstqqro.quepQuestion.description}" />
-                            </p:column>                            
-                                              
-                            <p:column headerText="Abrev" sortBy="#{lstqqro.quepQuestion.tip}" filterBy="#{lstqqro.quepQuestion.tip}" filterMatchMode="contains" 
-                                      style="width:55px; text-align: center;"  filterStyle="width:50px;">
-                                <f:facet name="header">
-                                    <h:outputText value="Abrev" />
-                                </f:facet>
-                                <h:outputText value="#{lstqqro.quepQuestion.tip}" />
+                                <h:outputText value="#{lstqqq.quepQuestion.description}" />
                             </p:column>
-                           
+
+                            <p:column headerText="Role" sortBy="#{lstqqq.questionnaire.rolePractice.role.name}" filterBy="#{lstqqq.questionnaire.rolePractice.role.name}" filterMatchMode="contains"
+                                      style="width:45px; text-align: justify;"  filterStyle="width:45px;">
+                                <f:facet name="header">
+                                    <h:outputText value="Role"/>
+                                </f:facet>
+                                <h:outputText value="#{lstqqq.questionnaire.rolePractice.role.name}" />
+                            </p:column>
 
                         </p:dataTable>
 

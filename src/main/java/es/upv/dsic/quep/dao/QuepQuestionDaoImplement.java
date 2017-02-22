@@ -10,6 +10,8 @@ import es.upv.dsic.quep.hibernate.HibernateUtil;
 import es.upv.dsic.quep.model.MaturityLevel;
 import es.upv.dsic.quep.model.Organization;
 import es.upv.dsic.quep.model.QuepQuestion;
+import es.upv.dsic.quep.model.QuepQuestionResponseOption;
+import es.upv.dsic.quep.model.QuepQuestionTechnique;
 import es.upv.dsic.quep.model.RoleStakeholder;
 import java.util.List;
 import org.hibernate.HibernateException;
@@ -31,6 +33,42 @@ public class QuepQuestionDaoImplement implements QuepQuestionDao {
             session = HibernateUtil.getSessionFactory().openSession();
             Query query = session.createQuery("from QuepQuestion where active=1");
             list = (List<QuepQuestion>) query.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return list;
+    }
+    
+     @Override
+    public List<QuepQuestionResponseOption> getLstQQuestionResponseOption(){
+        Session session = null;
+        List<QuepQuestionResponseOption> list = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            Query query = session.createQuery("from QuepQuestionResponseOption where active=1");
+            list = (List<QuepQuestionResponseOption>) query.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return list;
+    }
+    
+    @Override
+    public List<QuepQuestionTechnique> getLstQQuestionTechniques(){
+        Session session = null;
+        List<QuepQuestionTechnique> list = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            Query query = session.createQuery("from QuepQuestionTechnique where active=1");
+            list = (List<QuepQuestionTechnique>) query.list();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         } finally {
