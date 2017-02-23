@@ -201,7 +201,7 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
 
         MaturityLevelDaoImplement mdi = new MaturityLevelDaoImplement();
         oMaturityLevel = mdi.getMaturityLevel(Integer.parseInt(sMaturityLevelId));
-        drawHorizontalBarModel("Values", "Principles", "Level: " + oMaturityLevel.getName());
+        drawHorizontalBarModel("Values", "Principles", "Level " +oMaturityLevel.getId()+": "+ oMaturityLevel.getName());
     }
 
     public Map<MaturityLevel, Result> getResultsMaturityLevels() {

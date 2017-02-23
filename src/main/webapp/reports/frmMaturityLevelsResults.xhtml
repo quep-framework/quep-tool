@@ -54,14 +54,13 @@
                                          />
 
                         <p:chart id="idchart"  widgetVar="wchart" type="bar" model="#{maturityLevelResultsChartViewBean.horizontalBarModel}"  
-                                 style="width:715px;height:550px;" >
+                                 style="width:800px;height:550px;" >
                             <p:ajax event="itemSelect" listener="#{maturityLevelResultsChartViewBean.listener}" update="idchart" process="@this"></p:ajax>
                         </p:chart>    
                     </p:panel>   
 
-                    <p:dialog widgetVar="dlgchart" 
-                              showEffect="fade"                               
-                              modal="true" 
+                    <p:dialog widgetVar="dlgchart"                                                          
+                              
                               header="Chart Results"                              
                               showHeader="true"   
                               id="IDdlgchart"
@@ -69,7 +68,7 @@
                         <!--p:ajax event="close" update="IDdlgchart"  /-->
                         <p:outputPanel id="output" 
                                        layout="block" 
-                                       style="width:720px;height:555px"/>
+                                       style="width:820px;height:555px"/>
                         <p:commandButton value="Print" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px">
                             <p:printer target="output" />
                         </p:commandButton>
