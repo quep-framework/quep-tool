@@ -70,7 +70,7 @@ public class QuestionnaireDynamicBean implements Serializable {
 
     @Inject
     private OrganizationBean organizationBean;
-    
+
     private QuestioannaireDaoImplement qdi = new QuestioannaireDaoImplement();
 
     private List<Response> lstResponse;
@@ -90,7 +90,6 @@ public class QuestionnaireDynamicBean implements Serializable {
     public static final String prefixTxtPageNumber = "txtPageNumber_";
     public static final String prefixTxtComments = "txtComments_";
 
-    
     @Inject
     private LoginBean loginBean;
 
@@ -101,7 +100,7 @@ public class QuestionnaireDynamicBean implements Serializable {
     @PostConstruct
     public void init() {
         try {
-             oOrganization = organizationBean.getOrganization();
+            oOrganization = organizationBean.getOrganization();
             try {
                 buildQuestionnaire();
             } catch (Exception e) {
@@ -113,7 +112,7 @@ public class QuestionnaireDynamicBean implements Serializable {
     }
 
     /* ------- 
-     Inicialización de listas (recuperación de datos)
+     InicializaciÛn de listas (recuperaciÛn de datos)
     - lstQuestionnaireResponse: lista que recupera el cuestionario de respuestas en caso de tenerlas
     - lstResponse: lista de respuestas asociadas al cuestionario de respuestas
     - lstQuestionnaireQQ: lista que recupera el cuestionarios de preguntas configurados para el rol actual
@@ -134,13 +133,13 @@ public class QuestionnaireDynamicBean implements Serializable {
 
         //Currently: Questionnaire is set up to all organization. 
         //Todos los cuestionarios se encuentra configurados para evaluar a cualquier organizacion
-        lstQuestionnaireQQ = qdi. getQuestionnairesQQbyRole(loginBean.getRole().getId());
+        lstQuestionnaireQQ = qdi.getQuestionnairesQQbyRole(loginBean.getRole().getId());
         lstMapQuestionnaireQQ = setMapQuestionnaireQQ(lstQuestionnaireQQ);
     }
 
     /* ------- 
-    Construcción del Cuestionario para el rol logeado
-    Se crean todos los componentes (botones, tabs, paneles, ...) dinámicamente según los datos recuperados en las listas
+    ConstrucciÛn del Cuestionario para el rol logeado
+    Se crean todos los componentes (botones, tabs, paneles, ...) din·micamente seg˙n los datos recuperados en las listas
     Se llama al proceso que crea un panel por cada uno de los principios 
     ---*/
     UIForm form;
@@ -160,7 +159,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             //panel.setId("panel");
 
             form = new UIForm();
-            form.setId("frmQ");            
+            form.setId("frmQ");
 
             PanelGrid panelfrm = new PanelGrid();
             panelfrm.setId("pnlMain");
@@ -170,7 +169,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             growl.setShowDetail(true);
 
             ///**************************
-            //Sección de Command Button Save y Complete              
+            //SecciÛn de Command Button Save y Complete              
             CommandButton btnSave = new CommandButton();
             btnSave.setId("cmdSave");
             btnSave.setValue("Save");
@@ -203,7 +202,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             CommandButton yesComplete = new CommandButton();
             yesComplete.setValue("Yes");
             yesComplete.setIcon("ui-icon-check");
-            yesComplete.setStyleClass("ui-confirmdialog-yes");            
+            yesComplete.setStyleClass("ui-confirmdialog-yes");
             yesComplete.setOncomplete("PF('dlg').hide();");
             yesComplete.addActionListener(new ActionListener() {
                 @Override
@@ -236,7 +235,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             form.getChildren().add(panelfrm);
 
             ///**************************
-            //Sección del panel correspondiente a la construcción de las preguntas de cuestionario
+            //SecciÛn del panel correspondiente a la construcciÛn de las preguntas de cuestionario
             AccordionPanel apnl = new AccordionPanel();
             apnl.setId("tvQ");
             apnl.setMultiple(true);
@@ -280,7 +279,7 @@ public class QuestionnaireDynamicBean implements Serializable {
     public void completed(ActionEvent ae) {
         try {
             if (validateComplete() == 1) {
-                saveResponse(1);                
+                saveResponse(1);
             } else {
                 addMessage("Error", "Please fill all requiered fields, which is marked with *.", 2);
             }
@@ -291,8 +290,8 @@ public class QuestionnaireDynamicBean implements Serializable {
 
     /* ------- 
     Se crea un panel por cada uno de los principios existentes en el hashmap lstMapQuestionnaireQQ
-    a) Se llama al proceso de creación del panel de las preguntas 
-    b) Se llama al proceso de creación del panel de las opciones de respuesta
+    a) Se llama al proceso de creaciÛn del panel de las preguntas 
+    b) Se llama al proceso de creaciÛn del panel de las opciones de respuesta
     ---*/
     private PanelGrid createPrinciplePanel(Principle key, List<QuestionnaireQuepQuestion> lstQQQ) {
         PanelGrid panel = new PanelGrid();
@@ -312,8 +311,8 @@ public class QuestionnaireDynamicBean implements Serializable {
     }
 
     /* ------- 
-     a) Creación del panel correspondiente a cada una de las preguntas obtenidas en el hashmap
-        de questionario de preguntas según el rol
+     a) CreaciÛn del panel correspondiente a cada una de las preguntas obtenidas en el hashmap
+        de questionario de preguntas seg˙n el rol
     ---*/
     private PanelGrid createQuestionPanel(QuepQuestion qq, int j, String sTechnique, String sResilience) {
         PanelGrid pnlQuestion = new PanelGrid();
@@ -347,36 +346,34 @@ public class QuestionnaireDynamicBean implements Serializable {
             OverlayPanel pnlTech = new OverlayPanel();
             pnlTech.setId("pnlTech_" + String.valueOf(qq.getId()));
             pnlTech.setFor("btnTech_" + String.valueOf(qq.getId()));
-            pnlTech.setHideEffect("fade");      
+            pnlTech.setHideEffect("fade");
             //pnlTech.setStyle("height:300px;");      
-            
-            
+
             PanelGrid pnlBP = new PanelGrid();
             pnlBP.setId("pnlBP_" + String.valueOf(qq.getId()));
             pnlBP.setColumns(1);
             pnlBP.setStyle(" width:600px; float:right;");
-            
-            OutputLabel oTech = new OutputLabel();
-           // InputText oTech = new InputText();
-            oTech.setId("oTech_" + String.valueOf(qq.getId()));
-            oTech.setValue("<p>Techniques: <br/>" + sTechnique+"</p>"); 
-            oTech.setEscape(false);
-            //oTech.setStyle("white-space:pre; display:block; width:200px; height:50px; text-align:justify;");  
-            oTech.setStyle("width:600px;");  
-            
 
-            OutputLabel oTech2 = new OutputLabel();
-            //InputText oTech2 = new InputText();
-            oTech2.setId("oTech2_" + String.valueOf(qq.getId()));
-            oTech2.setValue("<p>Resilience: <br/>" + sResilience + "</p>"); 
-            oTech2.setEscape(false);
+            OutputLabel oTech = new OutputLabel();
+            // InputText oTech = new InputText();
+            oTech.setId("oTech_" + String.valueOf(qq.getId()));
+            oTech.setValue("<p>Techniques: <br/>" + sTechnique + "</p>");
+            oTech.setEscape(false);
+            //oTech.setStyle("white-space:pre; display:block; width:200px; height:50px; text-align:justify;");  +
+            oTech.setStyle("width:600px;");
+            pnlBP.getChildren().add(oTech);
+
+            if (!sResilience.equals("")) {
+                OutputLabel oTech2 = new OutputLabel();
+                //InputText oTech2 = new InputText();
+                oTech2.setId("oTech2_" + String.valueOf(qq.getId()));
+                oTech2.setValue("<p>Resilience: <br/>" + sResilience + "</p>");
+                oTech2.setEscape(false);
+                pnlBP.getChildren().add(oTech2);
+            }
             //oTech2.setStyle("white-space:pre; ");
 
-            pnlBP.getChildren().add(oTech);
-            pnlBP.getChildren().add(oTech2);
-
             pnlTech.getChildren().add(pnlBP);
-            
 
             pnlQuestion.getChildren().add(btnTech);
             pnlQuestion.getChildren().add(pnlTech);
@@ -385,12 +382,13 @@ public class QuestionnaireDynamicBean implements Serializable {
     }
 
     /* ------- 
-     b) Creación del panel correspondiente de las Opciones de Respuesta para cada pregunta
+     b) CreaciÛn del panel correspondiente de las Opciones de Respuesta para cada pregunta
     ---*/
     private PanelGrid createResponseOptionPanel(QuestionnaireQuepQuestion qqq, String[] sTechnique) {
-        boolean bandShowToggleTechnique = false;  
+        boolean bandShowToggleTechnique = false;
+        boolean bandHiddenPageNumber = false;
         PanelGrid pnlResponseOption = new PanelGrid();
-        
+
         OutputLabel lblTxtComments;
         InputTextarea txtComments;
 
@@ -415,7 +413,7 @@ public class QuestionnaireDynamicBean implements Serializable {
         if (lstResponse != null && lstResponse.size() > 0) {
             lstCurrentResponses = getCurrentResponses(qqq);
         }
-         
+
         ////////////////////////////////////////
         //Create Radio Button - Response Option
         if (qt.getName().toLowerCase().trim().contains("radio")) {
@@ -429,6 +427,11 @@ public class QuestionnaireDynamicBean implements Serializable {
                 //rB.setSelectItems(setCurrentResponseOption(lstCurrentResponses));  
                 sRBValue = setCurrentResponseOption(lstCurrentResponses);
                 rB.setValue(sRBValue);
+                
+                 //** band to hidden the page number
+                if (Integer.parseInt(sRBValue) == 2){
+                    bandHiddenPageNumber = true;
+                }
             }
             rB.getChildren().add(selectItems);
             rB.setColumns(5);
@@ -442,18 +445,19 @@ public class QuestionnaireDynamicBean implements Serializable {
             }
             rB.setOnchange("validateQuestion(this.id,'" + prefixQ + "','" + prefixIdRO + "');");
             pnlResponseOption.getChildren().add(rB);
-           
-            //if there are Techniques                      
-            Fieldset fs = new Fieldset();
-            fs.setId("fs_" + String.valueOf(qqq.getQuepQuestion().getId()));
-            fs.setLegend("Technique");
-            fs.setToggleable(true);
-            fs.setCollapsed(true);
-            fs.setToggleSpeed(500);
-            PanelGrid pnfs = new PanelGrid();
-            pnfs.setId("pnfs_" + String.valueOf(qqq.getQuepQuestion().getId()));
-            pnfs.setColumns(1);
+
+            //if there are Techniques   
             if (sTechnique.length > 0) {
+                Fieldset fs = new Fieldset();
+                fs.setId("fs_" + String.valueOf(qqq.getQuepQuestion().getId()));
+                fs.setLegend("Technique");
+                fs.setToggleable(true);
+                fs.setCollapsed(true);
+                fs.setToggleSpeed(500);
+                PanelGrid pnfs = new PanelGrid();
+                pnfs.setId("pnfs_" + String.valueOf(qqq.getQuepQuestion().getId()));
+                pnfs.setColumns(1);
+                //if (sTechnique.length > 0) {
                 for (int i = 0; i < sTechnique.length; i++) {
                     HtmlOutputLabel ol = new HtmlOutputLabel();
                     ol.setId("ofs_" + String.valueOf(qqq.getQuepQuestion().getId()) + String.valueOf(i));
@@ -463,28 +467,29 @@ public class QuestionnaireDynamicBean implements Serializable {
                     fs.getChildren().add(ol);
                 }
                 fs.getChildren().add(pnfs);
+                fs.setStyle("visibility: hidden; ");
+                fs.setStyleClass("panelNoBorder");
+                pnlResponseOption.getChildren().add(fs);
             }
-            pnlResponseOption.getChildren().add(fs);
-            fs.setStyle("visibility: hidden; ");
-            fs.setStyleClass("panelNoBorder");
-            
-        ////////////////////////////////////////    
-        //Create Check List - Response Option
-        } else if (qt.getName().toLowerCase().trim().contains("check")) {
+            ////////////////////////////////////////    
+            //Create Check List - Response Option
+        } else if (qt.getName().toLowerCase().trim().contains("check")) {            
             SelectManyCheckbox chk = new SelectManyCheckbox();
             chk.setId(prefixIdRO + String.valueOf(qqq.getQuepQuestion().getId()));
+            chk.setLayout("grid");
+            chk.setColumns(5);
             UISelectItems selectItems = new UISelectItems();
             selectItems = setSelectItems(qqq);
             if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
                 chk.setValue(setLstCurrentResponseOption(lstCurrentResponses));
             }
-            chk.getChildren().add(selectItems);
-            chk.setColumns(5);
-            chk.setStyle("display: block; width: 400px;"); 
+            chk.getChildren().add(selectItems);            
+            //chk.set
+            //chk.setStyle("display: block; width: 400px;");
             pnlResponseOption.getChildren().add(chk);
-            
-        ////////////////////////////////////////
-        //Create Text - Response Option
+
+            ////////////////////////////////////////
+            //Create Text - Response Option
         } else if (qt.getName().toLowerCase().trim().contains("text")) {
             InputText txt = new InputText();
             txt.setId(prefixIdRO + String.valueOf(qqq.getQuepQuestion().getId()));
@@ -498,9 +503,9 @@ public class QuestionnaireDynamicBean implements Serializable {
                 }
             }
             pnlResponseOption.getChildren().add(txt);
-            
-        ////////////////////////////////////////
-        //Create Combo Box - Response Option
+
+            ////////////////////////////////////////
+            //Create Combo Box - Response Option
         } else if (qt.getName().toLowerCase().trim().contains("combo")) {
             SelectOneMenu cmb = new SelectOneMenu();
             cmb.setId(prefixIdRO + String.valueOf(qqq.getQuepQuestion().getId()));
@@ -511,15 +516,15 @@ public class QuestionnaireDynamicBean implements Serializable {
             }
             cmb.getChildren().add(selectItems);
             pnlResponseOption.getChildren().add(cmb);
-            
-        ////////////////////////////////////////
-        //Create Calendar (date) - Response Option
+
+            ////////////////////////////////////////
+            //Create Calendar (date) - Response Option
         } else if (qt.getName().toLowerCase().trim().contains("date")) {
             Calendar cldr = new Calendar();
             cldr.setId(prefixIdRO + String.valueOf(qqq.getQuepQuestion().getId()));
 
             cldr.setShowOn("button");
-            
+
             if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
                 cldr.setPattern("dd/MM/yyyy");
                 try {
@@ -541,14 +546,14 @@ public class QuestionnaireDynamicBean implements Serializable {
             pnlResponseOption.getChildren().add(cldr);
         }
 
-        //Verify if show techniques
-        if (!bandShowToggleTechnique) {
+        //Verify if show techniques when is not a "radio button" response option
+        if (!bandShowToggleTechnique || !(sTechnique.length > 0)) {
             OutputLabel lblAuxWoToggleTq = new OutputLabel();
             lblAuxWoToggleTq.setId("lblAuxWoToggleTq_" + String.valueOf(qqq.getQuepQuestion().getId()));
             lblAuxWoToggleTq.setValue("");
             pnlResponseOption.getChildren().add(lblAuxWoToggleTq);
         }
-        
+
         ////////////////////////////////////////
         //Verify if show comments 
         if (qqq.getQuepQuestion().getHasComment() == 1) {
@@ -563,7 +568,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             txtComments.setStyle("width: 500px;");
             txtComments.setAutoResize(false);
             txtComments.setMaxlength(15000);
-            
+
             //----
             AjaxBehavior ajaxBehavior = (AjaxBehavior) FacesContext.getCurrentInstance().getApplication().createBehavior(AjaxBehavior.BEHAVIOR_ID);
             ajaxBehavior.addAjaxBehaviorListener(new CustomAjaxListener());
@@ -586,7 +591,7 @@ public class QuestionnaireDynamicBean implements Serializable {
                 }
             }
         }
-        
+
         ////////////////////////////////////////
         //Verify if show Page Number 
         if (qqq.getQuepQuestion().getHasPageNumber() == 1) {
@@ -597,8 +602,8 @@ public class QuestionnaireDynamicBean implements Serializable {
             pnlResponseOption.getChildren().add(lblTxtPageNumber);
             InputText txtPageNumber = new InputText();
             txtPageNumber.setId(prefixTxtPageNumber + String.valueOf(qqq.getQuepQuestion().getId()));
-            txtPageNumber.setStyle("width: 50px;");
-            txtPageNumber.setAccesskey("validateQuestion(this.id,'" + prefixQ + "','" + prefixIdRO + "');");
+            //txtPageNumber.setStyle("width: 50px;");
+            // txtPageNumber.setAccesskey("validateQuestion(this.id,'" + prefixQ + "','" + prefixIdRO + "');");
 
             if (lstCurrentResponses != null && lstCurrentResponses.size() > 0) {
                 txtPageNumber.setValue(lstCurrentResponses.get(0).getPagenumber());
@@ -608,6 +613,13 @@ public class QuestionnaireDynamicBean implements Serializable {
             lblNmPAux.setId("lblNmPAux_" + String.valueOf(qqq.getQuepQuestion().getId()));
             pnlResponseOption.getChildren().add(txtPageNumber);
             pnlResponseOption.getChildren().add(lblNmPAux);
+
+            //** hidden page number
+            if (bandHiddenPageNumber) {
+                txtPageNumber.setStyle("visibility: hidden; ");//.setRendered(false);               
+                lblTxtPageNumber.setStyle("visibility: hidden; ");               
+                txtPageNumber.setValue("");
+            }
 
             //** desabilitar en caso que el cuestionario se haya enviado o este completo
             if (lstQuestionnaireResponse.size() > 0) {
@@ -796,7 +808,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             } else {
                 lstRO = (String[]) requestParams.get(prefixQ + prefixIdRO + sQId);
             }
-            
+
             if (lstRO != null) {
                 for (String sRO : lstRO) {
                     if (qqq.getQuepQuestion().getIsMandatory() == 0) {
@@ -1056,7 +1068,7 @@ public class QuestionnaireDynamicBean implements Serializable {
     public void setLstQuestionnaireQQ(List<QuestionnaireQuepQuestion> lstQuestionnaireQQ) {
         this.lstQuestionnaireQQ = lstQuestionnaireQQ;
     }
- 
+
     public QuestioannaireDaoImplement getQdi() {
         return qdi;
     }
