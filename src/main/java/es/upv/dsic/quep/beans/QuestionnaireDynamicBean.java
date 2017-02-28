@@ -614,7 +614,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             pnlResponseOption.getChildren().add(txtPageNumber);
             pnlResponseOption.getChildren().add(lblNmPAux);
 
-            //** hidden page number
+            //** hidden page number   
             if (bandHiddenPageNumber) {
                 txtPageNumber.setStyle("visibility: hidden; ");//.setRendered(false);               
                 lblTxtPageNumber.setStyle("visibility: hidden; ");               
