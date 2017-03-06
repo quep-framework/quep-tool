@@ -39,13 +39,7 @@
         </property>
         <property name="abbreviation" type="string">
             <column name="abbreviation" length="4" />
-        </property>
-        <set name="rolePractices" table="role_practice" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="id_role" not-null="true" />
-            </key>
-            <one-to-many class="es.upv.dsic.quep.model.RolePractice" />
-        </set>
+        </property>     
         <set name="menus" table="menu" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="id_role" not-null="true" />

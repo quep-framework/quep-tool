@@ -16,6 +16,18 @@
         <link rel="stylesheet" type="text/css" href="../resource/themes/aristo/theme.css" />
         <link rel="stylesheet" type="text/css" href="../resource/css/site.css" />
         <link rel="stylesheet" type="text/css" href="../resource/css/quep-css.css" />      
+        <!--h:outputScript library="primefaces" name="jquery/jquery.js" /-->
+        <h:outputScript library="primefaces" name="charts/charts.js" />
+        <!--h:outputScript library="primefaces" name="charts/charts.css" /-->   
+        <script type="text/javascript">
+            function exportChartPrinciple() {
+                //export image
+                $('#output1').empty().append(PF('wchart1').exportAsImage());
+                PF('dlgchart1').show();
+
+            }
+        </script>
+
     </h:head>
     <h:body>
         <div class="PC">
@@ -32,26 +44,23 @@
 
                     <!-- content body start-->  
 
-                    <h:form id="frmChart">                        
+                    <h:form id="frmChartP">                        
                         <div>                                                  
                             <p:breadCrumb id="pnlbc" model="#{principleResultsChartViewBean.model}"/>                                                      
-                        </div>                        
+                        </div>    
+                        
+                        <p:commandButton type="button" value="Export" 
+                                         icon="ui-icon-extlink" 
+                                         onclick="exportChartPrinciple()"  
+                                         />
+                        <p:chart id="idchart1"  widgetVar="wchart1" type="bar" model="#{principleResultsChartViewBean.horizontalBarModel}" 
+                                 style="width:1000px;height:400px;"
+                                 >
+                            <p:ajax event="itemSelect" listener="#{principleResultsChartViewBean.listener}" update="idchart1" process="@this"></p:ajax>
+                        </p:chart>                            
                     </h:form>
 
-                    <p:panel>   
-                        <!--p:commandButton type="button" value="Export" 
-                                         icon="ui-icon-extlink" 
-                                         onclick="$('#output1').empty().append(PF('wchart1').exportAsImage());
-                                             PF('dlgchart1').show();" 
-                                         /-->
-
-                        <p:chart id="idchart1"  widgetVar="wchart1" type="bar" model="#{principleResultsChartViewBean.horizontalBarModel}"  
-                                 style="width: 750px;;height:550px;" >
-                            <p:ajax event="itemSelect" listener="#{principleResultsChartViewBean.listener}" update="idchart1" process="@this"></p:ajax>
-                        </p:chart>    
-                    </p:panel>   
-
-                    <!--p:dialog widgetVar="dlgchart1" 
+                    <p:dialog widgetVar="dlgchart1" 
                               showEffect="fade"                               
                               modal="true" 
                               header="Chart Results"                              
@@ -59,11 +68,18 @@
                               resizable="false">
                         <p:outputPanel id="output1" 
                                        layout="block" 
-                                       style="height:555px"/>
+                                       style="width:1005px;height:405px"
+                                       />
                         <p:commandButton value="Print" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px">
                             <p:printer target="output1" />
                         </p:commandButton>
-                    </p:dialog-->                                      
+                    </p:dialog>      
+
+                    <p:panel>   
+
+                    </p:panel>   
+
+
                     <!-- content body end-->
 
                     <!-- footer start-->

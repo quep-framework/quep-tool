@@ -6,39 +6,42 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"          
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
     <h:head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <title>General Results</title>
+        <title>Results Principles - Practices</title>
         <link rel="stylesheet" type="text/css" href="../resource/themes/aristo/theme.css" />
         <link rel="stylesheet" type="text/css" href="../resource/css/site.css" />
-        <link rel="stylesheet" type="text/css" href="../resource/css/quep-css.css" />
-
+        <link rel="stylesheet" type="text/css" href="../resource/css/quep-css.css" />      
         <h:outputScript library="primefaces" name="charts/charts.js" />
         <script type="text/javascript">
-            function exportChartML() {
+            function exportChartPriResilience() {
                 //export image
-                $('#outputML').empty().append(PF('wchartML').exportAsImage());
-                PF('dlgchartML').show();
+                $('#outputR').empty().append(PF('wchartR').exportAsImage());
+                PF('dlgchartR').show();
 
             }
+            function customExtender() {
+                this.cfg.grid = {
+                    background: '#FFF' //Set background to white
+                };
+            }
         </script>
-
-        <h:outputScript>
-        function chartExtender() {        
-        // this = chart widget instance        
-        // this.cfg = options      
-        this.cfg.seriesDefaults.rendererOptions.varyBarColor = true;
-        }
-        </h:outputScript>
-
+        <!--h:outputScript>
+            function chartExtender() {        
+            // this = chart widget instance        
+            // this.cfg = options      
+            this.cfg.seriesDefaults.rendererOptions.varyBarColor = true;            
+            }
+        </h:outputScript-->
     </h:head>
     <h:body>
         <div class="PC">
             <!--start menu izq-->
-            <ui:include src="/frames/frmMenuSideLeft.xhtml" />            
+            <ui:include src="/frames/frmMenuSideLeft.xhtml" />                                 
             <!--end menu izq-->
 
             <div id="CONTENTSIDE">
@@ -50,44 +53,46 @@
 
                     <!-- content body start-->  
 
-                    <h:form id="frmChartML">                        
+                    <h:form id="frmChartR">                        
                         <div>                                                  
-                            <p:breadCrumb id="pnlbc" model="#{maturityLevelResultsChartViewBean.model}"/>                                                      
-                        </div>         
+                            <p:breadCrumb id="pnlbc" model="#{principleResilienceChartViewBean.model}"/>                                                      
+                        </div>          
 
                         <p:commandButton type="button" value="Export" 
                                          icon="ui-icon-extlink" 
-                                         onclick="exportChartML()" 
+                                         onclick="exportChartPriResilience()" 
                                          />
-                        <p:chart id="idchart"  widgetVar="wchartML" type="bar" model="#{maturityLevelResultsChartViewBean.horizontalBarModel}"                                   
-                                 style="width:1000px;height:400px;">
-                            <p:ajax event="itemSelect" listener="#{maturityLevelResultsChartViewBean.listener}" update="idchart" process="@this"></p:ajax>
+
+                        <p:chart id="idchartR"  widgetVar="wchartR" type="bar" model="#{principleResilienceChartViewBean.horizontalBarModel}"  
+                                 style="width:1000px;height:500px; "  >
+                            <!--p:ajax event="itemSelect" listener="{principleResilienceChartViewBean.listener}" update="idchart1" process="@this"></p:ajax-->
                         </p:chart>    
+                    </h:form>                    
 
-                    </h:form>
-
-                    <p:dialog widgetVar="dlgchartML"                                                          
+                    <p:dialog widgetVar="dlgchartR" 
+                              showEffect="fade"                               
+                              modal="true" 
                               header="Chart Results"                              
-                              showHeader="true"   
-                              id="IDdlgchart"
+                              showHeader="true"                                 
                               resizable="false">
-                        <!--p:ajax event="close" update="IDdlgchart"  /-->
-                        <p:outputPanel id="outputML" 
-                                       layout="block"  style="width:1005px;height:405px;"
+                        <p:outputPanel id="outputR" 
+                                       layout="block" 
+                                       style="width:1005px;height:505px;"
                                        />
                         <p:commandButton value="Print" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px">
-                            <p:printer target="outputML" />
+                            <p:printer target="outputR" />
                         </p:commandButton>
-                    </p:dialog>
+                    </p:dialog>                                      
                     <!-- content body end-->
 
                     <!-- footer start-->
-                    <ui:include src="/frames/frmMenuSideBottom.xhtml" /> 
+                    <ui:include src="/frames/frmMenuSideBottom.xhtml" />  
                     <!-- footer end-->
                 </div>
             </div>
         </div>
-    </h:body>
+
+    </h:body>    
 
 </html>
 

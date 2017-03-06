@@ -12,34 +12,45 @@ import java.math.BigDecimal;
  * @author agna8685
  */
 public class ResponseEstimate {
-     private BigDecimal sumRequiered;
-        private BigDecimal sum;
-        private BigDecimal avg;
 
-        public ResponseEstimate() {
-        }
+    private BigDecimal sumRequiered;
+    private BigDecimal sum;
+    private BigDecimal avg;
+    private BigDecimal avgResilience;
 
-        public BigDecimal getSumRequiered() {
-            return sumRequiered;
-        }
+    public ResponseEstimate() {
+    }
 
-        public void setSumRequiered(BigDecimal sumRequiered) {
-            this.sumRequiered = sumRequiered;
-        }
+    public BigDecimal getSumRequiered() {
+        return sumRequiered;
+    }
 
-        public BigDecimal getSum() {
-            return sum;
-        }
+    public void setSumRequiered(BigDecimal sumRequiered) {
+        this.sumRequiered = sumRequiered;
+    }
 
-        public void setSum(BigDecimal sum) {
-            this.sum = sum;
-        }
+    public BigDecimal getSum() {
+        return sum;
+    }
 
-        public BigDecimal getAvg() {
-            return avg;
-        }
+    public void setSum(BigDecimal sum) {
+        this.sum = sum;
+    }
 
-        public void setAvg(BigDecimal avg) {
-            this.avg = avg;
-        }
+    public BigDecimal getAvg() {
+        return avg;
+    }
+
+    public void setAvg(BigDecimal avg) {
+        this.avg = avg;
+    }
+
+    public BigDecimal getAvgResilience() {
+        return avgResilience;
+    }
+
+    public void setAvgResilience(BigDecimal avgResilience) {
+        this.avgResilience = avgResilience;
+    }
+
 }

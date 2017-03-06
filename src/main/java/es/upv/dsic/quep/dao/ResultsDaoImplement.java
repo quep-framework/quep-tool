@@ -38,7 +38,7 @@ public class ResultsDaoImplement implements ResultsDao {
                     + "where qqq.active=1 and qqro.active=1 and rs.active=1\n"
                     + "and rs.id.idOrganization='" + idOrg + "'" + "\n"
                     + "and qqq.id.idQuepQuestion=qqro.id.idQuepQuestion\n"
-                    + "and qqq.questionnaire.rolePractice.id.idRole=rs.id.idRole");
+                    + "and qqq.questionnaire.role.id=rs.id.idRole");
             list = (List<QuepQuestionResponseOption>) query.list();
         } catch (Exception e) {
             System.out.println(e.getMessage());

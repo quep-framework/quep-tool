@@ -20,11 +20,9 @@
                      update="false" insert="false" fetch="select">
             <column name="id_practice" not-null="true" />
         </many-to-one>
-        <many-to-one name="rolePractice" class="es.upv.dsic.quep.model.RolePractice" 
-                     lazy="false"
-                     update="false" insert="false" fetch="select">
+        <many-to-one name="role" class="es.upv.dsic.quep.model.Role" update="false" insert="false" fetch="select"
+                     lazy="false">
             <column name="id_role" not-null="true" />
-            <column name="id_practice" not-null="true" />
         </many-to-one>
         <property name="creationUser" type="string">
             <column name="creation_user" not-null="true" />

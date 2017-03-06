@@ -6,8 +6,7 @@
   <table-filter match-name="questionnaire"/>
   <table-filter match-name="technique"/>
   <table-filter match-name="organization"/>
-  <table-filter match-name="role"/>
-  <table-filter match-name="role_practice"/>
+  <table-filter match-name="role"/>  
   <table-filter match-name="quep_question_resilience"/>
   <table-filter match-name="maturity_level"/>
   <table-filter match-name="questionnaire_quep_question"/>

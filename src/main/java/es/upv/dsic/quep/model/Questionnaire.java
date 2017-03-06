@@ -1,5 +1,5 @@
 package es.upv.dsic.quep.model;
-// Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1
+// Generated 02-mar-2017 23:08:33 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -12,7 +12,6 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -26,12 +25,12 @@ import javax.persistence.TemporalType;
 @Table(name="questionnaire"
     ,schema="public"
 )
+
 public class Questionnaire  implements java.io.Serializable {
 
-
-     private QuestionnaireId id;
+  private QuestionnaireId id;
      private Practice practice;
-     private RolePractice rolePractice;
+     private Role role;
      private String creationUser;
      private Date creationDate;
      private String modificationUser;
@@ -45,21 +44,20 @@ public class Questionnaire  implements java.io.Serializable {
 
     public Questionnaire() {
     }
-
-	
-    public Questionnaire(QuestionnaireId id, Practice practice, RolePractice rolePractice, String creationUser, Date creationDate, int active, String audit) {
+    
+     public Questionnaire(QuestionnaireId id, Practice practice, Role role, String creationUser, Date creationDate, int active, String audit) {
         this.id = id;
         this.practice = practice;
-        this.rolePractice = rolePractice;
+        this.role = role;
         this.creationUser = creationUser;
         this.creationDate = creationDate;
         this.active = active;
         this.audit = audit;
     }
-    public Questionnaire(QuestionnaireId id, Practice practice, RolePractice rolePractice, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, String name, String description, Set<QuestionnaireQuepQuestion> questionnaireQuepQuestions, Set<QuestionnaireResponse> questionnaireResponses) {
+    public Questionnaire(QuestionnaireId id, Practice practice, Role role, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, String name, String description, Set<QuestionnaireQuepQuestion> questionnaireQuepQuestions, Set<QuestionnaireResponse> questionnaireResponses) {
        this.id = id;
        this.practice = practice;
-       this.rolePractice = rolePractice;
+       this.role = role;
        this.creationUser = creationUser;
        this.creationDate = creationDate;
        this.modificationUser = modificationUser;
@@ -71,10 +69,10 @@ public class Questionnaire  implements java.io.Serializable {
        this.questionnaireQuepQuestions = questionnaireQuepQuestions;
        this.questionnaireResponses = questionnaireResponses;
     }
-   
+    
      @EmbeddedId
 
-    
+     
     @AttributeOverrides( {
         @AttributeOverride(name="id", column=@Column(name="id", nullable=false) ), 
         @AttributeOverride(name="idPractice", column=@Column(name="id_practice", nullable=false) ), 
@@ -98,15 +96,13 @@ public class Questionnaire  implements java.io.Serializable {
     }
 
 @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumns( { 
-        @JoinColumn(name="id_role", referencedColumnName="id_role", nullable=false, insertable=false, updatable=false), 
-        @JoinColumn(name="id_practice", referencedColumnName="id_practice", nullable=false, insertable=false, updatable=false) } )
-    public RolePractice getRolePractice() {
-        return this.rolePractice;
+    @JoinColumn(name="id_role", nullable=false, insertable=false, updatable=false)
+    public Role getRole() {
+        return this.role;
     }
     
-    public void setRolePractice(RolePractice rolePractice) {
-        this.rolePractice = rolePractice;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     
@@ -206,7 +202,6 @@ public class Questionnaire  implements java.io.Serializable {
     public void setQuestionnaireResponses(Set<QuestionnaireResponse> questionnaireResponses) {
         this.questionnaireResponses = questionnaireResponses;
     }
-
 
 
 

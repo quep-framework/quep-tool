@@ -10,13 +10,9 @@ import es.upv.dsic.quep.hibernate.HibernateUtil;
 import es.upv.dsic.quep.model.Organization;
 import es.upv.dsic.quep.model.Role;
 import es.upv.dsic.quep.model.RoleStakeholder;
-import es.upv.dsic.quep.model.RoleStakeholderId;
 import java.util.List;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import static org.hibernate.criterion.Expression.sql;
 
 /**
  *

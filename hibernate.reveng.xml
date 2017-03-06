@@ -12,7 +12,6 @@
   <table-filter match-name="resilience_characteristic"/>
   <table-filter match-name="maturity_level"/>
   <table-filter match-name="role_stakeholder"/>
-  <table-filter match-name="role_practice"/>
   <table-filter match-name="practice"/>
   <table-filter match-name="principle"/>
   <table-filter match-name="menu"/>

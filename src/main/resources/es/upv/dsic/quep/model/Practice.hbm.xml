@@ -67,13 +67,7 @@
                 <column name="id_practice" not-null="true" />
             </key>
             <one-to-many class="es.upv.dsic.quep.model.MaturityLevelPractice" />
-        </set>
-        <set name="rolePractices" table="role_practice" inverse="true" lazy="true" fetch="select">
-            <key>
-                <column name="id_practice" not-null="true" />
-            </key>
-            <one-to-many class="es.upv.dsic.quep.model.RolePractice" />
-        </set>
+        </set>     
         <set name="quepQuestions" table="quep_question" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="id_practice" not-null="true" />

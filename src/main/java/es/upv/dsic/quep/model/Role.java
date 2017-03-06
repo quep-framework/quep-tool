@@ -38,7 +38,6 @@ public class Role  implements java.io.Serializable {
      private BigDecimal umbral;
      private BigDecimal weight;
      private String abbreviation;
-     private Set<RolePractice> rolePractices = new HashSet<RolePractice>(0);
      private Set<Menu> menus = new HashSet<Menu>(0);
      private Set<RoleStakeholder> roleStakeholders = new HashSet<RoleStakeholder>(0);
 
@@ -54,7 +53,7 @@ public class Role  implements java.io.Serializable {
         this.active = active;
         this.audit = audit;
     }
-    public Role(int id, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, BigDecimal umbral, BigDecimal weight, String abbreviation, Set<RolePractice> rolePractices, Set<Menu> menus, Set<RoleStakeholder> roleStakeholders) {
+    public Role(int id, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, BigDecimal umbral, BigDecimal weight, String abbreviation,  Set<Menu> menus, Set<RoleStakeholder> roleStakeholders) {
        this.id = id;
        this.name = name;
        this.creationUser = creationUser;
@@ -65,8 +64,7 @@ public class Role  implements java.io.Serializable {
        this.audit = audit;
        this.umbral = umbral;
        this.weight = weight;
-       this.abbreviation = abbreviation;
-       this.rolePractices = rolePractices;
+       this.abbreviation = abbreviation;    
        this.menus = menus;
        this.roleStakeholders = roleStakeholders;
     }
@@ -182,15 +180,6 @@ public class Role  implements java.io.Serializable {
     
     public void setAbbreviation(String abbreviation) {
         this.abbreviation = abbreviation;
-    }
-
-@OneToMany(fetch=FetchType.LAZY, mappedBy="role")
-    public Set<RolePractice> getRolePractices() {
-        return this.rolePractices;
-    }
-    
-    public void setRolePractices(Set<RolePractice> rolePractices) {
-        this.rolePractices = rolePractices;
     }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="role")

@@ -10,6 +10,7 @@ import es.upv.dsic.quep.hibernate.HibernateUtil;
 import es.upv.dsic.quep.model.MaturityLevel;
 import es.upv.dsic.quep.model.Organization;
 import es.upv.dsic.quep.model.QuepQuestion;
+import es.upv.dsic.quep.model.QuepQuestionResilience;
 import es.upv.dsic.quep.model.QuepQuestionResponseOption;
 import es.upv.dsic.quep.model.QuepQuestionTechnique;
 import es.upv.dsic.quep.model.RoleStakeholder;
@@ -24,9 +25,8 @@ import org.hibernate.Session;
  */
 public class QuepQuestionDaoImplement implements QuepQuestionDao {
 
-   
     @Override
-    public List<QuepQuestion> getLstQuepQuestion(){
+    public List<QuepQuestion> getLstQuepQuestion() {
         Session session = null;
         List<QuepQuestion> list = null;
         try {
@@ -42,9 +42,9 @@ public class QuepQuestionDaoImplement implements QuepQuestionDao {
         }
         return list;
     }
-    
-     @Override
-    public List<QuepQuestionResponseOption> getLstQQuestionResponseOption(){
+
+    @Override
+    public List<QuepQuestionResponseOption> getLstQQuestionResponseOption() {
         Session session = null;
         List<QuepQuestionResponseOption> list = null;
         try {
@@ -60,9 +60,9 @@ public class QuepQuestionDaoImplement implements QuepQuestionDao {
         }
         return list;
     }
-    
+
     @Override
-    public List<QuepQuestionTechnique> getLstQQuestionTechniques(){
+    public List<QuepQuestionTechnique> getLstQQuestionTechniques() {
         Session session = null;
         List<QuepQuestionTechnique> list = null;
         try {
@@ -78,8 +78,26 @@ public class QuepQuestionDaoImplement implements QuepQuestionDao {
         }
         return list;
     }
-    
-    
-    
+
+    @Override
+    public List<QuepQuestionResilience> getLstQuepQuestionResilience(int idPrinciple, int idPractice, int idQuestion) {
+        Session session = null;
+        List<QuepQuestionResilience> list = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            Query query = session.createQuery("from QuepQuestionResilience where active=1 \n"
+                    + "and idPractice='" + idPractice + "'" + "\n"
+                    + "and quepQuestion.id='" + idQuestion + "'" + "\n"
+                    + "and idPrinciple='" + idPrinciple + "'" + "\n");
+            list = (List<QuepQuestionResilience>) query.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return list;
+    }
 
 }

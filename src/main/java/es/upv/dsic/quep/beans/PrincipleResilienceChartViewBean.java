@@ -5,7 +5,6 @@
  */
 package es.upv.dsic.quep.beans;
 
-import es.upv.dsic.quep.dao.PracticeDaoImplement;
 import es.upv.dsic.quep.dao.PrincipleDaoImplement;
 import es.upv.dsic.quep.model.MaturityLevel;
 import es.upv.dsic.quep.model.Organization;
@@ -27,7 +26,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import org.primefaces.component.panelgrid.PanelGrid;
-import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.HorizontalBarChartModel;
 import org.primefaces.model.chart.ChartSeries;
@@ -43,7 +41,7 @@ import org.primefaces.model.menu.MenuModel;
 @Named
 @SessionScoped
 //@RequestScoped
-public class PrincipleResultsChartViewBean implements Serializable {
+public class PrincipleResilienceChartViewBean implements Serializable {
 
     @Inject
     private LoginBean loginBean;
@@ -57,9 +55,9 @@ public class PrincipleResultsChartViewBean implements Serializable {
     private MaturityLevel oMaturityLevel;
 
     private HorizontalBarChartModel horizontalBarModel;
-    private Map<MaturityLevel, Result> mapMaturityLevelResults;
-    private Map<Principle, Result> mapPrinciplesResults = new HashMap<Principle, Result>();
-    private Map<Practice, Result> mapPracticeResults = new HashMap<Practice, Result>();
+    //private Map<MaturityLevel, Result> mapMaturityLevelResults;
+    private Map<Principle, ResultR> mapPrinciplesResults = new HashMap<Principle, ResultR>();
+    //private Map<Practice, Result> mapPracticeResults = new HashMap<Practice, Result>();
     private Map<QuepQuestion, Result> mapQuepQuestionResults = new HashMap<QuepQuestion, Result>();
 
     private List<MaturityLevel> lstMaturityLevel;
@@ -73,8 +71,9 @@ public class PrincipleResultsChartViewBean implements Serializable {
 
     private PanelGrid panel = new PanelGrid();
 
-    private ChartSeries chartTolerable;
+   // private ChartSeries chartTolerable;
     private ChartSeries chartComplete;
+    private ChartSeries chartCompleteR;
     private ChartSeries chartPerComplete;
 
     private MenuModel model;
@@ -85,7 +84,7 @@ public class PrincipleResultsChartViewBean implements Serializable {
     //private boolean bExport;
     private String titleChar="";
 
-    public PrincipleResultsChartViewBean() {
+    public PrincipleResilienceChartViewBean() {
 
     }
 
@@ -101,14 +100,17 @@ public class PrincipleResultsChartViewBean implements Serializable {
         setMenuBreadCrumb(imenu);
         setHorizontalBarModel(new HorizontalBarChartModel());
 
-        chartTolerable = new ChartSeries();
-        chartTolerable.setLabel("% tolerable");
+     /*   chartTolerable = new ChartSeries();
+        chartTolerable.setLabel("% tolerable");*/
 
         chartComplete = new ChartSeries();
-        chartComplete.setLabel("% complete");
+        chartComplete.setLabel("% QuEP");
+        
+        chartCompleteR = new ChartSeries();
+        chartCompleteR.setLabel("% QuEP+Resilience");
 
-        chartPerComplete = new ChartSeries();
-        chartPerComplete.setLabel("% per complete");
+       // chartPerComplete = new ChartSeries();
+       // chartPerComplete.setLabel("% per complete");
 
         PrincipleDaoImplement pdi = new PrincipleDaoImplement();
         lstPrinciple = pdi.getPrinciple();
@@ -117,15 +119,11 @@ public class PrincipleResultsChartViewBean implements Serializable {
             mapSumQuepQuestions = new HashMap<QuepQuestion, ResponseEstimate>();
             mapSumQuepQuestions = results.calculateQuestions(oOrganization.getId());
 
-            mapPrinciplesResults = new HashMap<Principle, Result>();
+            mapPrinciplesResults = new HashMap<Principle, ResultR>();
             mapPrinciplesResults = getResultsPrinciple();
-        } else if (imenu == 2) { //by practice
+        }/* else if (imenu == 2) { //by practice
             mapPracticeResults = new HashMap<Practice, Result>();
             mapPracticeResults = getResultsPracticesByPrinciple(sId);
-        }
-        /*else if (imenu == 3) { //by practice
-            mapQuepQuestionResults = new HashMap<QuepQuestion, Result>();
-            mapQuepQuestionResults = getResultsQuestionsByPractice(sId);
         }*/
     }
 
@@ -133,14 +131,19 @@ public class PrincipleResultsChartViewBean implements Serializable {
         titleChar=title;        
         horizontalBarModel.clear();
         horizontalBarModel.addSeries(chartComplete);
-        horizontalBarModel.addSeries(chartPerComplete);
-        horizontalBarModel.setSeriesColors("0F5FE9,E4EAF0");
+        horizontalBarModel.addSeries(chartCompleteR);
+        //horizontalBarModel.addSeries(chartPerComplete);
+        
+        //Color        
+        horizontalBarModel.setSeriesColors("00749F,CB0105");
+        horizontalBarModel.setExtender("customExtender");
+        
         horizontalBarModel.setShowDatatip(true);
         horizontalBarModel.setShowPointLabels(true);
         horizontalBarModel.setTitle(titleChar);
         horizontalBarModel.setAnimate(true);
         horizontalBarModel.setLegendPosition("se");
-        horizontalBarModel.setStacked(true);
+        //horizontalBarModel.setStacked(true);
         horizontalBarModel.setZoom(true);
         horizontalBarModel.getAxis(AxisType.X).setLabel(sXAxis);
         horizontalBarModel.getAxis(AxisType.X).setMin(0);
@@ -158,20 +161,35 @@ public class PrincipleResultsChartViewBean implements Serializable {
         charLevel = 0;
         //Collections.sort(lstPrinciple, MaturityLevelComparable.Comparators.ID);         
         for (Principle oPri : lstPrinciple) {
-            for (Map.Entry<Principle, Result> entry : mapPrinciplesResults.entrySet()) {
+            for (Map.Entry<Principle, ResultR> entry : mapPrinciplesResults.entrySet()) {
                 Principle op = entry.getKey();
-                Result result = entry.getValue();
+                ResultR result = entry.getValue();
                 if (op.getId() == oPri.getId()) {
                     sChart = op.getAbbreviation() + ". " + op.getName();
                     //if (!op.getAbbreviation().contains("null")) sChart= op.getAbbreviation()+ ". " + sChart;
                     chartComplete.set(sChart, result.getComplete());
-                    chartPerComplete.set(sChart, result.getPerComplete());
+                  //  chartCompleteR.set(sChart, result.getCompleteR());
+                    //chartPerComplete.set(sChart, result.getPerComplete());
+                }
+            }
+        }
+        
+         for (Principle oPri : lstPrinciple) {
+            for (Map.Entry<Principle, ResultR> entry : mapPrinciplesResults.entrySet()) {
+                Principle op = entry.getKey();
+                ResultR result = entry.getValue();
+                if (op.getId() == oPri.getId()) {
+                    sChart = op.getAbbreviation() + ". " + op.getName();
+                    //if (!op.getAbbreviation().contains("null")) sChart= op.getAbbreviation()+ ". " + sChart;
+                   // chartComplete.set(sChart, result.getComplete());
+                    chartCompleteR.set(sChart, result.getCompleteR());
+                    //chartPerComplete.set(sChart, result.getPerComplete());
                 }
             }
         }
         drawHorizontalBarModel("Values", "Principles", "Results by Principles");
     }
-
+/*
     public void createHorizontalBarPracticeByPrinciple(String sPrincipleId) {
         String sChart = "";
         initValues(sPrincipleId);
@@ -201,50 +219,26 @@ public class PrincipleResultsChartViewBean implements Serializable {
         oPrinciple = prdi.getPrinciple(Integer.parseInt(sPrincipleId));
 
         drawHorizontalBarModel("Values", "Practices", "Principle: " + oPrinciple.getName());
-    }
-
-    /*public void createHorizontalBarQuestionsByPractice(String sPracticeId) {
-        String sChart = "";
-        initValues(sPracticeId);
-
-        PracticeDaoImplement pdi = new PracticeDaoImplement();
-        lstPractice = pdi.getPractice();
-
-        charLevel++;
-
-        //sort map private Map<QuepQuestion, Result> mapQuepQuestionResults = new HashMap<QuepQuestion, Result>();
-        //Map<QuepQuestion, Result> treeMap = new TreeMap<QuepQuestion, Result>(mapQuepQuestionResults);
-        
-        for (Map.Entry<QuepQuestion, Result> entry : mapQuepQuestionResults.entrySet()) {
-            QuepQuestion qq = entry.getKey();
-            Result result = entry.getValue();            
-            sChart = String.valueOf(qq.getId());
-            chartComplete.set(sChart, result.getComplete());
-            chartPerComplete.set(sChart, result.getPerComplete());
-        }
-
-        PracticeDaoImplement pradi = new PracticeDaoImplement();
-        Practice oPractice = new Practice();
-        oPractice=pradi.getPracticeByID(Integer.parseInt(sPracticeId));
-        drawHorizontalBarModel("Values", "Practices", "Principle: " + oPractice.getName());
     }*/
+    
 
-    public Map<Principle, Result> getResultsPrinciple() {
+    public Map<Principle, ResultR> getResultsPrinciple() {
         try {
-            Map<Principle, Result> mapPriResults = new HashMap<Principle, Result>();
+            Map<Principle, ResultR> mapPriResults = new HashMap<Principle, ResultR>();
             if (mapSumQuepQuestions.size() > 0 && mapSumQuepQuestions != null) {
                 Map<Principle, ResponseEstimate> mapSumPrinciple = new HashMap<Principle, ResponseEstimate>();
 
-                mapSumPrinciple = results.calculatePrincipleBySumQuestions(mapSumQuepQuestions, lstPrinciple);
+                mapSumPrinciple = results.calculatePrincipleBySumQuestionsResilience(mapSumQuepQuestions, lstPrinciple);
 
                 for (Map.Entry<Principle, ResponseEstimate> mapPri : mapSumPrinciple.entrySet()) {
                     Principle pri = mapPri.getKey();
                     ResponseEstimate rsp = mapPri.getValue();
-                    Result oResult = new Result();
+                    ResultR oResultR = new ResultR();
                     BigDecimal dComplete = rsp.getAvg();
-                    oResult.setComplete(dComplete);
-                    oResult.setPerComplete(getResultsPerComplete(dComplete));
-                    mapPriResults.put(pri, oResult);
+                    oResultR.setComplete(dComplete);
+                    oResultR.setCompleteR(rsp.getAvgResilience());
+                    oResultR.setPerComplete(getResultsPerComplete(dComplete,rsp.getAvgResilience()));
+                    mapPriResults.put(pri, oResultR);
                 }
             }
             return mapPriResults;
@@ -253,6 +247,7 @@ public class PrincipleResultsChartViewBean implements Serializable {
         }
     }
 
+    /*
     public Map<Practice, Result> getResultsPracticesByPrinciple(String sPrincipleId) {
         try {
             Map<Practice, Result> mapPraResults = new HashMap<Practice, Result>();
@@ -275,9 +270,9 @@ public class PrincipleResultsChartViewBean implements Serializable {
         } catch (Exception e) {
             return null;
         }
-    }
+    }*/
 
-    public Map<QuepQuestion, Result> getResultsQuestionsByPractice(String sPracticeId) {
+  /*  public Map<QuepQuestion, Result> getResultsQuestionsByPractice(String sPracticeId) {
         try {
             mapQuepQuestionResults = new HashMap<QuepQuestion, Result>();
             if (mapSumQuepQuestions.size() > 0 && mapSumQuepQuestions != null) {
@@ -297,19 +292,19 @@ public class PrincipleResultsChartViewBean implements Serializable {
         } catch (Exception e) {
             return null;
         }
-    }
+    }*/
 
-    public BigDecimal getResultsPerComplete(BigDecimal dResult) {
+    public BigDecimal getResultsPerComplete(BigDecimal dResult,BigDecimal dResultR) {
         try {
             BigDecimal dResultPerComplete;
-            dResultPerComplete = dResult.subtract(BigDecimal.valueOf(100)).multiply(BigDecimal.valueOf(-1));
+            dResultPerComplete = (dResult.add(dResultR)).subtract(BigDecimal.valueOf(100)).multiply(BigDecimal.valueOf(-1));
             return dResultPerComplete;
         } catch (Exception e) {
             return null;
         }
     }
 
-    public void listener(ItemSelectEvent e) {
+  /*  public void listener(ItemSelectEvent e) {
         String str = organizationBean.getNavigationBean().getCurrentPage();
         if (charLevel == 0) {
             imenu = 2;
@@ -319,30 +314,66 @@ public class PrincipleResultsChartViewBean implements Serializable {
             imenu = 3;
             createHorizontalBarQuestionsByPractice(String.valueOf(e.getItemIndex() + 1));
         }*/
-    }
+    //}
 
     public void setMenuBreadCrumb(int band) {
         model = new DefaultMenuModel();
         DefaultMenuItem item = new DefaultMenuItem("");
-        item.setCommand("#{principleResultsChartViewBean.createHorizontalBarPrinciples}");
-        item.setUpdate("idchart1");
+        item.setCommand("#{principleResilienceChartViewBean.createHorizontalBarPrinciples}");
+        item.setUpdate("idchartR");
         model.addElement(item);
 
-        item = new DefaultMenuItem("Principles");
+       /* item = new DefaultMenuItem("Principles");
         item.setCommand("#{principleResultsChartViewBean.createHorizontalBarPrinciples}");
         item.setUpdate("idchart1");
         item.setId("mPri");
-        model.addElement(item);
+        model.addElement(item);*/
 
-        item = new DefaultMenuItem("Practice");
+      /*  item = new DefaultMenuItem("Practice");
         //item.setCommand("#{principleResultsChartViewBean.createHorizontalBarPrinciples}");
         item.setId("mPra");
         model.addElement(item);
-
+*/
         /*item = new DefaultMenuItem("Questions");
         item.setId("mQuepQ");
         model.addElement(item);*/
     }
+    
+    public class ResultR {
+     private BigDecimal complete;
+     private BigDecimal completeR;
+        private BigDecimal perComplete;
+
+        public ResultR() {
+        }
+
+        public BigDecimal getComplete() {
+            return complete;
+        }
+
+        public void setComplete(BigDecimal complete) {
+            this.complete = complete;
+        }
+
+        public BigDecimal getPerComplete() {
+            return perComplete;
+        }
+
+        public void setPerComplete(BigDecimal perComplete) {
+            this.perComplete = perComplete;
+        }
+
+        public BigDecimal getCompleteR() {
+            return completeR;
+        }
+
+        public void setCompleteR(BigDecimal completeR) {
+            this.completeR = completeR;
+        }
+        
+        
+}
+
 
     public MenuModel getModel() {
         return model;
@@ -419,14 +450,14 @@ public class PrincipleResultsChartViewBean implements Serializable {
         this.model = model;
     }
 
-    public ChartSeries getChartTolerable() {
+/*    public ChartSeries getChartTolerable() {
         return chartTolerable;
     }
 
     public void setChartTolerable(ChartSeries chartTolerable) {
         this.chartTolerable = chartTolerable;
     }
-
+*/
     public ChartSeries getChartComplete() {
         return chartComplete;
     }
@@ -451,11 +482,11 @@ public class PrincipleResultsChartViewBean implements Serializable {
         this.lstPrinciple = lstPrinciple;
     }
 
-    public Map<Principle, Result> getMapPrinciplesResults() {
+    public Map<Principle, ResultR> getMapPrinciplesResults() {
         return mapPrinciplesResults;
     }
 
-    public void setMapPrinciplesResults(Map<Principle, Result> mapPrinciplesResults) {
+    public void setMapPrinciplesResults(Map<Principle, ResultR> mapPrinciplesResults) {
         this.mapPrinciplesResults = mapPrinciplesResults;
     }
 
@@ -491,14 +522,14 @@ public class PrincipleResultsChartViewBean implements Serializable {
         this.lstPractice = lstPractice;
     }
 
-    public Map<Practice, Result> getMapPracticeResults() {
+    /*public Map<Practice, Result> getMapPracticeResults() {
         return mapPracticeResults;
     }
 
     public void setMapPracticeResults(Map<Practice, Result> mapPracticeResults) {
         this.mapPracticeResults = mapPracticeResults;
     }
-
+*/
     public Principle getoPrinciple() {
         return oPrinciple;
     }
@@ -515,13 +546,13 @@ public class PrincipleResultsChartViewBean implements Serializable {
         this.oMaturityLevel = oMaturityLevel;
     }
 
-    public Map<MaturityLevel, Result> getMapMaturityLevelResults() {
+  /*  public Map<MaturityLevel, Result> getMapMaturityLevelResults() {
         return mapMaturityLevelResults;
     }
 
     public void setMapMaturityLevelResults(Map<MaturityLevel, Result> mapMaturityLevelResults) {
         this.mapMaturityLevelResults = mapMaturityLevelResults;
-    }
+    }*/
 
     public Results getResults() {
         return results;
@@ -555,6 +586,14 @@ public class PrincipleResultsChartViewBean implements Serializable {
 
     public void setTitleChar(String titleChar) {
         this.titleChar = titleChar;
+    }
+
+    public ChartSeries getChartCompleteR() {
+        return chartCompleteR;
+    }
+
+    public void setChartCompleteR(ChartSeries chartCompleteR) {
+        this.chartCompleteR = chartCompleteR;
     }
     
     

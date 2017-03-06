@@ -7,24 +7,18 @@ package es.upv.dsic.quep.beans;
 
 import es.upv.dsic.quep.converters.MaturityLevelComparable;
 import es.upv.dsic.quep.dao.MaturityLevelDaoImplement;
-import es.upv.dsic.quep.dao.PracticeDaoImplement;
 import es.upv.dsic.quep.dao.PrincipleDaoImplement;
-import es.upv.dsic.quep.dao.ResultsDaoImplement;
 import es.upv.dsic.quep.model.MaturityLevel;
-import es.upv.dsic.quep.model.MaturityLevelPractice;
 import es.upv.dsic.quep.model.Organization;
 import es.upv.dsic.quep.model.Practice;
 import es.upv.dsic.quep.model.Principle;
 import es.upv.dsic.quep.model.QuepQuestion;
-import es.upv.dsic.quep.model.QuepQuestionResponseOption;
-import es.upv.dsic.quep.model.Response;
 import es.upv.dsic.quep.model.RoleStakeholder;
 import es.upv.es.dsic.quep.utils.ResponseEstimate;
 import es.upv.es.dsic.quep.utils.Result;
 import es.upv.es.dsic.quep.utils.Results;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -102,6 +96,7 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
     public void init() {
         oOrganization = organizationBean.getOrganization();                
         imenu = 1;
+        
         createHorizontalBarMaturityLevel();
     }
 
@@ -114,7 +109,7 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
         chartTolerable.setLabel("% tolerable");
 
         chartComplete = new ChartSeries();
-        chartComplete.setLabel("% complete");
+        chartComplete.setLabel("% complete");        
 
         chartPerComplete = new ChartSeries();
         chartPerComplete.setLabel("% per complete");
@@ -143,18 +138,24 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
         titleChar=title;        
         horizontalBarModel.clear();
         horizontalBarModel.addSeries(chartComplete);
+         //color bar char        
+         horizontalBarModel.setSeriesColors("0F5FE9,E4EAF0");
+            //horizontalBarModel.setSeriesColors("5196BB,FDAB84,5D9C78,EBCC4D,E290FB,FCD5FA,F8A43D,2C97EA,1C8481,717A79");
+        
         horizontalBarModel.addSeries(chartPerComplete);
+        
         horizontalBarModel.setShowDatatip(true);
         horizontalBarModel.setShowPointLabels(true);
         horizontalBarModel.setTitle(titleChar);        
         horizontalBarModel.setAnimate(true);
-        horizontalBarModel.setLegendPosition("e");
+        horizontalBarModel.setLegendPosition("se");
         horizontalBarModel.setStacked(true);
         horizontalBarModel.setZoom(true);
         horizontalBarModel.getAxis(AxisType.X).setLabel(sXAxis);
         horizontalBarModel.getAxis(AxisType.X).setMin(0);
         horizontalBarModel.getAxis(AxisType.X).setMax(100);
         horizontalBarModel.getAxis(AxisType.X).setTickAngle(25);
+        horizontalBarModel.getAxis(AxisType.X).setTickInterval("5");
       
         horizontalBarModel.getAxis(AxisType.X).setTickFormat("%.4s%%");
         //horizontalBarModel.getAxis(AxisType.X).setTickFormat("%2$d");

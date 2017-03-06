@@ -52,37 +52,34 @@
             <artifactId>all-themes</artifactId>
             <version>1.0.8</version>
         </dependency-->
+
+        <!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
         <!--dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
-            <version>5.6.1</version>
+            <version>6.4.0</version>            
         </dependency-->
- 
-        <!--dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-scratchpad</artifactId>
-            <version>3.16-beta1</version>
-        </dependency-->  
+
         
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
             <version>3.16-beta2</version>
-            <scope>provided</scope>
+            <!--scope>provided</scope-->
         </dependency>
         
         <dependency>
             <groupId>com.lowagie</groupId>
             <artifactId>itext</artifactId>
             <version>2.1.7</version>
-            <scope>compile</scope>
+            <!--scope>compile</scope-->
         </dependency>
         
         <dependency>
             <groupId>org.apache.xmlbeans</groupId>
             <artifactId>xmlbeans</artifactId>
             <version>2.6.0</version>
-             <scope>compile</scope>
+            <!--scope>compile</scope-->
         </dependency>
 
     </dependencies>

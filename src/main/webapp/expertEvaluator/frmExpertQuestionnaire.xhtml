@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:f="http://xmlns.jcp.org/jsf/core"          
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <title>Questionnaire</title>
+        <link rel="stylesheet" type="text/css" href="../resource/themes/aristo/theme.css" />
+        <link rel="stylesheet" type="text/css" href="../resource/css/site.css" />
+        <link rel="stylesheet" type="text/css" href="../resource/css/quep-css.css" />
+
+        <h:outputScript library="primefaces" name="jquery/jquery.js" />
+        <h:outputScript library="primefaces" name="charts/charts.js" />
+        <h:outputScript library="primefaces" name="charts/charts.css" />
+    </h:head>
+    <h:body>
+        <div class="PC">
+            <!--start menu izq-->
+            <ui:include src="/frames/frmMenuSideLeft.xhtml" />            
+            <!--end menu izq-->
+
+            <div id="CONTENTSIDE">
+                <div id="CONTENTSIDEindent">
+
+                    <!-- header bar start-->
+                    <ui:include src="/frames/frmMenuSideTop.xhtml" />  
+                    <!-- header bar end-->
+
+                    <!-- content body start-->                      
+                    
+                     <p:outputLabel  value="Question 1: Description of question...." />
+                    <div class="ui-fluid"> 
+                        <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid" styleClass="ui-panelgrid-blank">
+                            <p:outputLabel value="Relevance" />
+                            <p:selectOneRadio id="oneBtnR">
+                                <f:selectItem itemLabel="Strongly Agree" itemValue="agreeR" />
+                                <f:selectItem itemLabel="Neutral" itemValue="neutralR" />
+                                <f:selectItem itemLabel="Strongly Disagree" itemValue="disagreeR" />                                
+                            </p:selectOneRadio>
+
+                            <p:outputLabel  value="Clarity" />
+                            <p:selectOneRadio id="oneBtnC">
+                                <f:selectItem itemLabel="Strongly Agree" itemValue="agreeC" />
+                                <f:selectItem itemLabel="Neutral" itemValue="neutralC" />
+                                <f:selectItem itemLabel="Strongly Disagree" itemValue="disagreeC" />                                
+                            </p:selectOneRadio>
+
+                            <p:outputLabel value="Belong to the principle" />
+                            <p:selectOneRadio id="oneBtnPri"  layout="responsive" columns="2">
+                                <f:selectItem itemLabel="A. Risk Driven" itemValue="ra" />
+                                <f:selectItem itemLabel="B. Plan Implementation" itemValue="imp" />
+                                <f:selectItem itemLabel="C. Stakeholder Participation" itemValue="stkPart" />                                
+                                <f:selectItem itemLabel="C. Stakeholder Participation" itemValue="stkPart" />                                
+                                <f:selectItem itemLabel="D. Monitoring and Continuous Improvement" itemValue="monitoring" />                                
+                                <f:selectItem itemLabel="E. Cooperation inter/intra organizational" itemValue="coop" />                                
+                                <f:selectItem itemLabel="F. Based on the safety of people" itemValue="safety" />                                
+                                <f:selectItem itemLabel="G. Leadership and policies" itemValue="leadership" />                                
+                                <f:selectItem itemLabel="H. Results of the objectives" itemValue="results" />                                
+                                <f:selectItem itemLabel="I. Information Technology and innovation" itemValue="it" />                                
+                                </p:selectOneRadio>
+
+                                <p:outputLabel value="Stakeholder"/>
+                                <p:selectManyCheckbox id="chkbox"  layout="responsive" columns="1">                                   
+                                <f:selectItem itemLabel="Organization" itemValue="org" />
+                                <f:selectItem itemLabel="Planner" itemValue="planner" />
+                                <f:selectItem itemLabel="Worker" itemValue="wrk" />                                
+                                <f:selectItem itemLabel="Citizen" itemValue="cit" />                                
+                                <f:selectItem itemLabel="Responder" itemValue="rsp" />                                                                
+                                </p:selectManyCheckbox>
+
+                        </p:panelGrid>
+                    </div>
+
+                    <!-- content body end-->
+
+                    <!-- footer start-->
+                    <ui:include src="/frames/frmMenuSideBottom.xhtml" /> 
+                    <!-- footer end-->
+                </div>
+            </div>
+        </div>
+    </h:body>
+
+</html>
+

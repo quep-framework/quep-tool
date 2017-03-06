@@ -6,6 +6,7 @@
 package es.upv.dsic.quep.dao;
 
 import es.upv.dsic.quep.model.QuepQuestion;
+import es.upv.dsic.quep.model.QuepQuestionResilience;
 import es.upv.dsic.quep.model.QuepQuestionResponseOption;
 import es.upv.dsic.quep.model.QuepQuestionTechnique;
 import java.util.List;
@@ -21,4 +22,6 @@ public interface QuepQuestionDao {
     public List<QuepQuestionResponseOption> getLstQQuestionResponseOption();
 
     public List<QuepQuestionTechnique> getLstQQuestionTechniques();
+
+    public List<QuepQuestionResilience> getLstQuepQuestionResilience(int idPrinciple, int idPractice, int idQuestion);
 }

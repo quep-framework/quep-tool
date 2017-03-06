@@ -7,6 +7,7 @@ package es.upv.es.dsic.quep.utils;
 
 import es.upv.dsic.quep.dao.MaturityLevelDaoImplement;
 import es.upv.dsic.quep.dao.PracticeDaoImplement;
+import es.upv.dsic.quep.dao.QuepQuestionDaoImplement;
 import es.upv.dsic.quep.dao.QuestioannaireDaoImplement;
 import es.upv.dsic.quep.dao.ResultsDaoImplement;
 import es.upv.dsic.quep.dao.RoleStakeholderDaoImplement;
@@ -15,9 +16,9 @@ import es.upv.dsic.quep.model.MaturityLevelPractice;
 import es.upv.dsic.quep.model.Practice;
 import es.upv.dsic.quep.model.Principle;
 import es.upv.dsic.quep.model.QuepQuestion;
+import es.upv.dsic.quep.model.QuepQuestionResilience;
 import es.upv.dsic.quep.model.QuepQuestionResponseOption;
 import es.upv.dsic.quep.model.QuestionnaireQuepQuestion;
-import es.upv.dsic.quep.model.QuestionnaireQuepQuestionId;
 import es.upv.dsic.quep.model.Response;
 import es.upv.dsic.quep.model.Role;
 import java.io.Serializable;
@@ -40,6 +41,7 @@ public class Results implements Serializable {
 
     public Map<QuepQuestion, ResponseEstimate> calculateQuestions(int organizationId) {
         ResultsDaoImplement rdi = new ResultsDaoImplement();
+        QuepQuestionDaoImplement qqdi = new QuepQuestionDaoImplement();
 
         //1.Evaluation Responses
         //SUM REQ Weight
@@ -56,6 +58,7 @@ public class Results implements Serializable {
             BigDecimal sumReqQQuestion = BigDecimal.ZERO;        //cambiar mapeo de int a double      
             BigDecimal sumQQuestion = BigDecimal.ZERO;
             BigDecimal avg = BigDecimal.ZERO;
+            BigDecimal avgR = BigDecimal.ZERO;
 
             //Get weight SUMs (included requiered SUM)
             for (QuepQuestionResponseOption oQQRO_aux : lstQQuestionResponseOption) {
@@ -80,10 +83,23 @@ public class Results implements Serializable {
             }
             avg = sumRsp.divide(sumReqQQuestion, 2, RoundingMode.HALF_EVEN);
 
+            //TODO: Qv= x*w        
+            if (oQQRO.getQuepQuestion().getWeight()!=null)
+             avg = oQQRO.getQuepQuestion().getWeight().multiply(avg);
+            
+            //TODO: +R (avg related to Resilience characteristic)
+           List<QuepQuestionResilience> lstQQResilience=
+                    qqdi.getLstQuepQuestionResilience(oQQRO.getQuepQuestion().getIdPrinciple(),oQQRO.getQuepQuestion().getPractice().getId(),oQQRO.getQuepQuestion().getId());
+            if (lstQQResilience.size()>0) avgR= avg;
+            /*for (QuepQuestionResilience oQQResilience : lstQQResilience) {     
+                avgR=avgR.add(oQQResilience.getResilienceCharacteristic().getWeight());  
+            }*/
+
             //setting map Reponses SUMs of Quep Questions
             oREstimate.setSumRequiered(sumReqQQuestion);
             oREstimate.setSum(sumQQuestion);
             oREstimate.setAvg(avg);
+            oREstimate.setAvgResilience(avgR);
             mapSumResponseOp.put(oQQRO.getQuepQuestion(), oREstimate);
         }
 
@@ -120,8 +136,8 @@ public class Results implements Serializable {
         return mapPracticeEstimate;
     }
 
-    public Map<Role,ResponseEstimate> calculateRolesBySumQuestions(Map<QuepQuestion, ResponseEstimate> mapSumQuepQuestions, int idOrganization) {
-        Map<Role, ResponseEstimate> mapRoleQQQuestionEstimate = new HashMap<Role,  ResponseEstimate>();
+    public Map<Role, ResponseEstimate> calculateRolesBySumQuestions(Map<QuepQuestion, ResponseEstimate> mapSumQuepQuestions, int idOrganization) {
+        Map<Role, ResponseEstimate> mapRoleQQQuestionEstimate = new HashMap<Role, ResponseEstimate>();
         Map<QuestionnaireQuepQuestion, ResponseEstimate> mapQQQEstimate = new HashMap<QuestionnaireQuepQuestion, ResponseEstimate>();
 
         List<Role> lstRole = new ArrayList<Role>();
@@ -139,7 +155,7 @@ public class Results implements Serializable {
                 BigDecimal avg = BigDecimal.ZERO;
 
                 for (QuestionnaireQuepQuestion qqq : lstQQQ) {
-                    if (qqq.getQuestionnaire().getRolePractice().getRole().getId() == oRole.getId()) {
+                    if (qqq.getQuestionnaire().getRole().getId() == oRole.getId()) {
                         for (Map.Entry<QuepQuestion, ResponseEstimate> oSumQ : mapSumQuepQuestions.entrySet()) {
                             QuepQuestion qq = oSumQ.getKey();
                             if (qqq.getQuepQuestion().getId() == qq.getId()) {
@@ -186,6 +202,44 @@ public class Results implements Serializable {
         return mapPrincipleEstimate;
     }
 
+    
+    public Map<Principle, ResponseEstimate> calculatePrincipleBySumQuestionsResilience(Map<QuepQuestion, ResponseEstimate> mapSumQuepQuestions, List<Principle> lstPrinciple) {
+        Map<Principle, ResponseEstimate> mapPrincipleEstimate = new HashMap<Principle, ResponseEstimate>();
+
+        for (Principle p : lstPrinciple) {
+            int size = 0;
+            int sizeR=0;
+            ResponseEstimate oREstimate = new ResponseEstimate();
+            BigDecimal avg = BigDecimal.ZERO;
+            BigDecimal avgR = BigDecimal.ZERO;
+            for (Map.Entry<QuepQuestion, ResponseEstimate> mQQ : mapSumQuepQuestions.entrySet()) {
+                QuepQuestion qq = mQQ.getKey();
+                ResponseEstimate rsp = mQQ.getValue();
+                if (qq.getPractice().getPrinciple().getId() == p.getId()) {
+                    avg = avg.add(rsp.getAvg());
+                    size++;
+                    if (!rsp.getAvgResilience().equals(BigDecimal.ZERO)){
+                        avgR=avgR.add(rsp.getAvgResilience());
+                        sizeR++;
+                    }                    
+                }
+            }
+            if (size == 0) {
+                size = 1;
+            }
+            
+             if (sizeR == 0) {
+                sizeR = 1;
+            }
+             
+            oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_EVEN));
+            oREstimate.setAvgResilience(avgR.divide(BigDecimal.valueOf(sizeR), 2, RoundingMode.HALF_EVEN));
+            mapPrincipleEstimate.put(p, oREstimate);
+        }
+        return mapPrincipleEstimate;
+    }
+
+    
     public Map<MaturityLevel, ResponseEstimate> calculateMaturityLevelBySumQuestions(Map<QuepQuestion, ResponseEstimate> mapSumQuepQuestions, List<MaturityLevel> lstMaturityLevel) {
 
         Map<MaturityLevel, ResponseEstimate> mapMaturityLevelEstimate = new HashMap<MaturityLevel, ResponseEstimate>();

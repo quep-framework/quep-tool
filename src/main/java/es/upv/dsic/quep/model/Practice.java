@@ -45,8 +45,7 @@ public class Practice  implements java.io.Serializable {
      private String description;
      private Set<Technique> techniques = new HashSet<Technique>(0);
      private Set<Questionnaire> questionnaires = new HashSet<Questionnaire>(0);
-     private Set<MaturityLevelPractice> maturityLevelPractices = new HashSet<MaturityLevelPractice>(0);
-     private Set<RolePractice> rolePractices = new HashSet<RolePractice>(0);
+     private Set<MaturityLevelPractice> maturityLevelPractices = new HashSet<MaturityLevelPractice>(0);     
      private Set<QuepQuestion> quepQuestions = new HashSet<QuepQuestion>(0);
 
     public Practice() {
@@ -62,7 +61,7 @@ public class Practice  implements java.io.Serializable {
         this.active = active;
         this.audit = audit;
     }
-    public Practice(int id, Principle principle, String abbreviation, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, Integer idTechnique, BigDecimal umbral, BigDecimal weight, String audit, String description, Set<Technique> techniques, Set<Questionnaire> questionnaires, Set<MaturityLevelPractice> maturityLevelPractices, Set<RolePractice> rolePractices, Set<QuepQuestion> quepQuestions) {
+    public Practice(int id, Principle principle, String abbreviation, String name, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, Integer idTechnique, BigDecimal umbral, BigDecimal weight, String audit, String description, Set<Technique> techniques, Set<Questionnaire> questionnaires, Set<MaturityLevelPractice> maturityLevelPractices, Set<QuepQuestion> quepQuestions) {
        this.id = id;
        this.principle = principle;
        this.abbreviation = abbreviation;
@@ -79,8 +78,7 @@ public class Practice  implements java.io.Serializable {
        this.description = description;
        this.techniques = techniques;
        this.questionnaires = questionnaires;
-       this.maturityLevelPractices = maturityLevelPractices;
-       this.rolePractices = rolePractices;
+       this.maturityLevelPractices = maturityLevelPractices;       
        this.quepQuestions = quepQuestions;
     }
    
@@ -253,14 +251,6 @@ public class Practice  implements java.io.Serializable {
         this.maturityLevelPractices = maturityLevelPractices;
     }
 
-@OneToMany(fetch=FetchType.LAZY, mappedBy="practice")
-    public Set<RolePractice> getRolePractices() {
-        return this.rolePractices;
-    }
-    
-    public void setRolePractices(Set<RolePractice> rolePractices) {
-        this.rolePractices = rolePractices;
-    }
 
 @OneToMany(fetch=FetchType.LAZY, mappedBy="practice")
     public Set<QuepQuestion> getQuepQuestions() {

@@ -27,7 +27,7 @@ public class MenuDaoImplement implements MenuDao {
         List<Menu> list = null;
         try {
             session = hibernateUtil.getSessionFactory().openSession();
-            Query query = session.createQuery("from Menu");
+            Query query = session.createQuery("from Menu where active=1");
             list = (List<Menu>) query.list();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -62,7 +62,7 @@ public class MenuDaoImplement implements MenuDao {
         List<Menu> list = null;
         try {
             session = hibernateUtil.getSessionFactory().openSession();
-            Query query = session.createQuery("from Menu where role.id=" + idRol);
+            Query query = session.createQuery("from Menu where role.id=" + idRol+" and active=1");
             list = (List<Menu>) query.list();
         } catch (Exception e) {
             System.out.println(e.getMessage());
