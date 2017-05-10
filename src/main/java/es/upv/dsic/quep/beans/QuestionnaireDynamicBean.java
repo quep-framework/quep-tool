@@ -1,7 +1,9 @@
 package es.upv.dsic.quep.beans;
 
+import es.upv.dsic.quep.dao.PracticeDaoImplement;
 import es.upv.dsic.quep.dao.QuestioannaireDaoImplement;
 import es.upv.dsic.quep.model.Organization;
+import es.upv.dsic.quep.model.Practice;
 import es.upv.dsic.quep.model.Principle;
 import es.upv.dsic.quep.model.QuepQuestion;
 import es.upv.dsic.quep.model.QuepQuestionTechnique;
@@ -27,6 +29,7 @@ import java.util.TreeMap;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIForm;
 import javax.faces.component.UISelectItems;
 import javax.faces.component.html.HtmlOutputLabel;
@@ -51,11 +54,15 @@ import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.overlaypanel.OverlayPanel;
+import org.primefaces.component.panel.Panel;
 import org.primefaces.component.panelgrid.PanelGrid;
 
 import org.primefaces.component.selectmanycheckbox.SelectManyCheckbox;
 import org.primefaces.component.selectonemenu.SelectOneMenu;
 import org.primefaces.component.selectoneradio.SelectOneRadio;
+import org.primefaces.component.separator.Separator;
+import org.primefaces.component.separator.UISeparator;
+import org.primefaces.component.spacer.Spacer;
 import org.primefaces.component.tabview.Tab;
 
 /**
@@ -74,6 +81,7 @@ public class QuestionnaireDynamicBean implements Serializable {
     private QuestioannaireDaoImplement qdi = new QuestioannaireDaoImplement();
 
     private List<Response> lstResponse;
+    
     private List<QuestionnaireResponse> lstQuestionnaireResponse;
     private List<QuestionnaireResponse> lstAuxQuestionnaireResponse;
     private List<QuestionnaireQuepQuestion> lstQuestionnaireQQ;
@@ -245,6 +253,7 @@ public class QuestionnaireDynamicBean implements Serializable {
                 Principle oPrinciple = entry.getKey();
                 List<QuestionnaireQuepQuestion> lstQQQ = entry.getValue();
 
+                //Creacion de panel agrupado por Principios
                 Tab tabapnl = new Tab();
                 tabapnl.setId("tabapnl_" + String.valueOf(oPrinciple.getId()));
                 tabapnl.setTitle(oPrinciple.getAbbreviation() + "." + oPrinciple.getName());
@@ -293,23 +302,50 @@ public class QuestionnaireDynamicBean implements Serializable {
     a) Se llama al proceso de creaciÛn del panel de las preguntas 
     b) Se llama al proceso de creaciÛn del panel de las opciones de respuesta
     ---*/
+    
     private PanelGrid createPrinciplePanel(Principle key, List<QuestionnaireQuepQuestion> lstQQQ) {
         PanelGrid panel = new PanelGrid();
         int j = 0;
+        int i =0;
         panel.setId("tab_" + String.valueOf(key.getId()));
 
-        //tab.setTitle(key.getName());
-        for (QuestionnaireQuepQuestion qqq : lstQQQ) {
-            int idQQ = qqq.getQuepQuestion().getId();
-            List<QuepQuestionTechnique> lstTechnique = getLstTechniques(idQQ);
-            String[] sTechnique = getSTechniques(lstTechnique);
-            panel.getChildren().add(createQuestionPanel(qqq.getQuepQuestion(), j, getSTechniquesTxt(lstTechnique), getsResilienceTxt(lstTechnique)));
-            panel.getChildren().add(createResponseOptionPanel(qqq, sTechnique));
-            j++;
+        //group by practice 
+         List<Practice> lstPractice= new ArrayList<Practice>();
+         PracticeDaoImplement pdi= new PracticeDaoImplement();
+         lstPractice = pdi.getPractice();
+         
+         for (Practice op : lstPractice) {
+             OutputLabel olGP= new OutputLabel();              
+             PanelGrid panelQQQ = new PanelGrid();
+             i=0;
+             for (QuestionnaireQuepQuestion qqq : lstQQQ) {
+                 if (op.getId() == qqq.getQuepQuestion().getPractice().getId()) {
+                     if (i == 0) {
+                         /*OutputLabel olSpaceGP = new OutputLabel();
+                         olSpaceGP.setValue("Blank Space");
+                         olSpaceGP.setStyle("color:white;");
+                         panel.getChildren().add(olSpaceGP);*/
+                         olGP.setValue("<p><br/> Practice: " + op.getName()+"</p>");
+                         olGP.setStyle("color: #638493;  font-weight: bold;");
+                         olGP.setEscape(false);
+                         panel.getChildren().add(olGP);
+                         UISeparator UIsp = new UISeparator();                          
+                         panel.getChildren().add(UIsp);
+                     }
+                     int idQQ = qqq.getQuepQuestion().getId();
+                     List<QuepQuestionTechnique> lstTechnique = getLstTechniques(idQQ);
+                     String[] sTechnique = getSTechniques(lstTechnique);
+                     panelQQQ.getChildren().add(createQuestionPanel(qqq.getQuepQuestion(), j, getSTechniquesTxt(lstTechnique), getsResilienceTxt(lstTechnique)));
+                     panelQQQ.getChildren().add(createResponseOptionPanel(qqq, sTechnique));
+                     j++;
+                     i++;
+                 }
+             }
+             panel.getChildren().add(panelQQQ);
         }
         return panel;
     }
-
+    
     /* ------- 
      a) CreaciÛn del panel correspondiente a cada una de las preguntas obtenidas en el hashmap
         de questionario de preguntas seg˙n el rol
@@ -1118,4 +1154,7 @@ public class QuestionnaireDynamicBean implements Serializable {
         this.oOrganization = oOrganization;
     }
 
+  
+
+    
 }

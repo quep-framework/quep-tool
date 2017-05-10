@@ -116,11 +116,9 @@ public class PrincipleResilienceChartViewBean implements Serializable {
         lstPrinciple = pdi.getPrinciple();
 
         if (imenu == 1) { //by principles           
-            mapSumQuepQuestions = new HashMap<QuepQuestion, ResponseEstimate>();
             mapSumQuepQuestions = results.calculateQuestions(oOrganization.getId());
 
-            mapPrinciplesResults = new HashMap<Principle, ResultR>();
-            mapPrinciplesResults = getResultsPrinciple();
+            mapPrinciplesResults =  getResultsPrinciple();
         }/* else if (imenu == 2) { //by practice
             mapPracticeResults = new HashMap<Practice, Result>();
             mapPracticeResults = getResultsPracticesByPrinciple(sId);
@@ -136,7 +134,7 @@ public class PrincipleResilienceChartViewBean implements Serializable {
         
         //Color        
         horizontalBarModel.setSeriesColors("00749F,CB0105");
-        horizontalBarModel.setExtender("customExtender");
+        //horizontalBarModel.setExtender("customExtender");
         
         horizontalBarModel.setShowDatatip(true);
         horizontalBarModel.setShowPointLabels(true);
