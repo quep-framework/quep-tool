@@ -306,7 +306,7 @@ public class QuestionnaireDynamicBean implements Serializable {
     private PanelGrid createPrinciplePanel(Principle key, List<QuestionnaireQuepQuestion> lstQQQ) {
         PanelGrid panel = new PanelGrid();
         int j = 0;
-        int i =0;
+        //int i =0;
         panel.setId("tab_" + String.valueOf(key.getId()));
 
         //group by practice 
@@ -317,10 +317,10 @@ public class QuestionnaireDynamicBean implements Serializable {
          for (Practice op : lstPractice) {
              OutputLabel olGP= new OutputLabel();              
              PanelGrid panelQQQ = new PanelGrid();
-             i=0;
+             j=0;             
              for (QuestionnaireQuepQuestion qqq : lstQQQ) {
                  if (op.getId() == qqq.getQuepQuestion().getPractice().getId()) {
-                     if (i == 0) {
+                     if (j == 0) {
                          /*OutputLabel olSpaceGP = new OutputLabel();
                          olSpaceGP.setValue("Blank Space");
                          olSpaceGP.setStyle("color:white;");
@@ -338,7 +338,7 @@ public class QuestionnaireDynamicBean implements Serializable {
                      panelQQQ.getChildren().add(createQuestionPanel(qqq.getQuepQuestion(), j, getSTechniquesTxt(lstTechnique), getsResilienceTxt(lstTechnique)));
                      panelQQQ.getChildren().add(createResponseOptionPanel(qqq, sTechnique));
                      j++;
-                     i++;
+                     //i++;
                  }
              }
              panel.getChildren().add(panelQQQ);
