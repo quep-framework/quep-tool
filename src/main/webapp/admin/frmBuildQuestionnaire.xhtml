@@ -1,0 +1,336 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:f="http://xmlns.jcp.org/jsf/core"          
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <title>Build Questionnaire</title>
+        <link rel="stylesheet" type="text/css" href="../resource/themes/aristo/theme.css" />
+        <link rel="stylesheet" type="text/css" href="../resource/css/site.css" />
+        <!--link rel="stylesheet" type="text/css" href="../resource/css/jquery-ui.css" />
+        <link rel="stylesheet" type="text/css" href="../resource/css/perfect-scrollbar.css" />
+        <link rel="stylesheet" type="text/css" href="../resource/css/sh.css" />
+        <link rel="stylesheet" type="text/css" href="../resource/icons/css/font-awesome.min.css" /--> 
+
+        <!--script type="text/javascript" src="../resource/js/jquery.js"></script-->
+        <!--documentado x bloquear select one menu--> 
+        <!--script type="text/javascript" src="../resource/js/perfect-scrollbar.js"></script>
+        <script type="text/javascript" src="../resource/js/site.js"></script>
+        <script type="text/javascript" src="../resource/js/index.js"></script-->
+
+        <!-- Dependencies of some widgets -->  
+        <!--script type="text/javascript" src="../resource/js/plugins/plugins-all.js"></script-->
+
+        <!-- Mustache for templating support -->
+        <!--script type="text/javascript" src="../resource/js/plugins/mustache.min.js"></script-->
+
+        <!-- X-TAG for PrimeElements -->
+        <!--script type="text/javascript" src="../resource/js/x-tag-core.min.js"></script-->
+
+        <!-- PrimeUI -->
+        <!--link rel="stylesheet" href="/QuEP-Tool/build/primeui.css" />
+        <script type="text/javascript" src="/QuEP-Tool/build/primeui.js"></script>
+        <script type="text/javascript" src="/QuEP-Tool/build/primeelements.js"></script-->                                                             
+    </h:head>
+    <h:body>
+        <div class="PC">
+            <!--start menu izq-->
+            <ui:include src="/frames/frmMenuSideLeft.xhtml" />                                 
+            <!--end menu izq-->
+
+            <div id="CONTENTSIDE">
+                <div id="CONTENTSIDEindent">
+
+                    <!-- header bar start-->
+                    <ui:include src="/frames/frmMenuSideTop.xhtml" />  
+                    <!-- header bar end-->
+
+                    <!-- content body start-->         
+                    <div>
+
+                        <h:form id="formQuepQuestion">
+                            <p:growl id="messages" showDetail="false"/>   
+                            <p:menubar >                                        
+                                <p:menuitem value="Add" icon="ui-icon-extlink" onclick="PF('dlg0').show();"/>                                                                                           
+                                <p:menuitem value="Save" actionListener="#{questionaireViewBean.save}" icon="ui-icon-disk" update="messages"/>
+                                <p:menuitem value="Update" actionListener="#{questionaireViewBean.update}" icon="ui-icon-arrowrefresh-1-w" update="messages"/>                                                                                                
+                                <p:menuitem value="Delete" actionListener="#{questionaireViewBean.delete}" icon="ui-icon-close" update="messages" ajax="false"/>                                                
+
+
+                                <f:facet name="options">
+                                    <!--p:inputText style="margin-right:10px" placeholder="Search"/-->
+                                    <!--p:commandButton type="button" value="Logout" icon="ui-icon-extlink" /-->
+                                </f:facet>
+                            </p:menubar>
+
+                            <p:accordionPanel>
+                                <p:tab title="QuEP Question">
+                                    <p:growl id="messages1" showDetail="false"/>       
+
+                                    <p:menubar >                                        
+                                        <p:menuitem value="New" icon="ui-icon-contact" onclick="PF('dlg').show();"/>                                                                                           
+                                      
+                                        <f:facet name="options">
+                                            <!--p:inputText style="margin-right:10px" placeholder="Search"/-->
+                                            <!--p:commandButton type="button" value="Logout" icon="ui-icon-extlink" /-->
+                                        </f:facet>
+                                    </p:menubar>
+
+
+                                    <p:dialog header="Quep Question" widgetVar="dlg" focus="description" >
+                                        <p:growl id="messagesQQ" showDetail="false"/>      
+                                        <p:menubar >                                                                                                                                                                                                                                                        
+                                            <p:menuitem value="Save" actionListener="#{questionaireViewBean.save}" icon="ui-icon-disk" update="messagesQQ"/>                                            
+                                            <p:menuitem value="Quit" actionListener="#{questionaireViewBean.delete}" icon="ui-icon-close" update="messagesQQ" ajax="false"/>                                                                                                                                     
+                                            <f:facet name="options">
+                                                <!--p:inputText style="margin-right:10px" placeholder="Search"/-->
+                                                <!--p:commandButton type="button" value="Logout" icon="ui-icon-extlink" /-->
+                                            </f:facet>
+                                        </p:menubar>
+                                        
+                                        <h:panelGrid columns="3">
+                                            <h:outputLabel for="description" value="Description:" />                                            
+                                            <p:editor id="description" widgetVar="editorWidget"  width="600" />                                                                                      
+                                            <p:commandButton value="Clear" type="button" onclick="PF('editorWidget').clear();" icon="ui-icon-close" />                                                                                   
+
+                                            <h:outputLabel for="hascomment" value="Has comment:" />
+                                            <p:inputText id="hascomment" label="hascomment" />
+                                            <h:outputLabel  value="" />
+
+                                            <h:outputLabel for="haspagenumber" value="Has page number:" />
+                                            <p:inputText id="haspagenumber" label="haspagenumber" />
+                                            <h:outputLabel  value="" />
+
+                                            <h:outputLabel for="principle" value="Principle:" />                                            
+                                            <p:selectCheckboxMenu id="principle" label="Principles"
+                                                                  filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                                                <f:selectItems value="#" />
+                                            </p:selectCheckboxMenu>                                          
+                                            <h:outputLabel  value="" />
+
+                                            <h:outputLabel for="practice" value="Practice:" />                                            
+                                            <p:selectCheckboxMenu id="practice" label="Practices"
+                                                                  filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                                                <f:selectItems value="#" />
+                                            </p:selectCheckboxMenu>                                          
+                                            <h:outputLabel  value="" />
+
+                                            <h:outputLabel for="maturitylevel" value="Maturity Level:" />                                            
+                                            <p:selectCheckboxMenu id="maturitylevel" label="Maturity levels"
+                                                                  filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                                                <f:selectItems value="#" />
+                                            </p:selectCheckboxMenu>                                          
+                                            <h:outputLabel  value="" />
+
+                                            <h:outputLabel for="tip" value="Tip:" />
+                                            <p:inputText id="tip" label="tip" />
+                                            <h:outputLabel  value="" />
+
+                                            <h:outputLabel for="ismandatory" value="Mandatory:" />
+                                            <p:selectBooleanButton id="ismandatory" value="#" onLabel="Yes" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width:60px">
+                                                <!--p:ajax update="msgs" listener="{selectBooleanView.addMessage}" /-->
+                                            </p:selectBooleanButton>
+                                            <h:outputLabel  value="" />                                            
+
+                                            <h:outputLabel for="questiontype" value="Question Type:" />                                            
+                                            <p:selectCheckboxMenu id="questiontype" label="Question Types"
+                                                                  filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                                                <f:selectItems value="#" />
+                                            </p:selectCheckboxMenu>                                          
+                                            <h:outputLabel  value="" />
+
+                                            <h:outputLabel for="umbral" value="Umbral:" />                                            
+                                            <h:panelGrid columns="1" style="margin-bottom: 10px">
+                                                <p:inputText id="umbral" value="" />
+                                                <p:slider for="umbral" />
+                                            </h:panelGrid>                     
+                                            <h:outputLabel  value="" />
+
+                                            <h:outputLabel for="weight" value="Weight" />                                            
+                                            <h:panelGrid columns="1" style="margin-bottom: 10px">
+                                                <p:inputText id="weight" value="" />
+                                                <p:slider for="weight" />
+                                            </h:panelGrid>                     
+                                            <h:outputLabel  value="" />
+
+                                            <h:outputLabel for="order" value="Order" />                                            
+                                            <p:inputMask id="order" value="#" mask="999"/>
+                                            <h:outputLabel  value="" />
+
+
+                                        </h:panelGrid>
+                                    </p:dialog>
+
+                                    <p:dataTable >
+                                        <f:facet name="header">
+                                            Question List
+                                        </f:facet>
+                                        <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+
+                                        <p:column headerText="Descripcion">
+                                            <h:outputText value="1" />
+                                        </p:column>
+
+                                        <p:column headerText="Principle">
+                                            <h:outputText value="2}" />
+                                        </p:column>
+
+                                        <p:column headerText="Practice">
+                                            <h:outputText value="3" />
+                                        </p:column>
+
+                                        <p:column headerText="MaturityLevel">
+                                            <h:outputText value="4" />
+                                        </p:column>
+
+                                        <p:column headerText="Order">
+                                            <h:outputText value="5" />
+                                        </p:column>
+
+                                        <p:column style="width:32px">
+                                            <p:rowEditor />
+                                        </p:column>
+                                    </p:dataTable>
+
+                                </p:tab>
+                            </p:accordionPanel>
+                            <!--/h:form>    
+                            <h:form id="formQuestionnaire"-->
+                            <p:accordionPanel>
+                                <p:tab title="Questionnaire">
+                                    <p:growl id="messages3"/>
+
+                                    <p:menubar >                                        
+                                          <p:menuitem value="New" icon="ui-icon-contact" onclick="PF('dlgQQ').show();"/>                                                                                                                                                                               
+                                        <f:facet name="options">
+                                            <!--p:inputText style="margin-right:10px" placeholder="Search"/-->
+                                            <!--p:commandButton type="button" value="Logout" icon="ui-icon-extlink" /-->
+                                        </f:facet>
+                                    </p:menubar>
+                                    
+                                    <p:dialog header="Quep Question" widgetVar="dlgQQ" focus="descriptionQ">
+                                        <p:growl id="messagesQQ" showDetail="false"/>      
+                                        <p:menubar >                                                                                                                                                                                                                                                        
+                                            <p:menuitem value="Save" actionListener="#{questionaireViewBean.save}" icon="ui-icon-disk" update="messagesQQ"/>                                            
+                                            <p:menuitem value="Quit" actionListener="#{questionaireViewBean.delete}" icon="ui-icon-close" update="messagesQQ" ajax="false"/>                                                                                                                                     
+                                            <f:facet name="options">
+                                                <!--p:inputText style="margin-right:10px" placeholder="Search"/-->
+                                                <!--p:commandButton type="button" value="Logout" icon="ui-icon-extlink" /-->
+                                            </f:facet>
+                                        </p:menubar>
+                                        
+                                        <h:panelGrid columns="3">
+                                            <h:outputLabel for="descriptionQ" value="Description:" />  
+                                            <p:inputTextarea id="descriptionQ" label="name" />                                                                                                                                
+                                            <h:outputLabel  value="" />                                                                                 
+
+                                            <h:outputLabel for="name" value="Name:" />
+                                            <p:inputText id="name" label="name" />
+                                            <h:outputLabel  value="" />                                          
+
+                                            <h:outputLabel for="practice" value="Practices" />                                            
+                                            <p:selectCheckboxMenu id="practice" label="Practices"
+                                                                  filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                                                <f:selectItems value="#" />
+                                            </p:selectCheckboxMenu>                                          
+                                            <h:outputLabel  value="" />
+
+                                            <h:outputLabel for="role" value="Role:" />                                            
+                                            <p:selectCheckboxMenu id="role" label="Roles"
+                                                                  filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                                                <f:selectItems value="#" />
+                                            </p:selectCheckboxMenu>                                          
+                                            <h:outputLabel  value="" />
+
+                                        </h:panelGrid>
+                                    </p:dialog>
+                                    
+                                    <p:dataTable >
+                                        <f:facet name="header">
+                                            Questionnaire List
+                                        </f:facet>
+                                        <p:column selectionMode="single" style="width:16px;text-align:center"/>
+
+                                        <p:column headerText="Name">
+                                            <h:outputText value="1" />
+                                        </p:column>
+
+                                        <p:column headerText="Practice">
+                                            <h:outputText value="2}" />
+                                        </p:column>
+
+                                        <p:column headerText="Role">
+                                            <h:outputText value="3" />
+                                        </p:column>
+
+                                        <p:column style="width:32px">
+                                            <p:rowEditor />
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:tab>
+                            </p:accordionPanel>
+                            
+                            <p:separator />
+                            <p:outputLabel value="Questionnaire Quep Question" style="font-weight: bold; margin-left: 15px; "/>
+                            <p:panel>
+                                
+                                    <p:growl id="messagesQQQ"/>
+
+                                    <!--p:menubar >                                        
+                                          <p:menuitem value="New" icon="ui-icon-contact" onclick="PF('dlgQQ').show();"/>                                                                                                                                                                               
+                                        <f:facet name="options">
+                                        </f:facet>
+                                    </p:menubar-->                                    
+                                    <p:dataTable >
+                                        <f:facet name="header" >
+                                            List
+                                        </f:facet>
+                                        <p:column  style="width:16px;text-align:center"/>
+
+                                        <p:column headerText="Questionnaire">
+                                            <h:outputText value="1" />
+                                        </p:column>
+
+                                        <p:column headerText="Role">
+                                            <h:outputText value="2}" />
+                                        </p:column>
+
+                                        <p:column headerText="Question">
+                                            <h:outputText value="3" />
+                                        </p:column>
+
+                                        <p:column style="width:32px">
+                                            <p:rowEditor />
+                                        </p:column>
+                                    </p:dataTable>                                
+                            </p:panel>
+
+                        </h:form>
+
+
+                    </div>
+                    <!-- content body end-->
+
+
+                    <!-- footer start-->
+                    <ui:include src="/frames/frmMenuSideBottom.xhtml" />  
+                    <!-- footer end-->
+
+                </div>
+            </div>
+        </div>
+
+        <!--script type="text/javascript" src="../resource/js/sh.js"></script-->
+
+    </h:body>
+
+</html>
+
+
