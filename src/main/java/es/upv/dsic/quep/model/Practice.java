@@ -5,6 +5,7 @@ package es.upv.dsic.quep.model;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,10 +44,12 @@ public class Practice  implements java.io.Serializable {
      private BigDecimal weight;
      private String audit;
      private String description;
-     private Set<Technique> techniques = new HashSet<Technique>(0);
-     private Set<Questionnaire> questionnaires = new HashSet<Questionnaire>(0);
-     private Set<MaturityLevelPractice> maturityLevelPractices = new HashSet<MaturityLevelPractice>(0);     
-     private Set<QuepQuestion> quepQuestions = new HashSet<QuepQuestion>(0);
+     private Set<Technique> techniques = new HashSet<>(0);
+     private Set<Questionnaire> questionnaires = new HashSet<>(0);
+     private Set<MaturityLevelPractice> maturityLevelPractices = new HashSet<>(0);     
+     private Set<QuepQuestion> quepQuestions = new HashSet<>(0);
+     
+
 
     public Practice() {
     }
@@ -262,7 +265,13 @@ public class Practice  implements java.io.Serializable {
     }
 
 
-
+    public void calculateValue() {
+        Iterator<QuepQuestion> iter = quepQuestions.iterator();
+        while (iter.hasNext()) {
+            QuepQuestion i = iter.next();
+           // i.get
+        }
+    }
 
 }
 
