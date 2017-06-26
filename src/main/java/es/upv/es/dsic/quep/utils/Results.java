@@ -87,10 +87,18 @@ public class Results implements Serializable {
             if (oQQRO.getQuepQuestion().getWeight()!=null)
              avg = oQQRO.getQuepQuestion().getWeight().multiply(avg);
             
-            //TODO: +R (avg related to Resilience characteristic)
-           List<QuepQuestionResilience> lstQQResilience=
+            //TODO: QVR=x*wR
+           // double wR:
+          /*  List<QuepQuestionResilience> lstQQResilience=
                     qqdi.getLstQuepQuestionResilience(oQQRO.getQuepQuestion().getIdPrinciple(),oQQRO.getQuepQuestion().getPractice().getId(),oQQRO.getQuepQuestion().getId());
-            if (lstQQResilience.size()>0) avgR= avg;
+            for (QuepQuestionResilience oQQResilience : lstQQResilience) {     
+                avgR=avgR.add(oQQResilience.getResilienceCharacteristic().getWeight());  
+            }
+            */
+            //TODO: +R (avg related to Resilience characteristic)
+           /*List<QuepQuestionResilience> lstQQResilience=
+                    qqdi.getLstQuepQuestionResilience(oQQRO.getQuepQuestion().getIdPrinciple(),oQQRO.getQuepQuestion().getPractice().getId(),oQQRO.getQuepQuestion().getId());
+            if (lstQQResilience.size()>0) avgR= avg;*/
             /*for (QuepQuestionResilience oQQResilience : lstQQResilience) {     
                 avgR=avgR.add(oQQResilience.getResilienceCharacteristic().getWeight());  
             }*/
@@ -116,6 +124,7 @@ public class Results implements Serializable {
         for (Practice oPr : lstPractice) {
             if (oPr.getPrinciple().getId() == Integer.parseInt(sPrincipleId)) {
                 int size = 0;
+                double sumWeight=0.0;
                 ResponseEstimate oREstimate = new ResponseEstimate();
                 BigDecimal avg = BigDecimal.ZERO;
                 for (Map.Entry<QuepQuestion, ResponseEstimate> oSumQ : mapSumQuepQuestions.entrySet()) {
@@ -124,12 +133,13 @@ public class Results implements Serializable {
                     if (qq.getPractice().getId() == oPr.getId()) {
                         avg = avg.add(rsp.getAvg());
                         size++;
+                        sumWeight+=qq.getWeight().doubleValue();
                     }
                 }
-                if (size == 0) {
-                    size = 1;
-                }
-                oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_EVEN));
+                if (sumWeight==0.0) {
+                    sumWeight = 1;
+                }//////////***cambiar en todos (no promedio)
+                oREstimate.setAvg(avg.divide(BigDecimal.valueOf(sumWeight), 2, RoundingMode.HALF_EVEN));
                 mapPracticeEstimate.put(oPr, oREstimate);
             }
         }
