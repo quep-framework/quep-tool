@@ -41,12 +41,15 @@ public class Results implements Serializable {
 
     public Map<QuepQuestion, ResponseEstimate> calculateQuestions(int organizationId) {
         ResultsDaoImplement rdi = new ResultsDaoImplement();
-        QuepQuestionDaoImplement qqdi = new QuepQuestionDaoImplement();
 
         //1.Evaluation Responses
         //SUM REQ Weight
         List<QuepQuestionResponseOption> lstQQuestionResponseOption = new ArrayList<QuepQuestionResponseOption>();
         lstQQuestionResponseOption = rdi.getQuepQuestionResponseOption(organizationId);
+
+        //Resilience
+        QuepQuestionDaoImplement qqdi = new QuepQuestionDaoImplement();
+        QuepQuestionResilience qResilience = new QuepQuestionResilience();
 
         //2.Calculate Responses
         List<Response> lstResult = new ArrayList<Response>();
@@ -55,54 +58,97 @@ public class Results implements Serializable {
         Map<QuepQuestion, ResponseEstimate> mapSumResponseOp = new HashMap<QuepQuestion, ResponseEstimate>();
         for (QuepQuestionResponseOption oQQRO : lstQQuestionResponseOption) {
             ResponseEstimate oREstimate = new ResponseEstimate();
-            BigDecimal sumReqQQuestion = BigDecimal.ZERO;        //cambiar mapeo de int a double      
+            BigDecimal sumReqQQuestion = BigDecimal.ZERO;        //cambiar mapeo de int a double                  
             BigDecimal sumQQuestion = BigDecimal.ZERO;
             BigDecimal avg = BigDecimal.ZERO;
+
+            BigDecimal sumReqQQuestionR = BigDecimal.ZERO;
             BigDecimal avgR = BigDecimal.ZERO;
 
-            //Get weight SUMs (included requiered SUM)
+            //Get weight SUMs (included requiered SUM
+            BigDecimal sumPreviousReqQQ = BigDecimal.ZERO;
             for (QuepQuestionResponseOption oQQRO_aux : lstQQuestionResponseOption) {
                 if (oQQRO_aux.getId().getIdQuepQuestion() == oQQRO.getId().getIdQuepQuestion()) {
                     sumQQuestion = sumQQuestion.add(oQQRO_aux.getResponseOption().getWeight());
                     if (oQQRO_aux.getResponseOption().getIsRequiered() == 1) {
-                        sumReqQQuestion = sumReqQQuestion.add(oQQRO_aux.getResponseOption().getWeight());
+                        if (oQQRO_aux.getResponseOption().getQuestionType().getName().toLowerCase().trim().contains("check")) {
+                            sumReqQQuestion = sumReqQQuestion.add(oQQRO_aux.getResponseOption().getWeight());
+                        } else if (oQQRO_aux.getResponseOption().getQuestionType().getName().toLowerCase().trim().contains("radio")) {
+                            sumReqQQuestion = oQQRO_aux.getResponseOption().getWeight();
+                            if (sumPreviousReqQQ.compareTo(sumReqQQuestion) == -1) {
+                                sumPreviousReqQQ = sumReqQQuestion;
+                            } else {
+                                sumReqQQuestion = sumPreviousReqQQ;
+                                break;
+                            }
+                        }
                     }
+
+                    try {
+                        qResilience = qqdi.getQuepQuestionResilience(oQQRO.getIdPrinciple(), oQQRO.getIdPractice(), oQQRO_aux.getId().getIdQuepQuestion());
+                        if (qResilience != null) {
+                            sumReqQQuestionR = sumReqQQuestion;
+                        }
+                    } catch (Exception e) {
+                        sumReqQQuestionR = BigDecimal.ZERO;
+                    }
+
                 }
             }
 
             //Get Responses SUMs of an Organization 
             BigDecimal sumRsp = BigDecimal.ZERO;
+            int sizeStkRsp = 0;
+
+            BigDecimal sumRspR = BigDecimal.ZERO;
+            int sizeStkRspR = 0;
+
             for (Response oResponse : lstResult) {
-                if (oResponse.getId().getIdQuepQuestion() == oQQRO.getId().getIdQuepQuestion()) {
+                if (oResponse.getId().getIdQuepQuestion() == oQQRO.getId().getIdQuepQuestion()
+                        && oResponse.getResponseOption().getIsRequiered() == 1) { //++
                     sumRsp = sumRsp.add(oResponse.getResponseOption().getWeight());
+                    sizeStkRsp++;
+
+                    try {
+                        qResilience = qqdi.getQuepQuestionResilience(oQQRO.getIdPrinciple(), oQQRO.getIdPractice(), oResponse.getId().getIdQuepQuestion());
+                        if (qResilience != null) {
+                            sumRspR = sumRsp;
+                            sizeStkRspR++;
+                        }
+                    } catch (Exception e) {
+                        sumRspR = BigDecimal.ZERO;
+                    }
+
                 }
             }
-            //average Responses SUMs / Requiered SUM of Questions Configurated in QuEP
-            if (sumReqQQuestion == BigDecimal.valueOf(0.0) || sumReqQQuestion.equals(BigDecimal.valueOf(0))) {
-                sumReqQQuestion = BigDecimal.valueOf(1.0);
+            if (sizeStkRsp == 0) {
+                sizeStkRsp = 1;
             }
-            avg = sumRsp.divide(sumReqQQuestion, 2, RoundingMode.HALF_EVEN);
 
-            //TODO: Qv= x*w        
-            if (oQQRO.getQuepQuestion().getWeight()!=null)
-             avg = oQQRO.getQuepQuestion().getWeight().multiply(avg);
-            
-            //TODO: QVR=x*wR
-           // double wR:
-          /*  List<QuepQuestionResilience> lstQQResilience=
-                    qqdi.getLstQuepQuestionResilience(oQQRO.getQuepQuestion().getIdPrinciple(),oQQRO.getQuepQuestion().getPractice().getId(),oQQRO.getQuepQuestion().getId());
-            for (QuepQuestionResilience oQQResilience : lstQQResilience) {     
-                avgR=avgR.add(oQQResilience.getResilienceCharacteristic().getWeight());  
+            if (sizeStkRspR == 0) {
+                sizeStkRspR = 1;
             }
-            */
-            //TODO: +R (avg related to Resilience characteristic)
-           /*List<QuepQuestionResilience> lstQQResilience=
-                    qqdi.getLstQuepQuestionResilience(oQQRO.getQuepQuestion().getIdPrinciple(),oQQRO.getQuepQuestion().getPractice().getId(),oQQRO.getQuepQuestion().getId());
-            if (lstQQResilience.size()>0) avgR= avg;*/
-            /*for (QuepQuestionResilience oQQResilience : lstQQResilience) {     
-                avgR=avgR.add(oQQResilience.getResilienceCharacteristic().getWeight());  
+            sumRsp = sumRsp.divide(BigDecimal.valueOf(sizeStkRsp), 4, RoundingMode.HALF_EVEN);
+            sumRspR = sumRspR.divide(BigDecimal.valueOf(sizeStkRspR), 4, RoundingMode.HALF_EVEN);
+
+            //average Responses SUMs / Requiered SUM of Questions Configurated in QuEP                              
+            try {
+                avg = sumRsp.divide(sumReqQQuestion, 4, RoundingMode.HALF_EVEN);
+            } catch (Exception e) {
+                avg = sumRsp.divide(BigDecimal.valueOf(1.0));
+            }
+
+            //average Resilience                             
+            try {
+                avgR = sumRspR.divide(sumReqQQuestionR, 4, RoundingMode.HALF_EVEN);
+            } catch (Exception e) {
+                avgR = sumRspR.divide(BigDecimal.valueOf(1.0));
+            }
+
+            //TODO: Qv= x*w    
+            /*    if (oQQRO.getQuepQuestion().getWeight() != null) {
+                avg = oQQRO.getQuepQuestion().getWeight().multiply(avg);                
             }*/
-
             //setting map Reponses SUMs of Quep Questions
             oREstimate.setSumRequiered(sumReqQQuestion);
             oREstimate.setSum(sumQQuestion);
@@ -124,22 +170,38 @@ public class Results implements Serializable {
         for (Practice oPr : lstPractice) {
             if (oPr.getPrinciple().getId() == Integer.parseInt(sPrincipleId)) {
                 int size = 0;
-                double sumWeight=0.0;
+                //double sumWeight = 0.0;
                 ResponseEstimate oREstimate = new ResponseEstimate();
-                BigDecimal avg = BigDecimal.ZERO;
+                
+                //BigDecimal avg = BigDecimal.ZERO;
+                BigDecimal x = BigDecimal.ZERO;    //avg            
+                BigDecimal sumWeight = BigDecimal.ZERO;//BigDecimal.valueOf(0.0)
+                BigDecimal Qv = BigDecimal.ZERO;
+                
                 for (Map.Entry<QuepQuestion, ResponseEstimate> oSumQ : mapSumQuepQuestions.entrySet()) {
                     QuepQuestion qq = oSumQ.getKey();
                     ResponseEstimate rsp = oSumQ.getValue();
                     if (qq.getPractice().getId() == oPr.getId()) {
-                        avg = avg.add(rsp.getAvg());
+                        //avg = avg.add(rsp.getAvg());
+                        Qv=Qv.add(rsp.getAvg().multiply(qq.getWeight()));
+                        sumWeight = sumWeight.add(qq.getWeight());                                                
                         size++;
-                        sumWeight+=qq.getWeight().doubleValue();
+                        //sumWeight += qq.getWeight().doubleValue();
                     }
                 }
-                if (sumWeight==0.0) {
+                                
+                //sum(Qv) / sum(w)
+                try {
+                    Qv = Qv.divide(sumWeight, 4, RoundingMode.HALF_EVEN);
+                } catch (Exception e) {
+                    Qv = Qv.divide(BigDecimal.valueOf(1.0), 4, RoundingMode.HALF_EVEN);
+                }
+                
+                oREstimate.setAvg(Qv);
+                /*if (sumWeight == 0.0) {
                     sumWeight = 1;
                 }//////////***cambiar en todos (no promedio)
-                oREstimate.setAvg(avg.divide(BigDecimal.valueOf(sumWeight), 2, RoundingMode.HALF_EVEN));
+                oREstimate.setAvg(avg.divide(BigDecimal.valueOf(sumWeight), 4, RoundingMode.HALF_EVEN));*/
                 mapPracticeEstimate.put(oPr, oREstimate);
             }
         }
@@ -181,7 +243,7 @@ public class Results implements Serializable {
                     //oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_EVEN));
                     //mapQQQEstimate.put(qqq, oREstimate);
                 }
-                oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_EVEN));
+                oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 4, RoundingMode.HALF_EVEN));
                 mapRoleQQQuestionEstimate.put(oRole, oREstimate);
             }
         }
@@ -191,117 +253,148 @@ public class Results implements Serializable {
     public Map<Principle, ResponseEstimate> calculatePrincipleBySumQuestions(Map<QuepQuestion, ResponseEstimate> mapSumQuepQuestions, List<Principle> lstPrinciple) {
         Map<Principle, ResponseEstimate> mapPrincipleEstimate = new HashMap<Principle, ResponseEstimate>();
 
-        for (Principle p : lstPrinciple) {
-            int size = 0;
+        for (Principle p : lstPrinciple) {            
             ResponseEstimate oREstimate = new ResponseEstimate();
-            BigDecimal avg = BigDecimal.ZERO;
+            BigDecimal x = BigDecimal.ZERO;
+            BigDecimal sumWeight = BigDecimal.ZERO;//BigDecimal.valueOf(0.0)
+            BigDecimal Qv = BigDecimal.ZERO;
+
             for (Map.Entry<QuepQuestion, ResponseEstimate> mQQ : mapSumQuepQuestions.entrySet()) {
                 QuepQuestion qq = mQQ.getKey();
                 ResponseEstimate rsp = mQQ.getValue();
                 if (qq.getPractice().getPrinciple().getId() == p.getId()) {
-                    avg = avg.add(rsp.getAvg());
-                    size++;
+                    //Qv=x*w                          
+                    Qv = Qv.add(rsp.getAvg().multiply(qq.getWeight()));
+                    sumWeight = sumWeight.add(qq.getWeight());
                 }
             }
-            if (size == 0) {
-                size = 1;
+            //Qv=x*w::Sum x / Sum weight
+            //sum(Qv) / sum(w)
+            try {
+                Qv = Qv.divide(sumWeight, 4, RoundingMode.HALF_EVEN);
+            } catch (Exception e) {
+                Qv = Qv.divide(BigDecimal.valueOf(1.0), 4, RoundingMode.HALF_EVEN);
             }
-            oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_EVEN));
+
+            //oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 4, RoundingMode.HALF_EVEN));
+            oREstimate.setAvg(Qv);
             mapPrincipleEstimate.put(p, oREstimate);
         }
         return mapPrincipleEstimate;
     }
 
-    
     public Map<Principle, ResponseEstimate> calculatePrincipleBySumQuestionsResilience(Map<QuepQuestion, ResponseEstimate> mapSumQuepQuestions, List<Principle> lstPrinciple) {
         Map<Principle, ResponseEstimate> mapPrincipleEstimate = new HashMap<Principle, ResponseEstimate>();
 
         for (Principle p : lstPrinciple) {
-            int size = 0;
-            int sizeR=0;
+           // int size = 0;
+            int sizeR = 0;
             ResponseEstimate oREstimate = new ResponseEstimate();
-            BigDecimal avg = BigDecimal.ZERO;
-            BigDecimal avgR = BigDecimal.ZERO;
+            //BigDecimal avg = BigDecimal.ZERO;
+            //BigDecimal avgR = BigDecimal.ZERO;
+            BigDecimal QvR = BigDecimal.ZERO;
+            BigDecimal sumWeightR = BigDecimal.ZERO;//BigDecimal.valueOf(0.0)
+                      
+            BigDecimal sumWeight = BigDecimal.ZERO;//BigDecimal.valueOf(0.0)
+            BigDecimal Qv = BigDecimal.ZERO;
+                
             for (Map.Entry<QuepQuestion, ResponseEstimate> mQQ : mapSumQuepQuestions.entrySet()) {
                 QuepQuestion qq = mQQ.getKey();
                 ResponseEstimate rsp = mQQ.getValue();
-                if (qq.getPractice().getPrinciple().getId() == p.getId()) {
-                    avg = avg.add(rsp.getAvg());
-                    size++;
-                    if (!rsp.getAvgResilience().equals(BigDecimal.ZERO)){
-                        avgR=avgR.add(rsp.getAvgResilience());
+                if (qq.getIdPrinciple() == p.getId()) {
+                    //avg = avg.add(rsp.getAvg());
+                    
+                    //Qv=x*w                          
+                    Qv = Qv.add(rsp.getAvg().multiply(qq.getWeight()));
+                    sumWeight = sumWeight.add(qq.getWeight());
+
+                    //size++;
+                    if (rsp.getAvgResilience().compareTo(BigDecimal.ZERO) != 0) {                        
+                        //avgR = avgR.add();
+                        QvR=QvR.add(rsp.getAvgResilience().multiply(qq.getWeight()));
+                        sumWeightR = sumWeightR.add(qq.getWeight());
                         sizeR++;
-                    }                    
+                    }
                 }
             }
-            if (size == 0) {
+          /*  if (size == 0) {
                 size = 1;
-            }
-            
-             if (sizeR == 0) {
+            }*/
+
+            if (sizeR == 0) {
                 sizeR = 1;
             }
-             
-            oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_EVEN));
-            oREstimate.setAvgResilience(avgR.divide(BigDecimal.valueOf(sizeR), 2, RoundingMode.HALF_EVEN));
+            
+            //sum(Qv) / sum(w)
+            try {
+                Qv = Qv.divide(sumWeight, 4, RoundingMode.HALF_EVEN);
+            } catch (Exception e) {
+                Qv = Qv.divide(BigDecimal.valueOf(1.0), 4, RoundingMode.HALF_EVEN);
+            }
+            
+            //Resilience
+            try {
+                QvR = QvR.divide(sumWeightR, 4, RoundingMode.HALF_EVEN);
+            } catch (Exception e) {
+                QvR = QvR.divide(BigDecimal.valueOf(1.0), 4, RoundingMode.HALF_EVEN);
+            }
+
+            oREstimate.setAvg(Qv);
+            //oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 4, RoundingMode.HALF_EVEN));
+            oREstimate.setAvgResilience(QvR);
             mapPrincipleEstimate.put(p, oREstimate);
         }
         return mapPrincipleEstimate;
     }
 
-    
     public Map<MaturityLevel, ResponseEstimate> calculateMaturityLevelBySumQuestions(Map<QuepQuestion, ResponseEstimate> mapSumQuepQuestions, List<MaturityLevel> lstMaturityLevel) {
 
         Map<MaturityLevel, ResponseEstimate> mapMaturityLevelEstimate = new HashMap<MaturityLevel, ResponseEstimate>();
-
-        MaturityLevelDaoImplement mldao = new MaturityLevelDaoImplement();
-        //PrincipleDaoImplement pdi = new PrincipleDaoImplement();
-
-        List<MaturityLevelPractice> lstMaturityLevelPractice = new ArrayList<MaturityLevelPractice>();
-        lstMaturityLevelPractice = mldao.getMaturityLevelsPractice();
-
-        //List<MaturityLevel> lstMaturityLevel = new ArrayList<MaturityLevel>();
-        //lstMaturityLevel = mldao.getMaturityLevels();
         ResponseEstimate oREstimate = new ResponseEstimate();
-
-        BigDecimal sumLastLevel = BigDecimal.ZERO;
+        BigDecimal sumLastLevel = BigDecimal.ZERO;        
         int sizeLevels = 0;
         MaturityLevel oLastMaturityLevel = new MaturityLevel();
+
         for (MaturityLevel ml : lstMaturityLevel) {
             if (ml.getId() != 10) { //add un campo mas que indique que es el último nivel en la BD
                 oREstimate = new ResponseEstimate();
-                BigDecimal avg = BigDecimal.ZERO;
-                int size = 0;
-                //for (MaturityLevelPractice mlp : lstMaturityLevelPractice) {
-                //if(mlp.getId().getIdMaturityLevel()==ml.getId()){
+                BigDecimal x = BigDecimal.ZERO;    //avg            
+                BigDecimal sumWeight = BigDecimal.ZERO;//BigDecimal.valueOf(0.0)
+                BigDecimal Qv = BigDecimal.ZERO;
+
+               int size = 0;
                 for (Map.Entry<QuepQuestion, ResponseEstimate> mQQ : mapSumQuepQuestions.entrySet()) {
                     QuepQuestion qq = mQQ.getKey();
                     ResponseEstimate rsp = mQQ.getValue();
-                    if ( //qq.getPractice().getId() == mlp.getId().getIdPractice()
-                            //&&
-                            qq.getMaturityLevel().getId() == ml.getId()) //&& mlp.getId().getIdMaturityLevel() == ml.getId()) 
-                    {
-                        avg = avg.add(rsp.getAvg());
-                        size++;
+                    if (qq.getMaturityLevel().getId() == ml.getId()) {
+                        //Qv=x*w                          
+                        Qv=Qv.add(rsp.getAvg().multiply(qq.getWeight()));
+                        sumWeight = sumWeight.add(qq.getWeight());                        
+                        size++;                        
                     }
-                    //  }
                 }
-                if (size == 0) {
-                    size = 1;
+                
+                //sum(Qv) / sum(w)
+                try {
+                    Qv = Qv.divide(sumWeight, 4, RoundingMode.HALF_EVEN);
+                } catch (Exception e) {
+                    Qv = Qv.divide(BigDecimal.valueOf(1.0), 4, RoundingMode.HALF_EVEN);
                 }
-                oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_EVEN));
+                
+                oREstimate.setAvg(Qv);
                 mapMaturityLevelEstimate.put(ml, oREstimate);
 
-                sumLastLevel = sumLastLevel.add(avg);
+                sumLastLevel = sumLastLevel.add(Qv);
                 sizeLevels++;
             } else {
                 oLastMaturityLevel = ml;
             }
         }
+        
 
         //setting last level
-        oREstimate = new ResponseEstimate();
-        oREstimate.setAvg(sumLastLevel.divide(BigDecimal.valueOf(sizeLevels), 2, RoundingMode.HALF_EVEN));
+        oREstimate = new ResponseEstimate();        
+        oREstimate.setAvg(sumLastLevel.divide(BigDecimal.valueOf(sizeLevels), 4, RoundingMode.HALF_EVEN));
         mapMaturityLevelEstimate.put(oLastMaturityLevel, oREstimate);
 
         return mapMaturityLevelEstimate;
@@ -326,7 +419,7 @@ public class Results implements Serializable {
             if (size == 0) {
                 size = 1;
             }
-            oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_EVEN));
+            oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 4, RoundingMode.HALF_EVEN));
             mapPrincipleEstimate.put(p, oREstimate);
         }
         return mapPrincipleEstimate;
@@ -336,38 +429,56 @@ public class Results implements Serializable {
         Map<Principle, ResponseEstimate> mapPrincipleEstimate
                 = new HashMap<Principle, ResponseEstimate>();
 
-        MaturityLevelDaoImplement mldao = new MaturityLevelDaoImplement();
-        //PrincipleDaoImplement pdi = new PrincipleDaoImplement();
-
+        MaturityLevelDaoImplement mldao = new MaturityLevelDaoImplement();        
         List<MaturityLevelPractice> lstMaturityLevelPractice = new ArrayList<MaturityLevelPractice>();
-        lstMaturityLevelPractice = mldao.getMaturityLevelsPractice();
+        lstMaturityLevelPractice = mldao.getMaturityLevelsPractice();                
 
-        // List<Principle> lstPrinciple = new ArrayList<Principle>();
-        // lstPrinciple = pdi.getPrinciple();
         for (Principle pri : lstPrinciple) {
             ResponseEstimate oREstimate = new ResponseEstimate();
-            BigDecimal avg = BigDecimal.ZERO;
-            int size = 0;
+            
+           // BigDecimal x = BigDecimal.ZERO; //avg
+            BigDecimal sumWeight = BigDecimal.ZERO;//BigDecimal.valueOf(0.0)
+            BigDecimal Qv = BigDecimal.ZERO;
+            
             for (MaturityLevelPractice mlp : lstMaturityLevelPractice) {
                 if (mlp.getId().getIdMaturityLevel() == Integer.parseInt(sMaturityLevelId)) {
                     for (Map.Entry<QuepQuestion, ResponseEstimate> mQQ : mapSumQuepQuestions.entrySet()) {
                         QuepQuestion qq = mQQ.getKey();
                         ResponseEstimate rsp = mQQ.getValue();
                         if (qq.getMaturityLevel().getId() == mlp.getId().getIdMaturityLevel()
-                                && pri.getId() == mlp.getIdPrinciple()) {
-                            avg = avg.add(rsp.getAvg());
-                            size++;
+                                && pri.getId() == mlp.getIdPrinciple()
+                                && mlp.getIdPrinciple() == qq.getIdPrinciple()) {//++
+                            //Qv=x*w                          
+                            Qv = Qv.add(rsp.getAvg().multiply(qq.getWeight()));
+                            sumWeight = sumWeight.add(qq.getWeight());
                         }
                     }
+                
                 }
             }
-            if (size == 0) {
-                size = 1;
+            
+                
+            //sum(Qv) / sum(w)
+            try {
+                Qv = Qv.divide(sumWeight, 4, RoundingMode.HALF_EVEN);
+            } catch (Exception e) {
+                Qv = Qv.divide(BigDecimal.valueOf(1.0), 4, RoundingMode.HALF_EVEN);
             }
-            oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_EVEN));
+            
+            //oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 4, RoundingMode.HALF_EVEN));
+            oREstimate.setAvg(Qv);
             mapPrincipleEstimate.put(pri, oREstimate);
         }
         return mapPrincipleEstimate;
     }
-
+    
+    
+    public int calculteLegendQR(int idOrg,int idStatus) {        
+        ResultsDaoImplement rdi = new ResultsDaoImplement();        
+        try {
+            return rdi.getLegendQrStatus(idOrg,idStatus);
+        } catch (Exception e) {
+           return 0;
+        }
+    }
 }

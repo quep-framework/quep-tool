@@ -522,6 +522,14 @@ public class QuestionnaireDynamicBean implements Serializable {
             chk.getChildren().add(selectItems);            
             //chk.set
             //chk.setStyle("display: block; width: 400px;");
+            
+            //** desabilitar en caso que el cuestionario se haya enviado o este completo
+            if (lstQuestionnaireResponse.size() > 0) {
+                if (lstQuestionnaireResponse.get(0).getStatus() == 1) {
+                    chk.setDisabled(true);
+                }
+            }
+            
             pnlResponseOption.getChildren().add(chk);
 
             ////////////////////////////////////////
@@ -830,28 +838,30 @@ public class QuestionnaireDynamicBean implements Serializable {
             1 Completed
             2 InProgress
             3 Deleted';*/
-        boolean band = false;
+        //boolean band = false;
         int size = 0;
         int lessSize = 0;
         Map<String, String[]> requestParams = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterValuesMap();
-        for (Iterator<QuestionnaireQuepQuestion> it = lstQuestionnaireQQ.iterator(); it.hasNext();) {
-            QuestionnaireQuepQuestion qqq = it.next();
-            //else {            
+        for (Iterator<QuestionnaireQuepQuestion> it = lstQuestionnaireQQ.iterator(); it.hasNext();) {            
+            QuestionnaireQuepQuestion qqq = it.next();           
+            
             String sQId = String.valueOf(qqq.getQuepQuestion().getId());
             String[] lstRO = null;
             if (qqq.getQuepQuestion().getQuestionType().getName().equals("date")) {
                 lstRO = (String[]) requestParams.get(prefixQ + prefixIdRO + sQId + "_input"); // recupero el valor del componente en una lista y para obtenerlo paso como parametro el id del pregunta                                       
             } else {
-                lstRO = (String[]) requestParams.get(prefixQ + prefixIdRO + sQId);
+                lstRO = (String[]) requestParams.get(prefixQ + prefixIdRO + sQId);//recupero los ids de los response option de una pregunta
             }
 
             if (lstRO != null) {
                 for (String sRO : lstRO) {
-                    if (qqq.getQuepQuestion().getIsMandatory() == 0) {
-                        lessSize++;
+                    if (qqq.getQuepQuestion().getIsMandatory() == 0 ) {
+                        lessSize++;                        
+                        //break;
                     } else if (sRO != null && !sRO.equals("")) {
                         size++;
                     }
+                    break;
                 }
             }
         }

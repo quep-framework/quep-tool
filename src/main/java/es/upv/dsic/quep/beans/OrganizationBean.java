@@ -46,6 +46,9 @@ public class OrganizationBean implements Serializable {
     
     @Inject
     private PrincipleResultsChartViewBean PrincipleResultsChartViewBean;
+    
+    @Inject
+    private PrincipleResilienceChartViewBean PrincipleResilienceChartViewBean;
 
     public OrganizationBean() {
       
@@ -78,9 +81,10 @@ public class OrganizationBean implements Serializable {
             if (str.contains("/QuEP-Tool/reports/frmMaturityLevelsResults.xhtml")) {
                 maturityLevelResultsChartViewBean.init();
             } else if (str.contains("/QuEP-Tool/reports/frmPrinciplesResults.xhtml")) {
-                PrincipleResultsChartViewBean.init();
-            } 
-            else if (str.contains("/QuEP-Tool/all/frmQuestionnaireDynamic.xhtml")) {
+                PrincipleResultsChartViewBean.init();            
+            } else if (str.contains("/QuEP-Tool/reports/frmPrinciplesResilienceResults.xhtml")) {
+                PrincipleResilienceChartViewBean.init();
+            } else if (str.contains("/QuEP-Tool/all/frmQuestionnaireDynamic.xhtml")) {
                 questionnaireDynamicBean.init();
             }
         }
@@ -174,6 +178,14 @@ public class OrganizationBean implements Serializable {
         this.PrincipleResultsChartViewBean = PrincipleResultsChartViewBean;
     }
 
+    public PrincipleResilienceChartViewBean getPrincipleResilienceChartViewBean() {
+        return PrincipleResilienceChartViewBean;
+    }
 
+    public void setPrincipleResilienceChartViewBean(PrincipleResilienceChartViewBean PrincipleResilienceChartViewBean) {
+        this.PrincipleResilienceChartViewBean = PrincipleResilienceChartViewBean;
+    }
+
+    
     
 }

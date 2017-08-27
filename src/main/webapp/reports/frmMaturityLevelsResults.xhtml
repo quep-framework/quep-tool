@@ -27,11 +27,11 @@
         </script>
 
         <h:outputScript>
-        function chartExtender() {        
-        // this = chart widget instance        
-        // this.cfg = options      
-        this.cfg.seriesDefaults.rendererOptions.varyBarColor = true;
-        }
+            function chartExtender() {        
+            // this = chart widget instance        
+            // this.cfg = options      
+            this.cfg.seriesDefaults.rendererOptions.varyBarColor = true;
+            }
         </h:outputScript>
 
     </h:head>
@@ -59,10 +59,20 @@
                                          icon="ui-icon-extlink" 
                                          onclick="exportChartML()" 
                                          />
-                        <p:chart id="idchart"  widgetVar="wchartML" type="bar" model="#{maturityLevelResultsChartViewBean.horizontalBarModel}"                                   
-                                 style="width:1000px;height:400px;">
+                        <!--p:panelGrid columns="1"-->                            
+                            <p:commandButton  icon="ui-icon-info" 
+                                              style="color:#0174DF; background-color: #F2F2F2;"
+                                              value="#{maturityLevelResultsChartViewBean.legendNumberStk}"
+                                              disabled="true"/> 
+                            <!--p:outputLabel id="idOpLQ" value="{maturityLevelResultsChartViewBean.legendNumberStk}"
+                                           class="dispBlock logoDarkText" />
+                        </p:panelGrid-->
+
+
+                        <p:chart id="idchart"  widgetVar="wchartML" type="bar" model="#{maturityLevelResultsChartViewBean.horizontalBarModel}"                                  
+                                 style="width:100%;height:400px;">
                             <p:ajax event="itemSelect" listener="#{maturityLevelResultsChartViewBean.listener}" update="idchart" process="@this"></p:ajax>
-                        </p:chart>    
+                        </p:chart>                        
 
                     </h:form>
 

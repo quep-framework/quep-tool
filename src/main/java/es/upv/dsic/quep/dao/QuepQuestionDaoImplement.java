@@ -14,6 +14,7 @@ import es.upv.dsic.quep.model.QuepQuestionResilience;
 import es.upv.dsic.quep.model.QuepQuestionResponseOption;
 import es.upv.dsic.quep.model.QuepQuestionTechnique;
 import es.upv.dsic.quep.model.RoleStakeholder;
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -80,9 +81,9 @@ public class QuepQuestionDaoImplement implements QuepQuestionDao {
     }
 
     @Override
-    public List<QuepQuestionResilience> getLstQuepQuestionResilience(int idPrinciple, int idPractice, int idQuestion) {
+    public QuepQuestionResilience getQuepQuestionResilience(int idPrinciple, int idPractice, int idQuestion) {
         Session session = null;
-        List<QuepQuestionResilience> list = null;
+        List<QuepQuestionResilience> list = new ArrayList<QuepQuestionResilience>();
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             Query query = session.createQuery("from QuepQuestionResilience where active=1 \n"
@@ -97,7 +98,7 @@ public class QuepQuestionDaoImplement implements QuepQuestionDao {
                 session.close();
             }
         }
-        return list;
+        return list.get(0);
     }
 
 }

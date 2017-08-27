@@ -19,6 +19,8 @@ import es.upv.es.dsic.quep.utils.Result;
 import es.upv.es.dsic.quep.utils.Results;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,6 +36,7 @@ import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.HorizontalBarChartModel;
 import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.LegendPlacement;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.MenuModel;
@@ -88,6 +91,8 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
     private int imenu;
     private String titleChar="";
     
+    private String legendNumberStk="";
+    
     public MaturityLevelResultsChartViewBean() {
 
     }
@@ -123,7 +128,7 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
             mapSumQuepQuestions = results.calculateQuestions(oOrganization.getId());
 
             mapMaturityLevelResults = new HashMap<MaturityLevel, Result>();
-            mapMaturityLevelResults = getResultsMaturityLevels();
+            mapMaturityLevelResults = getResultsMaturityLevels();                        
 
         } else if (imenu == 2) {//principle by id maturity level
             PrincipleDaoImplement pdi = new PrincipleDaoImplement();
@@ -132,6 +137,8 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
             mapPrinciplesResults = new HashMap<Principle, Result>();
             mapPrinciplesResults = getResultsPrincipleByLevel(sId);
         }
+        
+        legendNumberStk=getlegendQuestionnaires();
     }
 
     public void drawHorizontalBarModel(String sXAxis, String sYAxis, String title) {
@@ -139,7 +146,9 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
         horizontalBarModel.clear();
         horizontalBarModel.addSeries(chartComplete);
          //color bar char        
-         horizontalBarModel.setSeriesColors("0F5FE9,E4EAF0");
+        //horizontalBarModel.setSeriesColors("0F5FE9,E4EAF0");
+        horizontalBarModel.setSeriesColors("00749F,E4EAF0");
+        
             //horizontalBarModel.setSeriesColors("5196BB,FDAB84,5D9C78,EBCC4D,E290FB,FCD5FA,F8A43D,2C97EA,1C8481,717A79");
         
         horizontalBarModel.addSeries(chartPerComplete);
@@ -148,7 +157,11 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
         horizontalBarModel.setShowPointLabels(true);
         horizontalBarModel.setTitle(titleChar);        
         horizontalBarModel.setAnimate(true);
-        horizontalBarModel.setLegendPosition("se");
+        
+        //horizontalBarModel.setLegendPosition("se");
+        horizontalBarModel.setLegendPosition("e");
+        horizontalBarModel.setLegendPlacement(LegendPlacement.OUTSIDEGRID);
+        
         horizontalBarModel.setStacked(true);
         horizontalBarModel.setZoom(true);
         horizontalBarModel.getAxis(AxisType.X).setLabel(sXAxis);
@@ -180,7 +193,7 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
                 }
             }
         }
-        drawHorizontalBarModel("Values", "Maturity Levels", oOrganization.getName());
+        drawHorizontalBarModel("Porcentaje obtenido",oOrganization.getName(),"Resultados por Niveles de Madurez");
     }
 
     public void createHorizontalBarPrinciplesByLevel(String sMaturityLevelId) {
@@ -202,7 +215,7 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
 
         MaturityLevelDaoImplement mdi = new MaturityLevelDaoImplement();
         oMaturityLevel = mdi.getMaturityLevel(Integer.parseInt(sMaturityLevelId));
-        drawHorizontalBarModel("Values", "Principles", "Level " +oMaturityLevel.getId()+": "+ oMaturityLevel.getName());
+        drawHorizontalBarModel("Porcentaje obtenido", "Level " +oMaturityLevel.getId()+": "+ oMaturityLevel.getName(), "Resultados por Principios");
     }
 
     public Map<MaturityLevel, Result> getResultsMaturityLevels() {
@@ -219,6 +232,12 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
                 ResponseEstimate rsp = mapML.getValue();
                 Result oResult = new Result();
                 BigDecimal dComplete = rsp.getAvg();
+                
+                BigDecimal scale;
+                scale= new BigDecimal (100.00);
+                //scale=scale.setScale(4, RoundingMode.HALF_EVEN);
+                dComplete=dComplete.multiply(scale);
+                
                 oResult.setComplete(dComplete);
                 oResult.setPerComplete(getResultsPerComplete(dComplete));
                 mapMlResults.put(ml, oResult);
@@ -247,6 +266,11 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
                     ResponseEstimate rsp = mapPri.getValue();
                     Result oResult = new Result();
                     BigDecimal dComplete = rsp.getAvg();
+                    
+                    BigDecimal scale;
+                    scale = new BigDecimal(100.00);                    
+                    dComplete = dComplete.multiply(scale);
+
                     oResult.setComplete(dComplete);
                     oResult.setPerComplete(getResultsPerComplete(dComplete));
                     mapPriResults.put(pri, oResult);
@@ -266,6 +290,18 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
         } catch (Exception e) {
             return null;
         }
+    }
+    
+    public String getlegendQuestionnaires(){
+        Results oResults = new Results();
+        int cStatusComplete=0;
+        cStatusComplete=oResults.calculteLegendQR(oOrganization.getId(),1);
+        int cStatusPerComplete=0;
+        cStatusPerComplete=oResults.calculteLegendQR(oOrganization.getId(),2);
+        return String.valueOf(cStatusComplete) +
+                " completados de "+
+                String.valueOf(cStatusComplete+cStatusPerComplete) +
+                " configurados";                
     }
 
     public void listener(ItemSelectEvent e) {
@@ -501,130 +537,12 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
     public void setTitleChar(String titleChar) {
         this.titleChar = titleChar;
     }
-    
-    
 
+    public String getLegendNumberStk() {
+        return legendNumberStk;
+    }
+
+    public void setLegendNumberStk(String legendNumberStk) {
+        this.legendNumberStk = legendNumberStk;
+    }
 }
-
-/*public Map<Principle, ResponseEstimate> calculatePrinciples() {
-        Map<Principle, MaturityLevelResultsChartViewBean.ResponseEstimate> mapPrincipleEstimate 
-                = new HashMap<Principle, MaturityLevelResultsChartViewBean.ResponseEstimate>();
-        
-         mapSumPractices = new HashMap<Practice, ResponseEstimate>();
-         mapSumPractices = calculatePractices(mapSumQuepQuestions);
-         //if (mapSumPractices==0) mapSumPractices=1;
-
-        MaturityLevelDaoImplement mldao = new MaturityLevelDaoImplement();
-        //PrincipleDaoImplement pdi = new PrincipleDaoImplement();
-
-        List<MaturityLevelPractice> lstMaturityLevelPractice = new ArrayList<MaturityLevelPractice>();
-        lstMaturityLevelPractice = mldao.getMaturityLevelsPractice();
-
-       // List<Principle> lstPrinciple = new ArrayList<Principle>();
-       // lstPrinciple = pdi.getPrinciple();
-
-        for (Principle pri : lstPrinciple) {
-            MaturityLevelResultsChartViewBean.ResponseEstimate oREstimate = new MaturityLevelResultsChartViewBean.ResponseEstimate();
-            BigDecimal avg = BigDecimal.ZERO;
-            int size = 0;
-            for (MaturityLevelPractice mlp : lstMaturityLevelPractice) {
-                //if (mlp.getId().getIdMaturityLevel() == Integer.parseInt(sMaturityLevelId)) {
-                    for (Map.Entry<Practice, MaturityLevelResultsChartViewBean.ResponseEstimate> mPra : mapSumPractices.entrySet()) {
-                        Practice pra = mPra.getKey();
-                        ResponseEstimate rsp = mPra.getValue();
-                        if (pra.getId() == mlp.getId().getIdPractice()
-                                && pri.getId() == mlp.getIdPrinciple()) {
-                            avg = avg.add(rsp.getAvg());
-                            size++;
-                        }
-                    }
-               // }
-            }
-            if (size == 0) {
-                size = 1;
-            }
-            oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_EVEN));
-            mapPrincipleEstimate.put(pri, oREstimate);
-        }
-        return mapPrincipleEstimate;
-    }*/
- /*
-    public Map<Principle, Result> getResultsPrincipleByLevel(String sMaturityLevelId) {
-        try {
-            Map<Principle, Result> mapPriResults = new HashMap<Principle, Result>();
-
-            if (mapSumPractices.size() > 0 && mapSumPractices != null) {
-                mapSumPrinciple = new HashMap<Principle, ResponseEstimate>();
-                mapSumPrinciple = calculatePrincipleByMaturityLevel(mapSumPractices, sMaturityLevelId);
-
-                for (Map.Entry<Principle, ResponseEstimate> mapPri : mapSumPrinciple.entrySet()) {
-                    Principle pri = mapPri.getKey();
-                    ResponseEstimate rsp = mapPri.getValue();
-                    Result oResult = new Result();
-                    BigDecimal dComplete = rsp.getAvg();
-                    oResult.setComplete(dComplete);
-                    oResult.setPerComplete(getResultsPerComplete(dComplete));
-                    mapPriResults.put(pri, oResult);
-
-                }
-            }
-
-            return mapPriResults;
-        } catch (Exception e) {
-            return null;
-        }
-    }*/
- /*
-    public Map<MaturityLevel, ResponseEstimate> calculateMaturityLevel(Map<Practice, ResponseEstimate> mapSumPractices) {
-        Map<MaturityLevel, ResponseEstimate> mapMaturityLevelEstimate = new HashMap<MaturityLevel, ResponseEstimate>();
-
-        MaturityLevelDaoImplement mldao = new MaturityLevelDaoImplement();
-        //PrincipleDaoImplement pdi = new PrincipleDaoImplement();
-
-        List<MaturityLevelPractice> lstMaturityLevelPractice = new ArrayList<MaturityLevelPractice>();
-        lstMaturityLevelPractice = mldao.getMaturityLevelsPractice();
-
-        //List<MaturityLevel> lstMaturityLevel = new ArrayList<MaturityLevel>();
-        //lstMaturityLevel = mldao.getMaturityLevels();
-
-        ResponseEstimate oREstimate = new ResponseEstimate();
-
-        BigDecimal sumLastLevel = BigDecimal.ZERO;
-        int sizeLevels = 0;
-        MaturityLevel oLastMaturityLevel = new MaturityLevel();
-        for (MaturityLevel ml : lstMaturityLevel) {
-            if (ml.getId() != 10) { //add un campo mas que indique que es el último nivel en la BD
-                oREstimate = new ResponseEstimate();
-                BigDecimal avg = BigDecimal.ZERO;
-                int size = 0;
-                for (MaturityLevelPractice mlp : lstMaturityLevelPractice) {
-                    //if(mlp.getId().getIdMaturityLevel()==ml.getId()){
-                    for (Map.Entry<Practice, ResponseEstimate> mPra : mapSumPractices.entrySet()) {
-                        Practice pra = mPra.getKey();
-                        ResponseEstimate rsp = mPra.getValue();
-                        if (pra.getId() == mlp.getId().getIdPractice()
-                                && mlp.getId().getIdMaturityLevel() == ml.getId()) {
-                            avg = avg.add(rsp.getAvg());
-                            size++;
-                        }
-                    }
-                }
-                if (size == 0) {
-                    size = 1;
-                }
-                oREstimate.setAvg(avg.divide(BigDecimal.valueOf(size), 2, RoundingMode.HALF_EVEN));
-                mapMaturityLevelEstimate.put(ml, oREstimate);
-
-                sumLastLevel = sumLastLevel.add(avg);
-                sizeLevels++;
-            } else {
-                oLastMaturityLevel = ml;
-            }
-        }
-
-        //setting last level
-        oREstimate = new ResponseEstimate();
-        oREstimate.setAvg(sumLastLevel.divide(BigDecimal.valueOf(sizeLevels), 2, RoundingMode.HALF_EVEN));
-        mapMaturityLevelEstimate.put(oLastMaturityLevel, oREstimate);
-
-        return mapMaturityLevelEstimate;*/

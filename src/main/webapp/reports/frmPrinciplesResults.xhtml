@@ -53,8 +53,14 @@
                                          icon="ui-icon-extlink" 
                                          onclick="exportChartPrinciple()"  
                                          />
+                        
+                        <p:commandButton  icon="ui-icon-info" 
+                                              style="color:#0174DF; background-color: #F2F2F2;"
+                                              value="#{principleResultsChartViewBean.legendNumberStk}"
+                                              disabled="true"/> 
+                        
                         <p:chart id="idchart1"  widgetVar="wchart1" type="bar" model="#{principleResultsChartViewBean.horizontalBarModel}" 
-                                 style="width:1000px;height:400px;"
+                                 style="width:90%;height:400px;"
                                  >
                             <p:ajax event="itemSelect" listener="#{principleResultsChartViewBean.listener}" update="idchart1" process="@this"></p:ajax>
                         </p:chart>                            
@@ -74,11 +80,6 @@
                             <p:printer target="output1" />
                         </p:commandButton>
                     </p:dialog>      
-
-                    <p:panel>   
-
-                    </p:panel>   
-
 
                     <!-- content body end-->
 

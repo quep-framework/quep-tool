@@ -16,7 +16,7 @@ public class ResponseEstimate {
     private BigDecimal sumRequiered;
     private BigDecimal sum;
     private BigDecimal avg;
-    private BigDecimal avgResilience;
+    private BigDecimal avgResilience;    
 
     public ResponseEstimate() {
     }

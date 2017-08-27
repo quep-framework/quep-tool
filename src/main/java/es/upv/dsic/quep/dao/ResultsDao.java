@@ -17,4 +17,5 @@ import java.util.List;
 public interface ResultsDao {    
    public List<QuepQuestionResponseOption> getQuepQuestionResponseOption(int idOrg);
    public List<Response> getListResponse(int idOrg);
+   public int getLegendQrStatus(int idOrg,int iStatus) ;
 }

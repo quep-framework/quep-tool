@@ -15,28 +15,19 @@
         <title>Results Principles - Practices</title>
         <link rel="stylesheet" type="text/css" href="../resource/themes/aristo/theme.css" />
         <link rel="stylesheet" type="text/css" href="../resource/css/site.css" />
-        <link rel="stylesheet" type="text/css" href="../resource/css/quep-css.css" />  
-        
-        
-        <h:outputScript library="primefaces" name="#{request.contextPath}/js/jquery.min.js"/>
-    <script type="text/javascript" src="#{request.contextPath}/js/html2canvas.js"></script>
-   
+        <link rel="stylesheet" type="text/css" href="../resource/css/quep-css.css" />      
+        <!--h:outputScript library="primefaces" name="jquery/jquery.js" /-->
+        <h:outputScript library="primefaces" name="charts/charts.js" />
+        <!--h:outputScript library="primefaces" name="charts/charts.css" /-->   
         <script type="text/javascript">
-            function exportChartPriResilience() {
+            function exportChartPrinciple() {
                 //export image
-                $('#frmChartR\\:outputR').empty().append(PF('wchartR').exportAsImage());
-                PF('dlgchartR').show();
+                $('#output1').empty().append(PF('wchart1').exportAsImage());
+                PF('dlgchart1').show();
 
             }
-
         </script>
-        <!--h:outputScript>
-            function chartExtender() {        
-            // this = chart widget instance        
-            // this.cfg = options      
-            this.cfg.seriesDefaults.rendererOptions.varyBarColor = true;            
-            }
-        </h:outputScript-->
+
     </h:head>
     <h:body>
         <div class="PC">
@@ -53,53 +44,39 @@
 
                     <!-- content body start-->  
 
-                    <h:form id="frmChartR">      
-                        <script type="text/javascript">
-                            function saveAsImage() {
-                                html2canvas($("#frmChartR\\:idchartR"), {
-                                    onrendered: function (canvas) {
-                                        theCanvas = canvas;
-                                        document.body.appendChild(canvas);
-                                        $("#frmChartR\\:outputR").append(canvas);
-                                    }
-                                });
-                            }
-
-                        </script>
-                        <div>                                                  
-                            <p:breadCrumb id="pnlbc" model="#{principleResilienceChartViewBean.model}"/>                                                      
-                        </div>          
-
+                    <h:form id="frmChartP">   
                         <p:commandButton type="button" value="Export" 
                                          icon="ui-icon-extlink" 
-                                         onclick="saveAsImage();PF('eventDialog').show();" 
+                                         onclick="exportChartPrinciple()"  
                                          />
+                        
+                        <p:commandButton  icon="ui-icon-info" 
+                                              style="color:#0174DF; background-color: #F2F2F2;"
+                                              value="#{principleResilienceChartViewBean.legendNumberStk}"
+                                              disabled="true"/> 
+                        
+                        <p:chart id="idchart1"  widgetVar="wchart1" type="bar" model="#{principleResilienceChartViewBean.horizontalBarModel}" 
+                                 style="width:90%;height:400px;"
+                                 >
+                            <p:ajax event="itemSelect" listener="#{principleResilienceChartViewBean.listener}" update="idchart1" process="@this"></p:ajax>
+                        </p:chart>                            
+                    </h:form>
 
-                        <p:chart id="idchartR"  widgetVar="wchartR" type="bar" model="#{principleResilienceChartViewBean.horizontalBarModel}"  
-                                 style="width:1000px;height:500px; "  >
-                            <!--p:ajax event="itemSelect" listener="{principleResilienceChartViewBean.listener}" update="idchart1" process="@this"></p:ajax-->
-                        </p:chart> 
-
-                         <p:dialog id="eventDialog" widgetVar="eventDialog" resizable="false" width="520" height="300" >
-            <p:outputPanel id="outputR"/>
-        </p:dialog>>
-                    </h:form>      
-
-
-                    <!--p:dialog widgetVar="dlgchartR" 
+                    <p:dialog widgetVar="dlgchart1" 
                               showEffect="fade"                               
                               modal="true" 
                               header="Chart Results"                              
                               showHeader="true"                                 
                               resizable="false">
-                        <p:outputPanel id="outputR1" 
+                        <p:outputPanel id="output1" 
                                        layout="block" 
-                                       style="width:1005px;height:505px;"
+                                       style="width:1005px;height:405px"
                                        />
                         <p:commandButton value="Print" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px">
-                            <p:printer target="outputR" />
+                            <p:printer target="output1" />
                         </p:commandButton>
-                    </p:dialog-->                                      
+                    </p:dialog>      
+
                     <!-- content body end-->
 
                     <!-- footer start-->
@@ -112,4 +89,3 @@
     </h:body>    
 
 </html>
-

@@ -23,5 +23,5 @@ public interface QuepQuestionDao {
 
     public List<QuepQuestionTechnique> getLstQQuestionTechniques();
 
-    public List<QuepQuestionResilience> getLstQuepQuestionResilience(int idPrinciple, int idPractice, int idQuestion);
+    public QuepQuestionResilience getQuepQuestionResilience(int idPrinciple, int idPractice, int idQuestion) ;
 }

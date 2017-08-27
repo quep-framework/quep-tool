@@ -64,8 +64,11 @@
         <property name="weight" type="big_decimal">
             <column name="weight" precision="5"  />
         </property>
-         <property name="order" type="int">
+        <property name="order" type="int">
             <column name="order" not-null="true" />
+        </property>
+         <property name="abbreviature" type="string">
+            <column name="abbreviature"  />
         </property>
         <set name="quepQuestionResiliences" table="quep_question_resilience" inverse="true" lazy="true" fetch="select">
             <key>

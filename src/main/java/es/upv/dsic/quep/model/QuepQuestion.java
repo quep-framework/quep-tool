@@ -46,6 +46,7 @@ public class QuepQuestion implements java.io.Serializable {
     private BigDecimal umbral;
     private BigDecimal weight;
     private int order;
+    private String abbreviature;
     private Set<QuepQuestionResilience> quepQuestionResiliences = new HashSet<>(0);
     private Set<QuepQuestionTechnique> quepQuestionTechniques = new HashSet<>(0);
     private Set<QuepQuestionResponseOption> quepQuestionResponseOptions = new HashSet<>(0);
@@ -54,7 +55,7 @@ public class QuepQuestion implements java.io.Serializable {
     public QuepQuestion() {
     }
 
-    public QuepQuestion(int id, MaturityLevel maturityLevel, Practice practice, QuestionType questionType, int idPrinciple, String description, int hasComment, int hasPageNumber, int isMandatory, String creationUser, Date creationDate, int active, String audit, int order) {
+    public QuepQuestion(int id, MaturityLevel maturityLevel, Practice practice, QuestionType questionType, int idPrinciple, String description, int hasComment, int hasPageNumber, int isMandatory, String creationUser, Date creationDate, int active, String audit, int order, String abbreviature) {
         this.id = id;
         this.maturityLevel = maturityLevel;
         this.practice = practice;
@@ -69,9 +70,10 @@ public class QuepQuestion implements java.io.Serializable {
         this.active = active;
         this.audit = audit;
         this.order = order;
+        this.abbreviature= abbreviature;
     }
 
-    public QuepQuestion(int id, MaturityLevel maturityLevel, Practice practice, QuestionType questionType, int idPrinciple, String description, String tip, int hasComment, int hasPageNumber, int isMandatory, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, BigDecimal umbral, BigDecimal weight, int order, Set<QuepQuestionResilience> quepQuestionResiliences, Set<QuepQuestionTechnique> quepQuestionTechniques, Set<QuepQuestionResponseOption> quepQuestionResponseOptions, Set<QuestionnaireQuepQuestion> questionnaireQuepQuestions) {
+    public QuepQuestion(int id, MaturityLevel maturityLevel, Practice practice, QuestionType questionType, int idPrinciple, String description, String tip, int hasComment, int hasPageNumber, int isMandatory, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, BigDecimal umbral, BigDecimal weight, int order, String abbreviature, Set<QuepQuestionResilience> quepQuestionResiliences, Set<QuepQuestionTechnique> quepQuestionTechniques, Set<QuepQuestionResponseOption> quepQuestionResponseOptions, Set<QuestionnaireQuepQuestion> questionnaireQuepQuestions) {
         this.id = id;
         this.maturityLevel = maturityLevel;
         this.practice = practice;
@@ -91,6 +93,7 @@ public class QuepQuestion implements java.io.Serializable {
         this.umbral = umbral;
         this.weight = weight;
         this.order = order;
+        this.abbreviature=abbreviature;
         this.quepQuestionResiliences = quepQuestionResiliences;
         this.quepQuestionTechniques = quepQuestionTechniques;
         this.quepQuestionResponseOptions = quepQuestionResponseOptions;
@@ -276,6 +279,15 @@ public class QuepQuestion implements java.io.Serializable {
         this.order = order;
     }
 
+    @Column(name = "abbreviature")
+    public String getAbbreviature() {
+        return abbreviature;
+    }
+
+    public void setAbbreviature(String abbreviature) {
+        this.abbreviature = abbreviature;
+    }
+    
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "quepQuestion")
     public Set<QuepQuestionResilience> getQuepQuestionResiliences() {
         return this.quepQuestionResiliences;
