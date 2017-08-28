@@ -35,8 +35,10 @@
         </h:outputScript>
 
     </h:head>
-    <h:body>
+    <h:body>                        
         <div class="PC">
+            <ui:include src="/frames/IdleMonitorView.xhtml" />  
+            
             <!--start menu izq-->
             <ui:include src="/frames/frmMenuSideLeft.xhtml" />            
             <!--end menu izq-->
@@ -82,12 +84,15 @@
                               id="IDdlgchart"
                               resizable="false">
                         <!--p:ajax event="close" update="IDdlgchart"  /-->
+                        
                         <p:outputPanel id="outputML" 
                                        layout="block"  style="width:1005px;height:405px;"
                                        />
+                        <h:form>
                         <p:commandButton value="Print" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px">
                             <p:printer target="outputML" />
                         </p:commandButton>
+                        </h:form>
                     </p:dialog>
                     <!-- content body end-->
 

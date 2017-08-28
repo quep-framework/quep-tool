@@ -92,9 +92,10 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
     private String titleChar="";
     
     private String legendNumberStk="";
+    private boolean bSessionMLResults=false;
     
     public MaturityLevelResultsChartViewBean() {
-
+        
     }
 
     @PostConstruct
@@ -103,7 +104,11 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
         imenu = 1;
         
         createHorizontalBarMaturityLevel();
+        bSessionMLResults=true;
     }
+    
+   
+
 
     public void initValues(String sId) {
        // results = new Results();        
@@ -415,6 +420,7 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
     }
 
     public HorizontalBarChartModel getHorizontalBarModel() {
+        //onload();
         return horizontalBarModel;
     }
 
@@ -545,4 +551,14 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
     public void setLegendNumberStk(String legendNumberStk) {
         this.legendNumberStk = legendNumberStk;
     }
+
+    public boolean isbSessionMLResults() {
+        return bSessionMLResults;
+    }
+
+    public void setbSessionMLResults(boolean bSessionMLResults) {
+        this.bSessionMLResults = bSessionMLResults;
+    }
+    
+    
 }

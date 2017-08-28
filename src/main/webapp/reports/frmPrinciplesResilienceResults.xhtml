@@ -30,6 +30,9 @@
 
     </h:head>
     <h:body>
+        
+        <ui:include src="/frames/IdleMonitorView.xhtml" />   
+        
         <div class="PC">
             <!--start menu izq-->
             <ui:include src="/frames/frmMenuSideLeft.xhtml" />                                 
@@ -72,9 +75,11 @@
                                        layout="block" 
                                        style="width:1005px;height:405px"
                                        />
-                        <p:commandButton value="Print" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px">
-                            <p:printer target="output1" />
-                        </p:commandButton>
+                        <h:form>
+                            <p:commandButton value="Print" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px">
+                                <p:printer target="output1" />
+                            </p:commandButton>
+                        </h:form>
                     </p:dialog>      
 
                     <!-- content body end-->

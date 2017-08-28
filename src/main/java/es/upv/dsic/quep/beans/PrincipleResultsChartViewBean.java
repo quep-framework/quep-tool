@@ -26,6 +26,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.event.AjaxBehaviorEvent;
 import org.primefaces.component.panelgrid.PanelGrid;
 import org.primefaces.event.ItemSelectEvent;
 import org.primefaces.model.chart.AxisType;
@@ -87,9 +88,11 @@ public class PrincipleResultsChartViewBean implements Serializable {
     private String titleChar="";
     
     private String legendNumberStk="";
+    
+    private boolean bSessionPrincipleResult=false;
 
     public PrincipleResultsChartViewBean() {
-
+        
     }
 
     @PostConstruct
@@ -97,7 +100,9 @@ public class PrincipleResultsChartViewBean implements Serializable {
         oOrganization = organizationBean.getOrganization();
         imenu = 1;
         createHorizontalBarPrinciples();
+        bSessionPrincipleResult=true;
     }
+    
 
     public void initValues(String sId) {
         //results = new Results();        
@@ -416,7 +421,7 @@ public class PrincipleResultsChartViewBean implements Serializable {
         this.organizationBean = organizationBean;
     }
 
-    public HorizontalBarChartModel getHorizontalBarModel() {
+    public HorizontalBarChartModel getHorizontalBarModel() {        
         return horizontalBarModel;
     }
 
@@ -574,4 +579,13 @@ public class PrincipleResultsChartViewBean implements Serializable {
         this.legendNumberStk = legendNumberStk;
     }
 
+    public boolean isbSessionPrincipleResult() {
+        return bSessionPrincipleResult;
+    }
+
+    public void setbSessionPrincipleResult(boolean bSessionPrincipleResult) {
+        this.bSessionPrincipleResult = bSessionPrincipleResult;
+    }
+
+    
 }

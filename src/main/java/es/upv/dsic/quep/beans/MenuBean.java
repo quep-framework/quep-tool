@@ -8,16 +8,22 @@ package es.upv.dsic.quep.beans;
 import es.upv.dsic.quep.dao.MenuDao;
 import es.upv.dsic.quep.dao.MenuDaoImplement;
 import es.upv.dsic.quep.model.Menu;
+import es.upv.dsic.quep.model.Organization;
 import es.upv.dsic.quep.model.Role;
 import es.upv.dsic.quep.model.RoleStakeholder;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 
 
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
@@ -38,6 +44,10 @@ public class MenuBean implements Serializable {
     
     @Inject 
     private LoginBean loginBean;
+    
+    @Inject 
+    private OrganizationBean organizationBean;
+    
 
     public MenuBean() {
     }
@@ -82,9 +92,8 @@ public class MenuBean implements Serializable {
                 model.addElement(item);
             }
         }
-    }
+    }    
     
- 
     public List<Menu> getLstMenu() {
         return lstMenu;
     }
@@ -108,5 +117,23 @@ public class MenuBean implements Serializable {
     public void setModel(MenuModel model) {
         this.model = model;
     }
+
+    public LoginBean getLoginBean() {
+        return loginBean;
+    }
+
+    public void setLoginBean(LoginBean loginBean) {
+        this.loginBean = loginBean;
+    }
+
+    public OrganizationBean getOrganizationBean() {
+        return organizationBean;
+    }
+
+    public void setOrganizationBean(OrganizationBean organizationBean) {
+        this.organizationBean = organizationBean;
+    }
+    
+    
 
 }

@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 
 public class NavigationBean implements Serializable {
 
+    
+    
     public static String toLogin() {
         return "/frmInitPage.xhtml";
     }
@@ -46,5 +48,9 @@ public class NavigationBean implements Serializable {
                 .getExternalContext().getRequest()).getRequestURI();
         System.out.println(str);
         return str;
+    }
+     
+     public String getRequestContextPath() {
+        return FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
     }
 }

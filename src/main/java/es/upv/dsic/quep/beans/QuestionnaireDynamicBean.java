@@ -100,6 +100,8 @@ public class QuestionnaireDynamicBean implements Serializable {
 
     @Inject
     private LoginBean loginBean;
+    
+    private boolean bSessionQuestionnaire=false;        
 
     public QuestionnaireDynamicBean() {
 
@@ -111,6 +113,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             oOrganization = organizationBean.getOrganization();
             try {
                 buildQuestionnaire();
+                bSessionQuestionnaire=true;
             } catch (Exception e) {
                 addMessage("Error", "You don't have questionnaires available. Please contact Administrator or quep.framework@gmail.com ", 0);
             }
@@ -1164,7 +1167,14 @@ public class QuestionnaireDynamicBean implements Serializable {
         this.oOrganization = oOrganization;
     }
 
-  
+    public boolean isbSessionQuestionnaire() {
+        return bSessionQuestionnaire;
+    }
+
+    public void setbSessionQuestionnaire(boolean bSessionQuestionnaire) {
+        this.bSessionQuestionnaire = bSessionQuestionnaire;
+    }
+    
 
     
 }

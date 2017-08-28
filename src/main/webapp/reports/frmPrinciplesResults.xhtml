@@ -25,11 +25,13 @@
                 $('#output1').empty().append(PF('wchart1').exportAsImage());
                 PF('dlgchart1').show();
 
-            }
+            }            
         </script>
 
     </h:head>
-    <h:body>
+    <h:body >
+        <ui:include src="/frames/IdleMonitorView.xhtml" />   
+        
         <div class="PC">
             <!--start menu izq-->
             <ui:include src="/frames/frmMenuSideLeft.xhtml" />                                 
@@ -44,7 +46,8 @@
 
                     <!-- content body start-->  
 
-                    <h:form id="frmChartP">                        
+                    <h:form id="frmChartP" >   
+                        
                         <div>                                                  
                             <p:breadCrumb id="pnlbc" model="#{principleResultsChartViewBean.model}"/>                                                      
                         </div>    
@@ -57,10 +60,10 @@
                         <p:commandButton  icon="ui-icon-info" 
                                               style="color:#0174DF; background-color: #F2F2F2;"
                                               value="#{principleResultsChartViewBean.legendNumberStk}"
-                                              disabled="true"/> 
+                                              disabled="true"  /> 
                         
                         <p:chart id="idchart1"  widgetVar="wchart1" type="bar" model="#{principleResultsChartViewBean.horizontalBarModel}" 
-                                 style="width:90%;height:400px;"
+                                 style="width:90%;height:400px;" 
                                  >
                             <p:ajax event="itemSelect" listener="#{principleResultsChartViewBean.listener}" update="idchart1" process="@this"></p:ajax>
                         </p:chart>                            
@@ -76,9 +79,11 @@
                                        layout="block" 
                                        style="width:1005px;height:405px"
                                        />
-                        <p:commandButton value="Print" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px">
-                            <p:printer target="output1" />
-                        </p:commandButton>
+                        <h:form>
+                            <p:commandButton value="Print" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px">
+                                <p:printer target="output1" />
+                            </p:commandButton>
+                        </h:form>
                     </p:dialog>      
 
                     <!-- content body end-->

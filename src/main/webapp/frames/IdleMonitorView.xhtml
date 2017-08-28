@@ -1,0 +1,19 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"      
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">    
+    <h:form>
+        <p:growl id="messagesIMtime" showDetail="true" sticky="true" />
+
+        <p:idleMonitor timeout="300000">            
+            <p:ajax event="idle" listener="#{idleMonitorView.onIdle}" update="messagesIMtime" />                  
+            <p:ajax event="active" listener="#{idleMonitorView.onActive}" update="messagesIMtime" />
+        </p:idleMonitor>
+        
+    </h:form>    
+            
+</ui:composition>
+

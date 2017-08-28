@@ -86,9 +86,9 @@ public class PrincipleResilienceChartViewBean implements Serializable {
     //private boolean bExport;
     private String titleChar="";
     private String legendNumberStk="";
+    private boolean bSessionPrincipleResilienceResult = false;
 
-    public PrincipleResilienceChartViewBean() {
-
+    public PrincipleResilienceChartViewBean() {           
     }
 
     @PostConstruct
@@ -96,8 +96,11 @@ public class PrincipleResilienceChartViewBean implements Serializable {
         oOrganization = organizationBean.getOrganization();
         imenu = 1;
         createHorizontalBarPrinciples();
+        bSessionPrincipleResilienceResult=true;
     }
-
+    
+   
+    
     public void initValues(String sId) {
         //results = new Results();        
         setMenuBreadCrumb(imenu);
@@ -379,6 +382,7 @@ public class PrincipleResilienceChartViewBean implements Serializable {
     }
 
     public HorizontalBarChartModel getHorizontalBarModel() {
+        //onload();
         return horizontalBarModel;
     }
 
@@ -544,4 +548,13 @@ public class PrincipleResilienceChartViewBean implements Serializable {
         this.legendNumberStk = legendNumberStk;
     }
 
+    public boolean isbSessionPrincipleResilienceResult() {
+        return bSessionPrincipleResilienceResult;
+    }
+
+    public void setbSessionPrincipleResilienceResult(boolean bSessionPrincipleResilienceResult) {
+        this.bSessionPrincipleResilienceResult = bSessionPrincipleResilienceResult;
+    }
+
+    
 }
