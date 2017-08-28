@@ -39,7 +39,7 @@
             <!--end menu izq-->
 
             <div id="CONTENTSIDE">
-                <div id="CONTENTSIDEindent">
+                <div id="CONTENTSIDEindent" style=" overflow-x:scroll ; overflow-y: scroll; padding-bottom:10px; ">
 
                     <!-- header bar start-->
                     <ui:include src="/frames/frmMenuSideTop.xhtml" />  
@@ -59,7 +59,7 @@
                                               disabled="true"/> 
                         
                         <p:chart id="idchart1"  widgetVar="wchart1" type="bar" model="#{principleResilienceChartViewBean.horizontalBarModel}" 
-                                 style="width:90%;height:400px;"
+                                 style="width:1000px;height:400px;"
                                  >
                             <p:ajax event="itemSelect" listener="#{principleResilienceChartViewBean.listener}" update="idchart1" process="@this"></p:ajax>
                         </p:chart>                            
