@@ -94,10 +94,14 @@ public class OrganizationBean implements Serializable {
 
         if (loginBean.checkUserByOrganization(loginBean.getRole().getId(), organization.getId())) {
             String str = navigationBean.getCurrentPage();
-            if (str.contains("/QuEP-Tool/reports/frmMaturityLevelsResults.xhtml") || 
+           /* if (str.contains("/QuEP-Tool/reports/frmMaturityLevelsResults.xhtml") || 
                     str.contains("/QuEP-Tool/reports/frmPrinciplesResults.xhtml") ||
                   str.contains("/QuEP-Tool/reports/frmPrinciplesResilienceResults.xhtml")
-                    || str.contains("/QuEP-Tool/all/frmQuestionnaireDynamic.xhtml")) {
+                    || str.contains("/QuEP-Tool/all/frmQuestionnaireDynamic.xhtml")) {*/
+           if (str.contains("/reports/frmMaturityLevelsResults.xhtml") || 
+                    str.contains("/reports/frmPrinciplesResults.xhtml") ||
+                  str.contains("/reports/frmPrinciplesResilienceResults.xhtml")
+                    || str.contains("/all/frmQuestionnaireDynamic.xhtml")) {
                 if (questionnaireDynamicBean.isbSessionQuestionnaire()) {
                     questionnaireDynamicBean.init();
                 }
