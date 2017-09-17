@@ -23,4 +23,5 @@
   <table-filter match-name="question_type"/>
   <table-filter match-name="quep_question_technique"/>
   <table-filter match-name="principle"/>
+  <table-filter match-name="emergency_plan"/>
 </hibernate-reverse-engineering>

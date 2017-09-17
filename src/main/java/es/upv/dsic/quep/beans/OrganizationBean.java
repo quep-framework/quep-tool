@@ -33,6 +33,7 @@ public class OrganizationBean implements Serializable {
     private List<Organization> lstOrganization;
     private boolean bandOrganization = false;
     private String nameOrganization = "";
+    private String nameEmergencyPlan = "";
 
     @Inject
     private LoginBean loginBean;
@@ -68,7 +69,8 @@ public class OrganizationBean implements Serializable {
             bandOrganization = lstOrganization.size() > 1;
 
             if (!bandOrganization) {
-                nameOrganization = lstOrganization.get(0).getName();
+                nameOrganization = lstOrganization.get(0).getName() ;
+                nameEmergencyPlan=lstOrganization.get(0).getEmergencyPlan().getName();
 
             }
             if (this.organization == null) {
@@ -270,5 +272,15 @@ public class OrganizationBean implements Serializable {
     public void setCredentialBean(CredentialBean credentialBean) {
         this.credentialBean = credentialBean;
     }
+
+    public String getNameEmergencyPlan() {
+        return nameEmergencyPlan;
+    }
+
+    public void setNameEmergencyPlan(String nameEmergencyPlan) {
+        this.nameEmergencyPlan = nameEmergencyPlan;
+    }
+    
+    
 
 }

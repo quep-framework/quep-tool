@@ -10,6 +10,11 @@
                 <param name="sequence">organization_id_seq</param>
             </generator>
         </id>
+         <many-to-one name="emergencyPlan"
+                      lazy="false" 
+                      class="es.upv.dsic.quep.model.EmergencyPlan" fetch="select">
+            <column name="id_emergency_plan" not-null="true" />
+        </many-to-one>
         <property name="name" type="string">
             <column name="name" not-null="true" />
         </property>

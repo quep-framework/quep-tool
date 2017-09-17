@@ -23,15 +23,17 @@
                                                               filter="true" filterMatchMode="contains"
                                                               valueChangeListener="#{organizationBean.changeListener}" onchange="submit()"                                                                               
                                                               converter="#{organizationConverter}">
-                                                <f:selectItems value="#{organizationBean.lstOrganization}" var="lstO"  itemLabel="#{lstO.name}" itemValue="#{lstO}" />
+                                                <f:selectItems value="#{organizationBean.lstOrganization}" var="lstO"  itemLabel="#{lstO.name} - #{lstO.emergencyPlan.name}" itemValue="#{lstO}" />
                                                 <p:column>
-                                                    <h:outputText value="#{o.name}" />
+                                                    <h:outputText value="#{o.name} - #{o.emergencyPlan.name} " />
                                                 </p:column>
                                             </p:selectOneMenu>                                                                                                                  
                                         </h:panelGrid>
                                     </c:when>
                                     <c:otherwise id="bOrgFalse">
-                                        Organization: #{organizationBean.nameOrganization}
+                                        Organization: #{organizationBean.nameOrganization}      
+                                        <br />
+                                        Plan de Emergencia: #{organizationBean.nameEmergencyPlan}      
                                     </c:otherwise>
                                 </c:choose>
                             </h:form>                                                                                                

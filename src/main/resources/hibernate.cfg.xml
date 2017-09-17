@@ -12,6 +12,7 @@
     <property name="hibernate.connection.password">quep</property>
     <property name="hibernate.show_sql">true</property>
     <property name="hibernate.current_session_context_class">thread</property>
+    <mapping resource="es/upv/dsic/quep/model/EmergencyPlan.hbm.xml"/>
     <mapping resource="es/upv/dsic/quep/model/Role.hbm.xml"/>
     <mapping resource="es/upv/dsic/quep/model/Practice.hbm.xml"/>
     <mapping resource="es/upv/dsic/quep/model/QuepQuestionResilience.hbm.xml"/>
