@@ -8,11 +8,13 @@ package es.upv.dsic.quep.beans;
 import es.upv.dsic.quep.converters.MaturityLevelComparable;
 import es.upv.dsic.quep.dao.MaturityLevelDaoImplement;
 import es.upv.dsic.quep.dao.PrincipleDaoImplement;
+import es.upv.dsic.quep.dao.ResultsDaoImplement;
 import es.upv.dsic.quep.model.MaturityLevel;
 import es.upv.dsic.quep.model.Organization;
 import es.upv.dsic.quep.model.Practice;
 import es.upv.dsic.quep.model.Principle;
 import es.upv.dsic.quep.model.QuepQuestion;
+import es.upv.dsic.quep.model.QuepQuestionTechnique;
 import es.upv.dsic.quep.model.RoleStakeholder;
 import es.upv.es.dsic.quep.utils.ResponseEstimate;
 import es.upv.es.dsic.quep.utils.Result;
@@ -93,6 +95,7 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
     
     private String legendNumberStk="";
     private boolean bSessionMLResults=false;
+    private List<QuepQuestionTechnique> lstQuepQuestionTechnique=new ArrayList<QuepQuestionTechnique>();
     
     public MaturityLevelResultsChartViewBean() {
         
@@ -135,6 +138,9 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
             mapMaturityLevelResults = new HashMap<MaturityLevel, Result>();
             mapMaturityLevelResults = getResultsMaturityLevels();                        
 
+            ResultsDaoImplement rdi = new ResultsDaoImplement();
+            lstQuepQuestionTechnique=new ArrayList<QuepQuestionTechnique>();
+            lstQuepQuestionTechnique=rdi.getListTechniquesByLevel(oOrganization.getId());
         } else if (imenu == 2) {//principle by id maturity level
             PrincipleDaoImplement pdi = new PrincipleDaoImplement();
             lstPrinciple = pdi.getPrinciple();
@@ -559,6 +565,15 @@ public class MaturityLevelResultsChartViewBean implements Serializable {
     public void setbSessionMLResults(boolean bSessionMLResults) {
         this.bSessionMLResults = bSessionMLResults;
     }
+
+    public List<QuepQuestionTechnique> getLstQuepQuestionTechnique() {
+        return lstQuepQuestionTechnique;
+    }
+
+    public void setLstQuepQuestionTechnique(List<QuepQuestionTechnique> lstQuepQuestionTechnique) {
+        this.lstQuepQuestionTechnique = lstQuepQuestionTechnique;
+    }
+    
     
     
 }

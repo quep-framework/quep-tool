@@ -9,6 +9,7 @@ import es.upv.dsic.quep.model.Menu;
 import es.upv.dsic.quep.hibernate.HibernateUtil;
 import es.upv.dsic.quep.model.Principle;
 import es.upv.dsic.quep.model.QuepQuestionResponseOption;
+import es.upv.dsic.quep.model.QuepQuestionTechnique;
 import es.upv.dsic.quep.model.Response;
 import java.util.List;
 import java.util.Map;
@@ -118,6 +119,35 @@ public class ResultsDaoImplement implements ResultsDao {
                     + "and r.responseOption.isRequiered=1\n"
                     + "and r.id.idOrganization='" + idOrg + "'");
             list = (List<Response>) query.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return list;
+    }
+    
+    //get techniques de un nivel 
+      @Override
+    public List<QuepQuestionTechnique> getListTechniquesByLevel(int idOrg) {
+        Session session = null;
+        List<QuepQuestionTechnique> list = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            Query query = session.createQuery("select qqt from QuepQuestionTechnique qqt,"
+                    + "Response r                  \n"
+                    + "where qqt.active=1 and r.active=1     \n"
+                    + "and qqt.quepQuestion.active=1          \n"
+                    + "and qqt.quepQuestion.id=r.id.idQuepQuestion \n"                    
+                    + "and  r.responseOption.active=1\n"
+                    + "and r.questionnaireResponse.status=1\n"
+                    + "and r.responseOption.isRequiered=1\n"
+                    + "and r.responseOption.weight=0\n"    
+                    + "and r.id.idOrganization='" + idOrg + "'\n"
+                    + "order by qqt.quepQuestion.maturityLevel.id");
+            list = (List<QuepQuestionTechnique>) query.list();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         } finally {

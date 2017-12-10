@@ -6,6 +6,14 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"          
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+          <style type="text/css">
+              
+              #p_columnid{
+                  width:20px;
+                  text-align: justify;
+              }
+
+          </style>
     <h:head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -24,6 +32,12 @@
                 PF('dlgchartML').show();
 
             }
+
+            function showTechniques() {
+                //export image
+                PF('dlgTechniques').show();
+
+            }
         </script>
 
         <h:outputScript>
@@ -38,7 +52,7 @@
     <h:body>                        
         <div class="PC">
             <ui:include src="/frames/IdleMonitorView.xhtml" />  
-            
+
             <!--start menu izq-->
             <ui:include src="/frames/frmMenuSideLeft.xhtml" />            
             <!--end menu izq-->
@@ -61,16 +75,20 @@
                                          icon="ui-icon-extlink" 
                                          onclick="exportChartML()" 
                                          />
+                        <p:commandButton type="button" value="Técnicas" 
+                                         icon="ui-icon ui-icon-star" 
+                                         onclick="showTechniques()" 
+                                         />
                         <!--p:panelGrid columns="1"-->                            
-                            <p:commandButton  icon="ui-icon-info" 
-                                              style="color:#0174DF; background-color: #F2F2F2;"
-                                              value="#{maturityLevelResultsChartViewBean.legendNumberStk}"
-                                              disabled="true"/> 
-                            <!--p:outputLabel id="idOpLQ" value="{maturityLevelResultsChartViewBean.legendNumberStk}"
-                                           class="dispBlock logoDarkText" />
-                        </p:panelGrid-->
+                        <p:commandButton  icon="ui-icon-info" 
+                                          style="color:#0174DF; background-color: #F2F2F2;"
+                                          value="#{maturityLevelResultsChartViewBean.legendNumberStk}"
+                                          disabled="true"/> 
+                        <!--p:outputLabel id="idOpLQ" value="{maturityLevelResultsChartViewBean.legendNumberStk}"
+                                       class="dispBlock logoDarkText" />
+                    </p:panelGrid-->
 
-
+                        <p:poll interval="60" update="idchart" />
                         <p:chart id="idchart"  widgetVar="wchartML" type="bar" model="#{maturityLevelResultsChartViewBean.horizontalBarModel}"                                  
                                  style="width:1000px;height:400px;" >
                             <p:ajax event="itemSelect" listener="#{maturityLevelResultsChartViewBean.listener}" update="idchart" process="@this"></p:ajax>
@@ -84,15 +102,114 @@
                               id="IDdlgchart"
                               resizable="false">
                         <!--p:ajax event="close" update="IDdlgchart"  /-->
-                        
+
                         <p:outputPanel id="outputML" 
                                        layout="block"  style="width:1005px;height:405px;"
                                        />
                         <h:form>
-                        <p:commandButton value="Print" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px">
-                            <p:printer target="outputML" />
-                        </p:commandButton>
+                            <p:commandButton value="Print" type="button" icon="ui-icon-print" style="display:block;margin-bottom: 20px">
+                                <p:printer target="outputML" />
+                            </p:commandButton>
                         </h:form>
+                    </p:dialog>
+
+
+                    <p:dialog widgetVar="dlgTechniques"                                                          
+                              header="Techniques Summary"                              
+                              showHeader="true"   
+                              id="idTechniques"
+                              resizable="false">
+                        <!--p:ajax event="close" update="IDdlgchart"  /-->
+                        <p:panel id="basic" header="Techniques" footer="Best Practices" style="margin-bottom:20px">
+                            <h:panelGrid columns="2" cellpadding="10">                                
+                                <h:outputText value="Tehcniques list" />
+                                <h:form>
+                                    <p:dataTable id="tbl" var="lstqqt" value="#{maturityLevelResultsChartViewBean.lstQuepQuestionTechnique}"
+                                                 emptyMessage="There are not data"
+                                                 rowIndexVar="rowIndex" 
+                                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                                                 paginator="true" rows="20" style="margin-bottom:20px" >                         
+
+                                        <f:facet name="{Exporters}">
+
+                                            <h:commandLink>
+                                                <p:graphicImage url="/resource/images/export/excel.png" width="24"/>
+                                                <p:dataExporter type="xls" target="tbl" fileName="Report" />
+                                            </h:commandLink>                                                                
+
+                                            <h:commandLink>
+                                                <p:graphicImage url="/resource/images/export/pdf.png" width="24"/>
+                                                <p:dataExporter type="pdf" target="tbl" fileName="Report"/>
+                                            </h:commandLink>
+
+                                            <h:commandLink>
+                                                <p:graphicImage url="/resource/images/export/csv.png" width="24"/>
+                                                <p:dataExporter type="csv" target="tbl" fileName="Report" />
+                                            </h:commandLink>
+
+                                            <h:commandLink>
+                                                <p:graphicImage url="/resource/images/export/xml.png" width="24"/>
+                                                <p:dataExporter type="xml" target="tbl" fileName="Report" />
+                                            </h:commandLink>
+                                        </f:facet>
+
+
+                                        <p:column  headerText="Maturity Level" sortBy="#{lstqqt.quepQuestion.maturityLevel.levelAbbreviation}"
+                                                   style="width:15px; text-align: center;"  filterBy="#{lstqqt.quepQuestion.maturityLevel.levelAbbreviation}"
+                                                   filterMatchMode="contains"
+                                                   id="p_columnid"  filterStyle="width:40px;"
+                                                   groupRow="true"
+                                                  >
+                                            <f:facet name="header">
+                                                <h:outputText value="Maturity Level" />
+                                            </f:facet>
+                                            <h:outputText value="#{lstqqt.quepQuestion.maturityLevel.levelAbbreviation}" />
+                                        </p:column>   
+
+                                        <p:column headerText="Abv" sortBy="#{lstqqt.technique.abbreviation}" filterBy="#{lstqqt.technique.abbreviation}" filterMatchMode="contains" 
+                                                  style="width:25px; text-align: center;"  filterStyle="width:30px;">
+                                            <f:facet name="header">
+                                                <h:outputText value="Abv" />
+                                            </f:facet>
+                                            <h:outputText value="#{lstqqt.technique.abbreviation}" />
+                                        </p:column>
+
+                                        <p:column headerText="Technique" sortBy="#{lstqqt.technique.name}" filterBy="#{lstqqt.technique.name}" filterMatchMode="contains" 
+                                                  style="width:350px; text-align: justify;"  filterStyle="width:295px;">
+                                            <f:facet name="header">
+                                                <h:outputText value="Technique" />
+                                            </f:facet>
+                                            <h:outputText value="#{lstqqt.technique.name}" />
+                                        </p:column>
+
+
+
+
+                                    </p:dataTable>
+
+                                    <h3>Export Page Data Only</h3>
+                                    <h:commandLink>
+                                        <p:graphicImage url="/resource/images/export/excel.png" />
+                                        <p:dataExporter type="xls" target="tbl" fileName="Report" pageOnly="true"/>
+                                    </h:commandLink>
+
+                                    <h:commandLink>
+                                        <p:graphicImage url="/resource/images/export/pdf.png" />
+                                        <p:dataExporter type="pdf" target="tbl" fileName="Report" pageOnly="true" />
+                                    </h:commandLink>
+
+                                    <h:commandLink>
+                                        <p:graphicImage url="/resource/images/export/csv.png" />
+                                        <p:dataExporter type="csv" target="tbl" fileName="Report" pageOnly="true" />
+                                    </h:commandLink>
+
+                                    <h:commandLink>
+                                        <p:graphicImage url="/resource/images/export/xml.png" />
+                                        <p:dataExporter type="xml" target="tbl" fileName="Report" pageOnly="true" />
+                                    </h:commandLink>
+                                </h:form>
+                            </h:panelGrid>
+                        </p:panel>                
                     </p:dialog>
                     <!-- content body end-->
 
