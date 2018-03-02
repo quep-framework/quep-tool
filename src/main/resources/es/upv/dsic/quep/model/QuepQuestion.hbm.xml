@@ -28,8 +28,8 @@
         <property name="description" type="string">
             <column name="description" not-null="true" />
         </property>
-        <property name="tip" type="string">
-            <column name="tip" />
+        <property name="code" type="string">
+            <column name="code" />
         </property>
         <property name="hasComment" type="int">
             <column name="has_comment" not-null="true" />

@@ -33,7 +33,7 @@ public class QuepQuestion implements java.io.Serializable {
     private QuestionType questionType;
     private int idPrinciple;
     private String description;
-    private String tip;
+    private String code;
     private int hasComment;
     private int hasPageNumber;
     private int isMandatory;
@@ -73,14 +73,14 @@ public class QuepQuestion implements java.io.Serializable {
         this.abbreviature= abbreviature;
     }
 
-    public QuepQuestion(int id, MaturityLevel maturityLevel, Practice practice, QuestionType questionType, int idPrinciple, String description, String tip, int hasComment, int hasPageNumber, int isMandatory, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, BigDecimal umbral, BigDecimal weight, int order, String abbreviature, Set<QuepQuestionResilience> quepQuestionResiliences, Set<QuepQuestionTechnique> quepQuestionTechniques, Set<QuepQuestionResponseOption> quepQuestionResponseOptions, Set<QuestionnaireQuepQuestion> questionnaireQuepQuestions) {
+    public QuepQuestion(int id, MaturityLevel maturityLevel, Practice practice, QuestionType questionType, int idPrinciple, String description, String code, int hasComment, int hasPageNumber, int isMandatory, String creationUser, Date creationDate, String modificationUser, Date modificationDate, int active, String audit, BigDecimal umbral, BigDecimal weight, int order, String abbreviature, Set<QuepQuestionResilience> quepQuestionResiliences, Set<QuepQuestionTechnique> quepQuestionTechniques, Set<QuepQuestionResponseOption> quepQuestionResponseOptions, Set<QuestionnaireQuepQuestion> questionnaireQuepQuestions) {
         this.id = id;
         this.maturityLevel = maturityLevel;
         this.practice = practice;
         this.questionType = questionType;
         this.idPrinciple = idPrinciple;
         this.description = description;
-        this.tip = tip;
+        this.code = code;
         this.hasComment = hasComment;
         this.hasPageNumber = hasPageNumber;
         this.isMandatory = isMandatory;
@@ -160,13 +160,13 @@ public class QuepQuestion implements java.io.Serializable {
         this.description = description;
     }
 
-    @Column(name = "tip")
-    public String getTip() {
-        return this.tip;
+    @Column(name = "code")
+    public String getCode() {
+        return this.code;
     }
 
-    public void setTip(String tip) {
-        this.tip = tip;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     @Column(name = "has_comment", nullable = false)
