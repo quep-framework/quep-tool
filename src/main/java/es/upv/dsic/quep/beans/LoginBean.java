@@ -37,20 +37,24 @@ public class LoginBean implements Serializable {
 
     private Stakeholder stakeholder = new Stakeholder();
     private Role role = new Role();
-   
-    public String login() {
-        setLoggedIn(checkUser(credentialBean.getUsername(), credentialBean.getPassword()));
-        FacesMessage msg = new FacesMessage("Login error!", "ERROR MSG");
-        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-        RequestContext.getCurrentInstance().addCallbackParam("loggedIn", loggedIn);
-        //RequestContext.getCurrentInstance().addCallbackParam("bandOrganization", bandOrganization);
 
-        if (loggedIn) {
-            return navigationBean.redirectToUser();
-        } else {
-            return navigationBean.toLogin();
-        }
+    public String login() {
+        try {
+            setLoggedIn(checkUser(credentialBean.getUsername(), credentialBean.getPassword()));
+            FacesMessage msg = new FacesMessage("Login error!", "ERROR MSG");
+            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            RequestContext.getCurrentInstance().addCallbackParam("loggedIn", loggedIn);
+            //RequestContext.getCurrentInstance().addCallbackParam("bandOrganization", bandOrganization);
+
+            if (loggedIn) {
+                return navigationBean.redirectToUser();
+            } else {
+                return navigationBean.toLogin();
+            }
+        } catch (Exception e) {
+            return null;
+        }        
     }
 
     public String logout() {
@@ -65,35 +69,35 @@ public class LoginBean implements Serializable {
 
     public boolean checkUser(String pUsername, String pPassword) {
         RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
-        RoleStakeholder roleStk= roleStkImpl.getRoleStakeholder(pUsername, pPassword);
-        stakeholder = roleStk.getStakeholder();        
-               
-        if (stakeholder != null) {            
+        RoleStakeholder roleStk = roleStkImpl.getRoleStakeholder(pUsername, pPassword);
+        stakeholder = roleStk.getStakeholder();
+
+        if (stakeholder != null) {
             role = new Role();
-            role = roleStkImpl.getRole(stakeholder);            
+            role = roleStkImpl.getRole(stakeholder);
             return true;
         } else {
             return false;
         }
         //TODO: Check bean
     }
-    
+
     public boolean checkUserByOrganization(int iRole, int organization) {
         ///////*******************                
         RoleStakeholderDaoImplement roleStkImpl = new RoleStakeholderDaoImplement();
-        RoleStakeholder roleStk= roleStkImpl.getRoleByOrganization(iRole, organization);
-        stakeholder = roleStk.getStakeholder();        
-               
-        if (stakeholder != null) {            
+        RoleStakeholder roleStk = roleStkImpl.getRoleByOrganization(iRole, organization);
+        stakeholder = roleStk.getStakeholder();
+
+        if (stakeholder != null) {
             role = new Role();
-            role = roleStkImpl.getRole(stakeholder);            
+            role = roleStkImpl.getRole(stakeholder);
             return true;
         } else {
             return false;
         }
         //TODO: Check bean
     }
-         
+
     /**
      * @return the loggedIn
      */
@@ -153,5 +157,5 @@ public class LoginBean implements Serializable {
     public void setRole(Role role) {
         this.role = role;
     }
-    
+
 }
