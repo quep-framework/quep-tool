@@ -100,6 +100,26 @@ public class QuestioannaireDaoImplement implements QuestionnaireQQDao {
         return list;
     }
     
+     @Override
+    public List<QuestionnaireResponse> getLstQuestionnaireResponse( int idOrg){
+        Session session = null;
+        List<QuestionnaireResponse> list = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            Query query = session.createQuery("select qr\n"
+                    + "from QuestionnaireResponse  qr \n"
+                    + "where qr.active=1 " + "and qr.organization.id='" + idOrg + "'"  );
+            list = (List<QuestionnaireResponse>) query.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return list;
+    }
+    
     
     @Override
     public List<QuestionnaireQuepQuestion> getQuestionnairesQQbyOrg(int idOrg) {

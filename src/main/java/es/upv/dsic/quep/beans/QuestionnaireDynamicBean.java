@@ -227,6 +227,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             noComplete.setIcon("ui-icon-close");
             noComplete.setStyleClass("ui-confirmdialog-no");
             noComplete.setOnclick("PF('dlg').hide(); return false;");
+            
 
             dlgCD.getChildren().add(yesComplete);
             dlgCD.getChildren().add(noComplete);
@@ -974,6 +975,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             addMessage("Save", "Response have been saving.", 1);
 
             if (band == 1) { //is complete button final send
+                sendEmail();
                 buildQuestionnaire();
                 //RequestContext.getCurrentInstance().update("@this");                
                 ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
@@ -983,6 +985,19 @@ public class QuestionnaireDynamicBean implements Serializable {
         } else {
             addMessage("Error", "Please try again later.", 0);
         }
+    }
+    
+    public void sendEmail(){
+        emailJSFManagedBean email= new emailJSFManagedBean();
+        email.setTo("");
+        email.setFrom("quep.framework@gmail.com");
+        email.setUsername("quep.framework@gmail.com");
+        email.setPassword("QuEP2016!");
+        email.setSmtp("smtp.gmail.com");
+        email.setPort(587);        
+        email.setSubject("Cuestionario enviado <<Marco QuEP>>");
+        email.setDescr("Gracias por contestar al cuestionario. Su colaboración es muy importante para mejorar la gestión de planes de emergencia en organizaciones.");        
+        
     }
 
     public void addMessage(String summary, String detail, int band) {
@@ -1089,7 +1104,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             oQuestionnaireResponse.setAudit("I");
             oQuestionnaireResponse.setIdPrinciple(lstQuestionnaireQQ.get(0).getIdPrinciple());
             oQuestionnaireResponse.setComputedValue(0);
-            oQuestionnaireResponse.setStatus(0);
+            oQuestionnaireResponse.setStatus(band);
         }
         lstAuxQuestionnaireResponse.add(oQuestionnaireResponse);
     }

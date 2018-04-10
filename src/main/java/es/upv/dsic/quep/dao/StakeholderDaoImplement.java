@@ -136,5 +136,28 @@ public class StakeholderDaoImplement implements StakeholderDao {
             return null;
         }
     }
+    
+    
+    @Override
+   public Stakeholder getStakeholder(int idStk, int idOrg) {
+        Session session = null;
+        List<Stakeholder> list = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            Query query = session.createQuery("from Stakeholder where id='" + idStk + "' and organization.id='" + idOrg + "' ");
+            list = (List<Stakeholder>) query.list();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        if (!list.isEmpty()) {
+            return list.get(0);
+        } else {
+            return null;
+        }
+    }
 
 }

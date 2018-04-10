@@ -20,4 +20,6 @@ public interface StakeholderDao {
     public void deleteStakeholder(Stakeholder stk);
     public Stakeholder login(String user, String password);
     public Stakeholder logout(String user);
+    
+    public Stakeholder getStakeholder(int idStk, int idOrg);
 }

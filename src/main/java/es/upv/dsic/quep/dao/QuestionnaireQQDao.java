@@ -46,6 +46,8 @@ public interface QuestionnaireQQDao {
     public List<Principle> getPrinciples(int idRole,int idOrg);
     
     public List<QuepQuestionTechnique> getQuepQuestionTechnique(int idqq);
+    
+    public List<QuestionnaireResponse> getLstQuestionnaireResponse( int idOrg);
      
     
     

@@ -1,8 +1,11 @@
 package es.upv.dsic.quep.model;
 // Generated 20-oct-2016 20:22:12 by Hibernate Tools 4.3.1
 
+import es.upv.dsic.quep.dao.StakeholderDao;
+import es.upv.dsic.quep.dao.StakeholderDaoImplement;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -39,6 +42,8 @@ public class QuestionnaireResponse implements java.io.Serializable {
     private Integer computedValue;
     private int status;
     private Set<Response> responses = new HashSet<Response>(0);
+    
+    private Stakeholder stk ;
 
     public QuestionnaireResponse() {
     }
@@ -203,4 +208,15 @@ public class QuestionnaireResponse implements java.io.Serializable {
         this.responses = responses;
     }
 
+    public Stakeholder getStk() {
+        StakeholderDaoImplement stkdai = new StakeholderDaoImplement();
+        return stkdai.getStakeholder(id.getIdStakeholder(),organization.getId());
+        //return stk;
+    }
+
+    
+    
+    
+    
+    
 }

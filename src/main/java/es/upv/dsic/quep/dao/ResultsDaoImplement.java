@@ -159,19 +159,29 @@ public class ResultsDaoImplement implements ResultsDao {
     }
 
     @Override
-    public int getLegendQrStatus(int idOrg,int iStatus) {
+    public int getLegendQrStatus(int idOrg, int iStatus) {
         Session session = null;
-        int contStatus=0;
+        int contStatus = 0;
         List list = null;
-        
+
         try {
-           session = HibernateUtil.getSessionFactory().openSession();           
-           Query query = session.createQuery("select distinct qr.id.idStakeholder,qr.id.idOrganization\n"                   
-                   + "from QuestionnaireResponse qr \n"
-                   + "where qr.active=1 and status = '" + iStatus + "'"+"\n"
-                            + " and qr.id.idOrganization='" + idOrg + "'\n"
-                  // + "group by  \n"            
-            );
+            session = HibernateUtil.getSessionFactory().openSession();
+            Query query =null;
+            if (iStatus == 2) {
+                query = session.createQuery("select distinct qr.id.idStakeholder,qr.id.idOrganization\n"
+                        + "from QuestionnaireResponse qr \n"
+                        + "where qr.active=1 and status in (0,2)\n"
+                        + " and qr.id.idOrganization='" + idOrg + "'\n"
+                // + "group by  \n"            
+                );
+            } else {
+                query = session.createQuery("select distinct qr.id.idStakeholder,qr.id.idOrganization\n"
+                        + "from QuestionnaireResponse qr \n"
+                        + "where qr.active=1 and status = '" + iStatus + "'" + "\n"
+                        + " and qr.id.idOrganization='" + idOrg + "'\n"
+                // + "group by  \n"            
+                );
+            }
            
            list=   (List) query.list();             
            contStatus= list.size();
