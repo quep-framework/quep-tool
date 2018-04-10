@@ -8,10 +8,10 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="Content-Type" content="text/htloqr; charset=UTF-8" />
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <title>Maturity Levels</title>
+        <title>Questionnaire Response</title>
         <link rel="stylesheet" type="text/css" href="../resource/themes/aristo/theme.css" />
         <link rel="stylesheet" type="text/css" href="../resource/css/site.css" />
         <!--link rel="stylesheet" type="text/css" href="../resource/css/jquery-ui.css" />
@@ -56,42 +56,51 @@
 
                     <!-- content body start-->         
                     <div>
-                        <h:form id="formShowMaturityLevels">
+                        <h:form id="formShowQuestionnaireResponse">
                              <p:panelGrid columns="2" id="pnlInsertML">                
-                                <p:outputLabel value="Name"/>
-                                <p:inputText value="#{maturityLevelBean.maturityLevel.name}"/>
-                                <p:outputLabel value="Abreviature"/>
-                                <p:inputText value="#{maturityLevelBean.maturityLevel.levelAbbreviation}"/>
-                                <p:outputLabel value="Description"/>
-                                <p:inputTextarea value="#{maturityLevelBean.maturityLevel.description}" cols="30"/>
+                                <p:outputLabel value="Organizacion"/>
+                                <p:inputText value="#{questionnaireResponseBean.oQR.id.idOrganization}"/>
+                                <p:outputLabel value="Questionnaire"/>
+                                <p:inputText value="#{questionnaireResponseBean.oQR.id.idQuestionnaire}"/>
+                                <p:outputLabel value="Principio"/>
+                                <p:inputTextarea value="#{questionnaireResponseBean.oQR.idPrinciple}" cols="30"/>
                             </p:panelGrid>
-                            <p:commandButton actionListener="#{maturityLevelBean.insert()}" value="Add" update=":formShowMaturityLevels" />
+                            <p:commandButton actionListener="#{questionnaireResponseBean.insert()}" value="Add" update=":formShowQuestionnaireResponse" />
                             
                             
-                            <p:panelGrid columns="2" id="pnlformShowMaturityLevels">  
-                                <p:dataTable  var="ml" value="#{maturityLevelBean.maturityLevels}"
+                            <p:panelGrid columns="2" id="pnlformShowQuestionnaireResponse">  
+                                <p:dataTable  var="loqr" value="#{questionnaireResponseBean.lstOQR}"
                                               emptyMessage="There are not data"
                                               paginator="true" rows="5" paginatorPosition="top"
                                               paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink}
                                               {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                               rowsPerPageTemplate="5 10">
                                     <f:facet name="header">
-                                        Maturity Levels List
+                                        Questionnaire Response List
                                     </f:facet>
-                                    <p:column headerText="Id" sortBy="#{ml.id}" filterBy="#{ml.id}" filterMatchMode="contains">
-                                        <h:outputText value="#{ml.id}"/>
+                                    <p:column headerText="Organizacion" sortBy="#{loqr.id.idOrganization}" filterBy="#{loqr.id.idOrganization}" filterMatchMode="contains">
+                                        <h:outputText value="#{loqr.organization.name}"/>
                                     </p:column>
-                                    <p:column headerText="Name" sortBy="#{ml.name}" filterBy="#{ml.name}" filterMatchMode="contains">
-                                        <h:outputText value="#{ml.name}"/>
+                                    <p:column headerText="Questionnaire" sortBy="#{loqr.id.idQuestionnaire}" filterBy="#{loqr.id.idQuestionnaire}" filterMatchMode="contains">
+                                        <h:outputText value="#{loqr.questionnaire.description}"/>
                                     </p:column>
+                                    
+                                    <p:column headerText="Role" sortBy="#{loqr.id.idRole}" filterBy="#{loqr.id.idRole}" filterMatchMode="contains">
+                                        <h:outputText value="#{loqr.questionnaire.role.name}"/>
+                                    </p:column>
+                                    
+                                    <p:column headerText="Stakeholder" sortBy="#{loqr.id.idStakeholder}" filterBy="#{loqr.id.idStakeholder}" filterMatchMode="contains">
+                                        <h:outputText value="#{loqr.id.idStakeholder}"/>
+                                    </p:column>
+                                    
                                     <p:column headerText="Update">
-                                        <p:commandButton value="Update" oncomplete="PF('dlgupml').show();" update=":formUpdate">
-                                            <f:setPropertyActionListener target="#{maturityLevelBean.maturityLevel}" value="#{ml}"/>                    
+                                        <p:commandButton value="Update" oncomplete="PF('dlguploqr').show();" update=":formUpdate">
+                                            <f:setPropertyActionListener target="#{questionnaireResponseBean.oQR}" value="#{loqr}"/>                    
                                         </p:commandButton>            
                                     </p:column>
                                     <p:column headerText="Delete">
-                                        <p:commandButton value="Delete" oncomplete="PF('dlgdelml').show();">
-                                            <f:setPropertyActionListener target="#{maturityLevelBean.maturityLevel}" value="#{ml}"/>                    
+                                        <p:commandButton value="Delete" oncomplete="PF('dlgdelloqr').show();">
+                                            <f:setPropertyActionListener target="#{questionnaireResponseBean.oQR}" value="#{loqr}"/>                    
                                         </p:commandButton>            
                                     </p:column>
 
@@ -102,30 +111,30 @@
 
                         <!--start Dialog-->  
                         <p:dialog id="dlg1" header="Update" showEffect="explode" hideEffect="explode"
-                                  widgetVar="dlgupml" modal="true" resizable="false" minWidth="200">
+                                  widgetVar="dlguploqr" modal="true" resizable="false" minWidth="200">
                             <h:form id="formUpdate">
                                 <p:panelGrid columns="2">
-                                    <p:outputLabel value="Name"/>
-                                    <p:inputText value="#{maturityLevelBean.maturityLevel.name}"/>
+                                    <p:outputLabel value="Organizacion"/>
+                                    <p:inputText value="#{questionnaireResponseBean.oQR.id.idOrganization}"/>
 
-                                    <p:outputLabel value="Abbreviation"/>
-                                    <p:inputText value="#{maturityLevelBean.maturityLevel.levelAbbreviation}"/>
+                                    <p:outputLabel value="Questionnaire"/>
+                                    <p:inputText value="#{questionnaireResponseBean.oQR.id.idQuestionnaire}"/>
                                     
-                                    <p:outputLabel value="Description"/>
-                                    <p:inputTextarea value="#{maturityLevelBean.maturityLevel.description}" cols="30"/>
+                                    <p:outputLabel value="Principio"/>
+                                    <p:inputTextarea value="#{questionnaireResponseBean.oQR.id.idPrinciple}" cols="30"/>
                                 </p:panelGrid>                
-                                <p:commandButton value="Update" update=":formShowMaturityLevels" 
-                                                 actionListener="#{maturityLevelBean.update()}" 
-                                                 oncomplete="PF('dlgupml').hide();"/>
+                                <p:commandButton value="Update" update=":formShowQuestionnaireResponse" 
+                                                 actionListener="#{questionnaireResponseBean.update()}" 
+                                                 oncomplete="PF('dlguploqr').hide();"/>
                             </h:form>
                         </p:dialog>
                         <p:dialog id="dlg2" header="Delete" showEffect="explode" hideEffect="explode"
-                                  widgetVar="dlgdelml" modal="true" resizable="false" minWidth="200">
+                                  widgetVar="dlgdelloqr" modal="true" resizable="false" minWidth="200">
                             <h:form id="formDelete">
                                 <h:outputText value="Are you sure?"/>
-                                <p:commandButton value="Yes" update=":formShowMaturityLevels" 
-                                                 actionListener="#{maturityLevelBean.delete()}" 
-                                                 oncomplete="PF('dlgdelml').hide();"/>
+                                <p:commandButton value="Yes" update=":formShowQuestionnaireResponse" 
+                                                 actionListener="#{questionnaireResponseBean.delete()}" 
+                                                 oncomplete="PF('dlgdelloqr').hide();"/>
                                 <p:commandButton value="No" onclick="dlg2.hide();"/>
                             </h:form>
                         </p:dialog>  
@@ -149,6 +158,5 @@
     </h:body>
 
 </html>
-
 
 
