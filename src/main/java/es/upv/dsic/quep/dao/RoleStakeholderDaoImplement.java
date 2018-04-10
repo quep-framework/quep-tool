@@ -98,7 +98,7 @@ public class RoleStakeholderDaoImplement implements RoleStakeholderDao {
         //List<RoleStakeholderId> listRS = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
-            Query queryR = session.createQuery("select rs.role from RoleStakeholder rs where rs.id.idStakeholder='" + stk.getId() + "'");
+            Query queryR = session.createQuery("select rs.role from RoleStakeholder rs where rs.active=1 and rs.id.idStakeholder='" + stk.getId() + "'");
             listR = (List<Role>) queryR.list();
 
         } catch (Exception e) {
@@ -122,7 +122,7 @@ public class RoleStakeholderDaoImplement implements RoleStakeholderDao {
         List<Organization> listO = null; 
         try {
             session = HibernateUtil.getSessionFactory().openSession();
-            Query queryRS = session.createQuery("select rs.organization from RoleStakeholder rs where rs.id.idStakeholder='" + idStakeholder + "' and rs.id.idRole='"+idRole + "'");
+            Query queryRS = session.createQuery("select rs.organization from RoleStakeholder rs where rs.active=1 and rs.id.idStakeholder='" + idStakeholder + "' and rs.id.idRole='"+idRole + "'");
             listO = (List<Organization>) queryRS.list();            
 
         } catch (Exception e) {
@@ -146,7 +146,7 @@ public class RoleStakeholderDaoImplement implements RoleStakeholderDao {
         List<Organization> listO = null; 
         try {
             session = HibernateUtil.getSessionFactory().openSession();
-            Query queryRS = session.createQuery("select rs.organization from RoleStakeholder rs where rs.id.idStakeholder='" + idStakeholder + "' and rs.id.idRole='"+idRole + "'");
+            Query queryRS = session.createQuery("select rs.organization from RoleStakeholder rs where rs.active=1 and rs.id.idStakeholder='" + idStakeholder + "' and rs.id.idRole='"+idRole + "'");
             listO = (List<Organization>) queryRS.list();            
 
         } catch (Exception e) {
