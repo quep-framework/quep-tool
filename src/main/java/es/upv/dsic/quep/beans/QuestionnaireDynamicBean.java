@@ -184,7 +184,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             CommandButton btnSave = new CommandButton();
             btnSave.setId("cmdSave");
             btnSave.setValue("Save");
-            btnSave.setTitle("Save current response");
+            btnSave.setTitle("Guardar");
             btnSave.setIcon("ui-icon-disk");
 
             btnSave.addActionListener(new ActionListener() {
@@ -199,7 +199,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             CommandButton btnDlg = new CommandButton();
             btnDlg.setId("cmdComplete");
             btnDlg.setValue("Send");
-            btnDlg.setTitle("Send final answer");
+            btnDlg.setTitle("Enviar formulario");
             btnDlg.setOnclick("PF('dlg').show();");
             btnDlg.setType("button");
             btnDlg.setIcon("ui-icon-mail-open");
@@ -211,7 +211,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             dlgCD.setShowEffect("fade");
             dlgCD.setHideEffect("fade");
             CommandButton yesComplete = new CommandButton();
-            yesComplete.setValue("Yes");
+            yesComplete.setValue("Sí");
             yesComplete.setIcon("ui-icon-check");
             yesComplete.setStyleClass("ui-confirmdialog-yes");
             yesComplete.setOncomplete("PF('dlg').hide();");
@@ -329,7 +329,7 @@ public class QuestionnaireDynamicBean implements Serializable {
                          olSpaceGP.setValue("Blank Space");
                          olSpaceGP.setStyle("color:white;");
                          panel.getChildren().add(olSpaceGP);*/
-                         olGP.setValue("<p><br/> Practice: " + op.getName()+"</p>");
+                         olGP.setValue("<p><br/> Práctica: " + op.getName()+"</p>");
                          olGP.setStyle("color: #638493;  font-weight: bold;");
                          olGP.setEscape(false);
                          panel.getChildren().add(olGP);
@@ -382,12 +382,12 @@ public class QuestionnaireDynamicBean implements Serializable {
             btnTech.setId("btnTech_" + String.valueOf(qq.getId()));
             btnTech.setIcon("ui-icon-info");
             btnTech.setType("button");
-            btnTech.setTitle("Best Practices");
+            btnTech.setTitle("Mejores Prácticas");
             OverlayPanel pnlTech = new OverlayPanel();
             pnlTech.setId("pnlTech_" + String.valueOf(qq.getId()));
             pnlTech.setFor("btnTech_" + String.valueOf(qq.getId()));
             pnlTech.setHideEffect("fade");
-            //pnlTech.setStyle("height:300px;");      
+            pnlTech.setStyle("right: 0px; position: absolute; text-align:justify;");      
 
             PanelGrid pnlBP = new PanelGrid();
             pnlBP.setId("pnlBP_" + String.valueOf(qq.getId()));
@@ -397,7 +397,7 @@ public class QuestionnaireDynamicBean implements Serializable {
             OutputLabel oTech = new OutputLabel();
             // InputText oTech = new InputText();
             oTech.setId("oTech_" + String.valueOf(qq.getId()));
-            oTech.setValue("<p>Techniques: <br/>" + sTechnique + "</p>");
+            oTech.setValue("<p>Técnicas: <br/>" + sTechnique + "</p>");
             oTech.setEscape(false);
             //oTech.setStyle("white-space:pre; display:block; width:200px; height:50px; text-align:justify;");  +
             oTech.setStyle("width:600px;");
@@ -407,7 +407,7 @@ public class QuestionnaireDynamicBean implements Serializable {
                 OutputLabel oTech2 = new OutputLabel();
                 //InputText oTech2 = new InputText();
                 oTech2.setId("oTech2_" + String.valueOf(qq.getId()));
-                oTech2.setValue("<p>Resilience: <br/>" + sResilience + "</p>");
+                oTech2.setValue("<p>Características de Resiliencia: <br/>" + sResilience + "</p>");
                 oTech2.setEscape(false);
                 pnlBP.getChildren().add(oTech2);
             }
@@ -439,7 +439,7 @@ public class QuestionnaireDynamicBean implements Serializable {
 
         //static component
         OutputLabel lblResponse = new OutputLabel();
-        lblResponse.setValue("Response:");
+        lblResponse.setValue("Opción de respuesta:");
         lblResponse.setId("lblResponse_" + String.valueOf(qqq.getQuepQuestion().getId()));
         lblResponse.setFor(prefixIdRO + String.valueOf(qqq.getQuepQuestion().getId()));
         pnlResponseOption.getChildren().add(lblResponse);
@@ -490,9 +490,10 @@ public class QuestionnaireDynamicBean implements Serializable {
             if (sTechnique.length > 0) {
                 Fieldset fs = new Fieldset();
                 fs.setId("fs_" + String.valueOf(qqq.getQuepQuestion().getId()));
-                fs.setLegend("Technique");
+                fs.setLegend("Técnica");
                 fs.setToggleable(true);
                 fs.setCollapsed(true);
+                fs.setStyle("text-align:justify;");
                 fs.setToggleSpeed(500);
                 PanelGrid pnfs = new PanelGrid();
                 pnfs.setId("pnfs_" + String.valueOf(qqq.getQuepQuestion().getId()));
@@ -607,7 +608,7 @@ public class QuestionnaireDynamicBean implements Serializable {
         if (qqq.getQuepQuestion().getHasComment() == 1) {
             lblTxtComments = new OutputLabel();
             lblTxtComments.setId("lblComments_" + String.valueOf(qqq.getQuepQuestion().getId()));
-            lblTxtComments.setValue("Comments:");
+            lblTxtComments.setValue("Comentarios:");
 
             pnlResponseOption.getChildren().add(lblTxtComments);
             txtComments = new InputTextarea();
@@ -645,7 +646,7 @@ public class QuestionnaireDynamicBean implements Serializable {
         if (qqq.getQuepQuestion().getHasPageNumber() == 1) {
             OutputLabel lblTxtPageNumber = new OutputLabel();
             lblTxtPageNumber.setId("lblPageNumber_" + String.valueOf(qqq.getQuepQuestion().getId()));
-            lblTxtPageNumber.setValue("Page Number:");
+            lblTxtPageNumber.setValue("Número de página:");
 
             pnlResponseOption.getChildren().add(lblTxtPageNumber);
             InputText txtPageNumber = new InputText();
