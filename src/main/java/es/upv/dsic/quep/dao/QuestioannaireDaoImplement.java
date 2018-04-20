@@ -196,7 +196,7 @@ public class QuestioannaireDaoImplement implements QuestionnaireQQDao {
         List<ResponseOption> list = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
-            Query query = session.createQuery("select qqro.responseOption from QuepQuestionResponseOption qqro  where qqro.active=1 and qqro.id.idQuepQuestion='" + idqq + "'");
+            Query query = session.createQuery("select qqro.responseOption from QuepQuestionResponseOption qqro  where qqro.active=1 and qqro.id.idQuepQuestion='" + idqq + "'  order by qqro.id");
             list = (List<ResponseOption>) query.list();
         } catch (Exception e) {
             System.out.println(e.getMessage());
