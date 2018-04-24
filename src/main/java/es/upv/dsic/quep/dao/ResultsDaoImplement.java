@@ -136,7 +136,7 @@ public class ResultsDaoImplement implements ResultsDao {
         List<QuepQuestionTechnique> list = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
-            Query query = session.createQuery("select qqt from QuepQuestionTechnique qqt,"
+            Query query = session.createQuery("select distinct qqt from QuepQuestionTechnique qqt,"
                     + "Response r                  \n"
                     + "where qqt.active=1 and r.active=1     \n"
                     + "and qqt.quepQuestion.active=1          \n"
@@ -145,8 +145,8 @@ public class ResultsDaoImplement implements ResultsDao {
                     + "and r.questionnaireResponse.status=1\n"
                     + "and r.responseOption.isRequiered=1\n"
                     + "and r.responseOption.weight=0\n"    
-                    + "and r.id.idOrganization='" + idOrg + "'\n"
-                    + "order by qqt.quepQuestion.maturityLevel.id");
+                    + "and r.id.idOrganization='" + idOrg + "'\n");
+                    //+ "order by qqt.quepQuestion.maturityLevel.id");
             list = (List<QuepQuestionTechnique>) query.list();
         } catch (Exception e) {
             System.out.println(e.getMessage());

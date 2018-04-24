@@ -973,7 +973,7 @@ public class QuestionnaireDynamicBean implements Serializable {
 
         Map<Integer, String> mSave = qdi.insertResponse(setMapResponses(lstRsp, lstAuxQuestionnaireResponse), setMapResponses(lstResponse, lstQuestionnaireResponse));
         if (mSave.containsKey(1)) {
-            addMessage("Save", "Response have been saving.", 1);
+            addMessage("Save", "Response have been saved.", 1);
 
             if (band == 1) { //is complete button final send
                 sendEmail();

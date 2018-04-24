@@ -117,18 +117,23 @@
                     <p:dialog widgetVar="dlgTechniques"                                                          
                               header="Techniques Summary"                              
                               showHeader="true"   
-                              id="idTechniques"
+                              id="idTechniques"                              
+                              minimizable="true"
+                              maximizable="true"
+                              showEffect="clip" hideEffect="clip"
+                              
                               resizable="false">
                         <!--p:ajax event="close" update="IDdlgchart"  /-->
-                        <p:panel id="basic" header="Techniques" footer="Best Practices" style="margin-bottom:20px">
-                            <h:panelGrid columns="2" cellpadding="10">                                
-                                <h:outputText value="Tehcniques list" />
+                        <p:panel id="basic" header="Techniques" footer="Best Practices" style="margin-bottom:20px; font-size: 70%"  toggleable="true" >
+                            <h:panelGrid columns="2" cellpadding="10" >                                
+                                <h:outputText value="Tehcniques" />
                                 <h:form>
                                     <p:dataTable id="tbl" var="lstqqt" value="#{maturityLevelResultsChartViewBean.lstQuepQuestionTechnique}"
                                                  emptyMessage="There are not data"
                                                  rowIndexVar="rowIndex" 
                                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
-                                                 paginator="true" rows="20" style="margin-bottom:20px" >                         
+                                                 paginator="true" rows="20" 
+                                                 scrollable="true" scrollHeight="80%" scrollWidth="80%">                         
 
                                         <f:facet name="{Exporters}">
 
